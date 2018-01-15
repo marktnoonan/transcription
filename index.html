@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Speech To Text</title>
+	<style>
+		* {
+			box-sizing: border-box
+		}
+
+		body {
+			font-family: sans-serif;
+			margin: 0;
+			padding: 0;
+		}
+
+		header {
+			background-color: #fff;
+			position: fixed;
+			width: 100%;
+			top: 0;
+			background-color: aliceblue;
+			padding: 10px;
+		}
+
+		h1 {
+			margin: 2px;
+		}
+
+		main {
+			margin-top: 80px;
+			align-items: top;
+		}
+
+		p {
+			font-size: 30px;
+			line-height: 1.2;
+			white-space: pre-wrap;
+			outline: none;
+		}
+
+		section {
+			padding: 10px;
+		}
+
+		.interim {
+			font-size: 20px;
+			color: slategray
+		}
+
+		.credit {
+			font-size: 12px;
+			color: slategray
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+		<h1>Live Transcript</h1>
+		<button onclick="listen()">Start Listening</button>
+		<button onclick="stop()">Stop Listening</button> Status: <span id="status">Not Listening</span>
+		<span class="credit">Made by Mark Noonan (<a href="https://twitter.com/marktnoonan">@marktnoonan</a>), based on David Walsh's <a href="https://davidwalsh.name/speech-recognition">blog post</a>, and with apologies for only working in Google Chrome.</span>
+	</header>
+	<main>
+		<section>
+			<p id="transcript" contenteditable="true"></p>
+			<span class="interim" id="interim"></span>
+		</section>
+	</main>
+
+
+
+	<script>
+		var listening = false;
+		var lastResultCache = "";
+		var recognition = new(window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+		recognition.lang = 'en-UK';
+		recognition.interimResults = true;
+		recognition.maxAlternatives = 1;
+		recognition.onresult = function(event) {
+			var interim = document.querySelector('#interim');
+			interim.textContent = event.results[0][0].transcript
+			lastResultCache = event.results[0][0].transcript
+		};
+
+		recognition.onend = function(event) {
+			var transcript = document.querySelector('#transcript')
+			if (lastResultCache != "") {
+				transcript.append(lastResultCache + '\r\n');
+				lastResultCache = ""
+			}
+
+			if (listening === false) {
+				return
+			} else {
+				window.scrollTo(0, document.body.scrollHeight);
+				recognition.start();
+			}
+		}
+
+		function listen() {
+			listening = true
+			document.querySelector("#status").textContent = "Listening";
+			recognition.start();
+		}
+
+		function stop() {
+			recognition.stop();
+			console.log("stopped");
+			document.querySelector("#status").textContent = "Not Listening";
+			listening = false;
+		}
+	</script>
+</body>
+
+</html>
