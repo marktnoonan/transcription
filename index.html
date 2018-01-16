@@ -19,7 +19,7 @@
 
 		header {
 			background-color: #fff;
-			position: fixed;
+			/* position: fixed; */
 			width: 100%;
 			top: 0;
 			background-color: aliceblue;
@@ -31,7 +31,7 @@
 		}
 
 		main {
-			margin-top: 80px;
+			/* margin-top: 80px; */
 			align-items: top;
 		}
 
@@ -40,6 +40,7 @@
 			line-height: 1.2;
 			white-space: pre-wrap;
 			outline: none;
+      margin: 2px;
 		}
 
 		section {
@@ -47,13 +48,16 @@
 		}
 
 		.interim {
-			font-size: 20px;
-			color: slategray
+			font-size: 22px;
+			color: slategray;
+      margin-top: 20px;
 		}
 
 		.credit {
+      margin-top: 4px;
 			font-size: 12px;
 			color:#333;
+      display: block;
 		}
 
     .snippet {
@@ -61,7 +65,11 @@
     }
 
     .name-transcript {
-      margin-top: 120px;
+      font-size: 14px;
+    }
+    
+    .transcript-id-form {
+      margin-top: 6px;
     }
 	</style>
 </head>
@@ -72,19 +80,21 @@
 		<button onclick="listen()">Start Listening</button>
     <button onclick="stop()">Stop Listening</button> Status: <span id="status">Not Listening</span>
     
-		<span class="credit">Made by Mark Noonan (<a href="https://twitter.com/marktnoonan">@marktnoonan</a>), based on David Walsh's <a href="https://davidwalsh.name/speech-recognition">blog post</a>, and with apologies for only working in Google Chrome.</span>
+    <span class="credit">Made by Mark Noonan (<a href="https://twitter.com/marktnoonan">@marktnoonan</a>), based on David Walsh's <a href="https://davidwalsh.name/speech-recognition">blog post</a>, and with apologies for only working in Google Chrome.</span>
+    <hr>
+    <aside class="name-transcript" id="name-transcript">
+      You can name this transcript to save the results and allow others to access it live from their own devices. Or don't
+      name it, and keep it private to just this browser window. If the transcript is not named,everything will be deleted when you close the page.
+      <form id="transcriptIDForm" class="transcript-id-form">
+        <label>Transcript ID:
+          <input type="text" id="newTranscriptID">
+        </label>
+        <button type="submit">Name Transcript</button>
+      </form>
+    </aside>
   </header>
 	<main>
-      <aside class="name-transcript">
-        Hi! You can name this transcript to save the results and allow others to access it live from their own devices. Or don't
-        name it, and keep it private to just this browser window. Everything will be deleted when you close the page.
-        <form id="transcriptIDForm">
-          <label>Transcript ID:
-            <input type="text" id="newTranscriptID">
-          </label>
-          <button type="submit">Name Transcript</button>
-        </form>
-      </aside>
+      
 		<section>
 			<p id="transcript" contenteditable="false"></p>
 			<span class="interim" id="interim"></span>
@@ -110,6 +120,7 @@
   var snippetIDs = [];
   var listening = false;
   var lastResultCache = "";
+  var observeLinkRoot = 'https://markthomasnoonan.com/transcription/observe.html'
 
   document.getElementById("transcriptIDForm").addEventListener('submit', function (event) {
         event.preventDefault();
@@ -171,6 +182,11 @@
 
   function saveTranscriptID(){
     transcriptID = document.getElementById("newTranscriptID").value;
+    var observeLink = observeLinkRoot + "?" + transcriptID;
+    console.log(observeLink);
+    document.getElementById('name-transcript').innerHTML='Link for others to watch: <a href="' 
+      + observeLink + '" target="_blank">' + observeLink + '</a>';
+    
   }
 
 function addEditingListener(editedID){
