@@ -65,7 +65,14 @@
 <body>
 	<header>
     <h1>Watch Transcript <span id="transcript-id"></span></h1>
-		<span class="credit">Made by Mark Noonan (<a href="https://twitter.com/marktnoonan">@marktnoonan</a>), based on David Walsh's <a href="https://davidwalsh.name/speech-recognition">blog post</a>.</span>
+    <form id="transcriptIDForm">
+      <label>Transcript ID:
+        <input type="text" id="newTranscriptID">
+      </label>
+      <button type="submit">Watch Transcript</button>
+    </form>
+
+    <span class="credit">Made by Mark Noonan (<a href="https://twitter.com/marktnoonan">@marktnoonan</a>), based on David Walsh's <a href="https://davidwalsh.name/speech-recognition">blog post</a>.</span>
 	</header>
 	<main>
 		<section>
@@ -87,30 +94,10 @@
 	};
 	firebase.initializeApp(config);
   var database = firebase.database();
-  var transcriptID = location.hash.substr(1) || '';
-  var transcript = document.querySelector('#transcript');
-  var snippetsArray = [];
-  document.querySelector('#transcript-id').textContent = '(ID: ' + transcriptID + ')';
-  var transcriptRef = database.ref('transcripts/' + transcriptID);
-  var htmlBuffer = '';
-  
-  transcriptRef.on('value', function (snapshot) {
-    console.log("update");
-    
-    var snippets = snapshot.val();
-    for (var snippet in snippets) {
-      if(!snippetsArray.includes(snippet) && snippet !== 'just-updated'){      
-        snippetsArray.push(snippet);
-        htmlBuffer += '<span class="snippet" id="' + snippet + '">' + snippets[snippet] + '</span>'
-        window.scrollTo(0, document.body.scrollHeight);
-      } else if (snippet === 'just-updated') {
-        if (document.getElementById(snippets[snippet])){
-          processUpdate(snippets[snippet]);          
-        }
-      }
-    }
-    transcript.innerHTML = htmlBuffer;
-  });
+  document.getElementById("transcriptIDForm").addEventListener('submit', function(event) {
+    event.preventDefault();
+    updateTranscriptID();
+  })
 
 function processUpdate(id) {
   database.ref('transcripts/' + transcriptID + '/' + id).once('value').then(
@@ -120,6 +107,32 @@ function processUpdate(id) {
   );
 }
 
+function updateTranscriptID() {
+  var transcriptID = document.getElementById("newTranscriptID").value;
+  var transcript = document.querySelector('#transcript');
+  var snippetsArray = [];
+  document.querySelector('#transcript-id').textContent = '(ID: ' + transcriptID + ')';
+  var transcriptRef = database.ref('transcripts/' + transcriptID);
+  var htmlBuffer = '';
+
+  transcriptRef.on('value', function (snapshot) {
+    console.log("update");
+
+    var snippets = snapshot.val();
+    for (var snippet in snippets) {
+      if (!snippetsArray.includes(snippet) && snippet !== 'just-updated') {
+        snippetsArray.push(snippet);
+        htmlBuffer += '<span class="snippet" id="' + snippet + '">' + snippets[snippet] + '</span>'
+        window.scrollTo(0, document.body.scrollHeight);
+      } else if (snippet === 'just-updated') {
+        if (document.getElementById(snippets[snippet])) {
+          processUpdate(snippets[snippet]);
+        }
+      }
+    }
+    transcript.innerHTML = htmlBuffer;
+  });
+}
   
 
 		
