@@ -86,8 +86,8 @@
       You can name this transcript to save the results and allow others to access it live from their own devices. Or don't
       name it, and keep it private to just this browser window. If the transcript is not named,everything will be deleted when you close the page.
       <form id="transcriptIDForm" class="transcript-id-form">
-        <label>Transcript ID:
-          <input type="text" id="newTranscriptID">
+        <label>Transcript name (letters, numbers, and dashes only): 
+          <input type="text" id="newTranscriptID" pattern="[a-zA-Z0-9-]+">
         </label>
         <button type="submit">Name Transcript</button>
       </form>
