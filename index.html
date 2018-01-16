@@ -71,7 +71,7 @@
 	</header>
 	<main>
 		<section>
-			<p id="transcript" contenteditable="true"></p>
+			<p id="transcript" contenteditable="false"></p>
 			<span class="interim" id="interim"></span>
 		</section>
 	</main>
@@ -95,8 +95,9 @@
   var snippetIDs = [];
   var listening = false;
   var lastResultCache = "";
+
   var recognition = new(window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
-  recognition.lang = 'en-UK';
+  recognition.lang = 'en-US';
   recognition.interimResults = true;
   recognition.maxAlternatives = 1;
   recognition.onresult = function(event) {
@@ -106,21 +107,25 @@
   };
 
   recognition.onend = function(event) {
+    
     if (lastResultCache != '') {
       var snippetID = Date.now();
       var span = document.createElement('span');
       span.className = "snippet";
       span.id = snippetID;
+      span.setAttribute('contenteditable', 'true');
       var snippetText = document.createTextNode(lastResultCache);
       span.append(lastResultCache);
-      console.log(span);
-      
       transcript.appendChild(span);
+      
       if (transcriptID !== '') {
         snippetIDs.push(snippetID);
-        database.ref('transcripts/' + transcriptID + '/' + snippetID).set(lastResultCache);
+        database.ref('transcripts/' + transcriptID + '/' + snippetID).set(lastResultCache, completion);
       }
-      lastResultCache = ""        
+
+      lastResultCache = "";      
+      addEditingListener(snippetID);
+              
     }
 
     if (listening === false) {
@@ -139,21 +144,27 @@
 
   function stop() {
     recognition.stop();
-    console.log("stopped");
     document.querySelector("#status").textContent = "Not Listening";
     listening = false;
   }
 
-  transcript.addEventListener('keyup', function(e){
-    // todo fix this to make sure we get the right element!
-    var editedID = e.target.firstChild.id;
-        console.log("keyup! " + editedID);
-    var newText = e.target.firstChild.textContent;
-    database.ref('transcripts/' + transcriptID + '/' + editedID).set(newText);
-    database.ref('transcripts/' + transcriptID + '/just-updated').set(editedID);
-    
+function addEditingListener(editedID){
+  var element = document.getElementById(editedID);
+    element.addEventListener('keyup', function (e) {
+    var newText = element.textContent;
+    database.ref('transcripts/' + transcriptID + '/' + editedID).set(newText, completion);
+    database.ref('transcripts/' + transcriptID + '/just-updated').set(editedID, completion);
   })
+}
 
+function completion(error) {
+  console.log('completed');
+    if (error) {
+      console.log("Data could not be saved." + error);
+    } else {
+      console.log("Data saved successfully.");
+    }
+  }
 
 	</script>
 </body>
