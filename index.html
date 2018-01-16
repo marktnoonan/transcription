@@ -60,7 +60,7 @@
 
 <body>
 	<header>
-		<h1>Live Transcript</h1>
+    <h1>Live Transcript</h1>
 		<button onclick="listen()">Start Listening</button>
 		<button onclick="stop()">Stop Listening</button> Status: <span id="status">Not Listening</span>
 		<span class="credit">Made by Mark Noonan (<a href="https://twitter.com/marktnoonan">@marktnoonan</a>), based on David Walsh's <a href="https://davidwalsh.name/speech-recognition">blog post</a>, and with apologies for only working in Google Chrome.</span>
@@ -73,47 +73,66 @@
 	</main>
 
 
+<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
 
 	<script>
-		var listening = false;
-		var lastResultCache = "";
-		var recognition = new(window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
-		recognition.lang = 'en-UK';
-		recognition.interimResults = true;
-		recognition.maxAlternatives = 1;
-		recognition.onresult = function(event) {
-			var interim = document.querySelector('#interim');
-			interim.textContent = event.results[0][0].transcript
-			lastResultCache = event.results[0][0].transcript
-		};
+  var config = {
+		apiKey: "AIzaSyD591s8Of9vqduC2ZAakt9mMQRin4wCFSQ",
+		authDomain: "live-transcript.firebaseapp.com",
+		databaseURL: "https://live-transcript.firebaseio.com",
+		projectId: "live-transcript",
+		storageBucket: "",
+		messagingSenderId: "1024703297861"
+	};
+	firebase.initializeApp(config);
+  var database = firebase.database();
 
-		recognition.onend = function(event) {
-			var transcript = document.querySelector('#transcript')
-			if (lastResultCache != "") {
-				transcript.append(lastResultCache + '\r\n');
-				lastResultCache = ""
-			}
+  var transcriptID = location.hash.substr(1) || ''
+  console.log(location.hash)
+  var listening = false;
+  var lastResultCache = "";
+  var recognition = new(window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+  recognition.lang = 'en-UK';
+  recognition.interimResults = true;
+  recognition.maxAlternatives = 1;
+  recognition.onresult = function(event) {
+    var interim = document.querySelector('#interim');
+    interim.textContent = event.results[0][0].transcript
+    lastResultCache = event.results[0][0].transcript
+  };
 
-			if (listening === false) {
-				return
-			} else {
-				window.scrollTo(0, document.body.scrollHeight);
-				recognition.start();
-			}
-		}
+  recognition.onend = function(event) {
+    var transcript = document.querySelector('#transcript')
+    if (lastResultCache != '') {
+      transcript.append(lastResultCache + '\r\n');
+      if (transcriptID !== '') {
+        database.ref('transcripts/' + transcriptID).push(lastResultCache)
+      }
+      lastResultCache = ""        
+    }
 
-		function listen() {
-			listening = true
-			document.querySelector("#status").textContent = "Listening";
-			recognition.start();
-		}
+    if (listening === false) {
+      return
+    } else {
+      window.scrollTo(0, document.body.scrollHeight);
+      recognition.start();
+    }
+  }
 
-		function stop() {
-			recognition.stop();
-			console.log("stopped");
-			document.querySelector("#status").textContent = "Not Listening";
-			listening = false;
-		}
+  function listen() {
+    listening = true
+    document.querySelector("#status").textContent = "Listening";
+    recognition.start();
+  }
+
+  function stop() {
+    recognition.stop();
+    console.log("stopped");
+    document.querySelector("#status").textContent = "Not Listening";
+    listening = false;
+  }
+
+
 	</script>
 </body>
 

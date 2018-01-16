@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Speech To Text</title>
+	<style>
+		* {
+			box-sizing: border-box
+		}
+
+		body {
+			font-family: sans-serif;
+			margin: 0;
+			padding: 0;
+		}
+
+		header {
+			background-color: #fff;
+			position: fixed;
+			width: 100%;
+			top: 0;
+			background-color: aliceblue;
+			padding: 10px;
+		}
+
+		h1 {
+			margin: 2px;
+		}
+
+		main {
+			margin-top: 80px;
+			align-items: top;
+		}
+
+		p {
+			font-size: 30px;
+			line-height: 1.2;
+			white-space: pre-wrap;
+			outline: none;
+		}
+
+		section {
+			padding: 10px;
+		}
+
+		.interim {
+			font-size: 20px;
+			color: slategray
+		}
+
+		.credit {
+			font-size: 12px;
+			color: slategray
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+    <h1>Watch Transcript <span id="transcript-id"></span></h1>
+		<span class="credit">Made by Mark Noonan (<a href="https://twitter.com/marktnoonan">@marktnoonan</a>), based on David Walsh's <a href="https://davidwalsh.name/speech-recognition">blog post</a>, and with apologies for only working in Google Chrome.</span>
+	</header>
+	<main>
+		<section>
+			<p id="transcript"></p>
+		</section>
+	</main>
+
+
+<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
+
+	<script>
+  var config = {
+		apiKey: "AIzaSyD591s8Of9vqduC2ZAakt9mMQRin4wCFSQ",
+		authDomain: "live-transcript.firebaseapp.com",
+		databaseURL: "https://live-transcript.firebaseio.com",
+		projectId: "live-transcript",
+		storageBucket: "",
+		messagingSenderId: "1024703297861"
+	};
+	firebase.initializeApp(config);
+  var database = firebase.database();
+  var transcriptID = location.hash.substr(1) || '';
+  var transcript = document.querySelector('#transcript');
+  var snippetsArray = [];
+  document.querySelector('#transcript-id').textContent = '(ID: ' + transcriptID + ')';
+  var transcriptRef = database.ref('transcripts/' + transcriptID);
+  
+  transcriptRef.on('value', function (snapshot) {
+    var snippets = snapshot.val();
+    for (var snippet in snippets) {
+      if(!snippetsArray.includes(snippet)){
+        snippetsArray.push(snippet);
+        transcript.append(snippets[snippet] + '\r\n');
+        window.scrollTo(0, document.body.scrollHeight);
+      }
+    }
+  });
+
+
+  
+
+		
+
+
+	</script>
+</body>
+
+</html>
