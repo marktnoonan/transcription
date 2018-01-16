@@ -59,6 +59,10 @@
     .snippet {
       display: block;
     }
+
+    .name-transcript {
+      margin-top: 120px;
+    }
 	</style>
 </head>
 
@@ -69,8 +73,18 @@
     <button onclick="stop()">Stop Listening</button> Status: <span id="status">Not Listening</span>
     
 		<span class="credit">Made by Mark Noonan (<a href="https://twitter.com/marktnoonan">@marktnoonan</a>), based on David Walsh's <a href="https://davidwalsh.name/speech-recognition">blog post</a>, and with apologies for only working in Google Chrome.</span>
-	</header>
+  </header>
 	<main>
+      <aside class="name-transcript">
+        Hi! You can name this transcript to save the results and allow others to access it live from their own devices. Or don't
+        name it, and keep it private to just this browser window. Everything will be deleted when you close the page.
+        <form id="transcriptIDForm">
+          <label>Transcript ID:
+            <input type="text" id="newTranscriptID">
+          </label>
+          <button type="submit">Name Transcript</button>
+        </form>
+      </aside>
 		<section>
 			<p id="transcript" contenteditable="false"></p>
 			<span class="interim" id="interim"></span>
@@ -92,10 +106,16 @@
 	firebase.initializeApp(config);
   var database = firebase.database();
   var transcript = document.querySelector('#transcript')
-  var transcriptID = location.hash.substr(1) || '';
+  var transcriptID = '';
   var snippetIDs = [];
   var listening = false;
   var lastResultCache = "";
+
+  document.getElementById("transcriptIDForm").addEventListener('submit', function (event) {
+        event.preventDefault();
+        saveTranscriptID();
+      })
+
 
   var recognition = new(window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
   recognition.lang = 'en-US';
@@ -147,6 +167,10 @@
     recognition.stop();
     document.querySelector("#status").textContent = "Not Listening";
     listening = false;
+  }
+
+  function saveTranscriptID(){
+    transcriptID = document.getElementById("newTranscriptID").value;
   }
 
 function addEditingListener(editedID){

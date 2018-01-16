@@ -95,11 +95,18 @@
 	firebase.initializeApp(config);
   var database = firebase.database();
   var transcriptID = '';
+  var transcriptIDForm = document.getElementById("transcriptIDForm");
+  
 
-  document.getElementById("transcriptIDForm").addEventListener('submit', function(event) {
+  transcriptIDForm.addEventListener('submit', function(event) {
     event.preventDefault();
     updateTranscriptID();
   })
+
+if (window.location.search){
+  document.getElementById("newTranscriptID").value = window.location.search.substr(1);
+  updateTranscriptID();
+}
 
 function processUpdate(id) {
   database.ref('transcripts/' + transcriptID + '/' + id).once('value').then(
