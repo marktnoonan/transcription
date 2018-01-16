@@ -94,6 +94,8 @@
 	};
 	firebase.initializeApp(config);
   var database = firebase.database();
+  var transcriptID = '';
+
   document.getElementById("transcriptIDForm").addEventListener('submit', function(event) {
     event.preventDefault();
     updateTranscriptID();
@@ -108,7 +110,7 @@ function processUpdate(id) {
 }
 
 function updateTranscriptID() {
-  var transcriptID = document.getElementById("newTranscriptID").value;
+  transcriptID = document.getElementById("newTranscriptID").value;
   var transcript = document.querySelector('#transcript');
   var snippetsArray = [];
   document.querySelector('#transcript-id').textContent = '(ID: ' + transcriptID + ')';
@@ -131,6 +133,7 @@ function updateTranscriptID() {
       }
     }
     transcript.innerHTML = htmlBuffer;
+    window.scrollTo(0, document.body.scrollHeight);
   });
 }
   
