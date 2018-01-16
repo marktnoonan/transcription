@@ -55,6 +55,10 @@
 			font-size: 12px;
 			color: slategray
 		}
+
+        .snippet {
+      display: block;
+    }
 	</style>
 </head>
 
@@ -88,18 +92,33 @@
   var snippetsArray = [];
   document.querySelector('#transcript-id').textContent = '(ID: ' + transcriptID + ')';
   var transcriptRef = database.ref('transcripts/' + transcriptID);
+  var htmlBuffer = '';
   
   transcriptRef.on('value', function (snapshot) {
+    console.log("update");
+    
     var snippets = snapshot.val();
     for (var snippet in snippets) {
-      if(!snippetsArray.includes(snippet)){
+      if(!snippetsArray.includes(snippet) && snippet !== 'just-updated'){      
         snippetsArray.push(snippet);
-        transcript.append(snippets[snippet] + '\r\n');
+        htmlBuffer += '<span class="snippet" id="' + snippet + '">' + snippets[snippet] + '</span>'
         window.scrollTo(0, document.body.scrollHeight);
+      } else if (snippet === 'just-updated') {
+        if (document.getElementById(snippets[snippet])){
+          processUpdate(snippets[snippet]);          
+        }
       }
     }
+    transcript.innerHTML = htmlBuffer;
   });
 
+function processUpdate(id) {
+  database.ref('transcripts/' + transcriptID + '/' + id).once('value').then(
+    function (snapshot) {
+      document.getElementById(id).textContent = snapshot.val()
+    }
+  );
+}
 
   
 

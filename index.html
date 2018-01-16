@@ -53,8 +53,12 @@
 
 		.credit {
 			font-size: 12px;
-			color: slategray
+			color:#333;
 		}
+
+    .snippet {
+      display: block;
+    }
 	</style>
 </head>
 
@@ -86,9 +90,9 @@
 	};
 	firebase.initializeApp(config);
   var database = firebase.database();
-
-  var transcriptID = location.hash.substr(1) || ''
-  console.log(location.hash)
+  var transcript = document.querySelector('#transcript')
+  var transcriptID = location.hash.substr(1) || '';
+  var snippetIDs = [];
   var listening = false;
   var lastResultCache = "";
   var recognition = new(window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
@@ -102,11 +106,19 @@
   };
 
   recognition.onend = function(event) {
-    var transcript = document.querySelector('#transcript')
     if (lastResultCache != '') {
-      transcript.append(lastResultCache + '\r\n');
+      var snippetID = Date.now();
+      var span = document.createElement('span');
+      span.className = "snippet";
+      span.id = snippetID;
+      var snippetText = document.createTextNode(lastResultCache);
+      span.append(lastResultCache);
+      console.log(span);
+      
+      transcript.appendChild(span);
       if (transcriptID !== '') {
-        database.ref('transcripts/' + transcriptID).push(lastResultCache)
+        snippetIDs.push(snippetID);
+        database.ref('transcripts/' + transcriptID + '/' + snippetID).set(lastResultCache);
       }
       lastResultCache = ""        
     }
@@ -131,6 +143,16 @@
     document.querySelector("#status").textContent = "Not Listening";
     listening = false;
   }
+
+  transcript.addEventListener('keyup', function(e){
+    // todo fix this to make sure we get the right element!
+    var editedID = e.target.firstChild.id;
+        console.log("keyup! " + editedID);
+    var newText = e.target.firstChild.textContent;
+    database.ref('transcripts/' + transcriptID + '/' + editedID).set(newText);
+    database.ref('transcripts/' + transcriptID + '/just-updated').set(editedID);
+    
+  })
 
 
 	</script>
