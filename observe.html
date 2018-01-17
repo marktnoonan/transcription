@@ -57,12 +57,9 @@
 		}
 
     .snippet {
- 	 	display: block;
-    margin: 10px;
-    border-radius: 6px;
-    background-color: ghostwhite;
-    padding: 4px;
-    box-shadow: 0px 0px 5px -1px;
+      margin: .15em;
+      outline: none;
+			display: inline-block;
     }
 	</style>
 </head>
@@ -137,6 +134,10 @@ function updateTranscriptID() {
       if (!snippetsArray.includes(snippet) && snippet !== 'just-updated') {
         snippetsArray.push(snippet);
         htmlBuffer += '<span class="snippet" id="' + snippet + '">' + snippets[snippet] + '</span>'
+				var snippetIterator = snippet.split('-')[1];				
+				if (snippetIterator === '0'){
+					htmlBuffer += '<br />'
+				}
         window.scrollTo(0, document.body.scrollHeight);
       } else if (snippet === 'just-updated') {
         if (document.getElementById(snippets[snippet])) {
