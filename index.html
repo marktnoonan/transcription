@@ -17,14 +17,18 @@
 			padding: 0;
 		}
 
-		header {
+		header, .header-buffer {
 			background-color: #fff;
-			/* position: fixed; */
+			position: fixed;
 			width: 100%;
 			top: 0;
 			background-color: aliceblue;
 			padding: 10px;
 		}
+
+    .header-buffer {
+      position: initial
+    }
 
 		h1 {
 			margin: 2px;
@@ -81,23 +85,38 @@
     <h1>Live Transcript</h1>
 		<button onclick="listen()">Start Listening</button>
     <button onclick="stop()">Stop Listening</button> Status: <span id="status">Not Listening</span>
-    
-    <span class="credit">Made by Mark Noonan (<a href="https://twitter.com/marktnoonan">@marktnoonan</a>), based on David Walsh's <a href="https://davidwalsh.name/speech-recognition">blog post</a>, and with apologies for only working in Google Chrome.</span>
-    <hr>
-    <aside class="name-transcript" id="name-transcript">
-      You can name this transcript to save the results and allow others to access it live from their own devices. Or don't
-      name it, and keep it private to just this browser window. If the transcript is not named,everything will be deleted when you close the page.
-      <form id="transcriptIDForm" class="transcript-id-form">
-        <label>Transcript name (letters, numbers, and dashes only): 
+    <form id="transcriptIDForm" class="transcript-id-form">
+      <label>Transcript name (letters, numbers, and dashes only):
+        <input type="text" id="newTranscriptID" pattern="[a-zA-Z0-9-]+">
+      </label>
+      <button type="submit">Name Transcript</button>
+    </form>
+  </header>
+    <div class='header-buffer' aria-hidden="true">
+      <h1>Live Transcript</h1>
+      <button onclick="listen()">Start Listening</button>
+      <button onclick="stop()">Stop Listening</button> Status:
+      <span id="status">Not Listening</span>
+      <form id="header-form-buffer" class="transcript-id-form">
+        <label>Transcript name (letters, numbers, and dashes only):
           <input type="text" id="newTranscriptID" pattern="[a-zA-Z0-9-]+">
         </label>
         <button type="submit">Name Transcript</button>
       </form>
-    </aside>
-  </header>
+    </div>
 	<main>
       
 		<section>
+      <span class="credit">Made by Mark Noonan (
+        <a href="https://twitter.com/marktnoonan">@marktnoonan</a>), based on David Walsh's
+        <a href="https://davidwalsh.name/speech-recognition">blog post</a>, and with apologies for only working in Google Chrome.</span>
+      <hr>
+      <aside class="name-transcript" id="name-transcript">
+        You can name this transcript to save the results and allow others to access it live from their own devices. Or don't name
+        it, and keep it private to just this browser window. If the transcript is not named, everything will be deleted when you
+        close the page.
+        
+      </aside>
 			<p id="transcript" contenteditable="false"></p>
 			<span class="interim" id="interim"></span>
 		</section>
@@ -188,8 +207,10 @@
   function saveTranscriptID(){
     transcriptID = document.getElementById("newTranscriptID").value;
     var observeLink = observeLinkRoot + "?" + transcriptID;
-    console.log(observeLink);
-    document.getElementById('name-transcript').innerHTML='Link for others to watch: <a href="' 
+    document.getElementById('name-transcript').innerHTML = "";
+    document.getElementById('transcriptIDForm').innerHTML='Link for others to watch: <a href="' 
+      + observeLink + '" target="_blank">' + observeLink + '</a>';
+    document.getElementById('header-form-buffer').innerHTML = 'Link for others to watch: <a href="'
       + observeLink + '" target="_blank">' + observeLink + '</a>';
     
   }
@@ -203,10 +224,22 @@ function addEditingListener(editedID, newElement){
   element.addEventListener('focus', selectWord);
 
   element.addEventListener('keydown', function(e){
+
+  // esc and enter should confirm the edited word
+  if (e.keyCode == 27) {
+      element.blur();
+      window.getSelection().removeAllRanges()
+    } else if (e.keyCode == 13) {
+      element.blur();
+      e.preventDefault();
+      window.getSelection().removeAllRanges()
+    }
+
     if (!textChanged && e.keyCode == 9 || 
     !textChanged && e.shiftKey && e.keyCode == 9){
-      console.log("tab pressed");
-      } else if (!blurListenerAdded && transcriptID !== '') {
+      // do nothing - there must be a better way to express this!
+      } 
+        else if (!blurListenerAdded && transcriptID !== '') {
         textChanged = true;
         blurListenerAdded = true;
         addBlurListener();
