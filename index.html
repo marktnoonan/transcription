@@ -15,7 +15,10 @@
 			font-family: sans-serif;
 			margin: 0;
 			padding: 0;
+      scroll-behavior: smooth;
 		}
+
+    
 
 		header, .header-buffer {
 			background-color: #fff;
@@ -45,6 +48,7 @@
 			white-space: pre-wrap;
 			outline: none;
       margin: 2px;
+      margin-bottom: 62px;
 		}
 
 		section {
@@ -52,9 +56,15 @@
 		}
 
 		.interim {
-			font-size: 22px;
-			color: slategray;
-      margin-top: 20px;
+      font-size: 22px;
+      color: #555;
+      bottom: 0;
+      left: 0;
+      background-color: #FFF;
+      padding: 8px;
+      width: 100%;
+      border-top: 1px solid gray;
+      position: fixed;
 		}
 
 		.credit {
@@ -115,7 +125,7 @@
         You can name this transcript to save the results and allow others to access it live from their own devices. Or don't name
         it, and keep it private to just this browser window. If the transcript is not named, everything will be deleted when you
         close the page.
-        
+        <hr> 
       </aside>
 			<p id="transcript" contenteditable="false"></p>
 			<span class="interim" id="interim"></span>
@@ -124,8 +134,10 @@
 
 
 <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
-
+<script>window.noZensmooth = true</script>
+<script src="zenscroll-min.js"></script>
 	<script>
+
   var config = {
 		apiKey: "AIzaSyD591s8Of9vqduC2ZAakt9mMQRin4wCFSQ",
 		authDomain: "live-transcript.firebaseapp.com",
@@ -134,12 +146,15 @@
 		storageBucket: "",
 		messagingSenderId: "1024703297861"
 	};
-	firebase.initializeApp(config);
-  var database = firebase.database();
+
+  var database;
   var transcript = document.querySelector('#transcript')
   var transcriptID = '';
   var snippetIDs = [];
   var listening = false;
+  var wordsPushedToTranscript = 0;
+  var charLengthOfPushes = 0;
+  var line;
   var lastResultCache = "";
   var observeLinkRoot = 'https://markthomasnoonan.com/transcription/observe.html'
 
@@ -148,15 +163,48 @@
         saveTranscriptID();
       })
 
-
   var recognition = new(window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
   recognition.lang = 'en-US';
   recognition.interimResults = true;
   recognition.maxAlternatives = 1;
+  var interim = document.querySelector('#interim');
   recognition.onresult = function(event) {
-    var interim = document.querySelector('#interim');
-    interim.textContent = event.results[0][0].transcript
-    lastResultCache = event.results[0][0].transcript
+    var resultText = event.results[0][0].transcript;
+    var resultWords = resultText.split(' ');
+    var minLengthNeeded = 10 + wordsPushedToTranscript;
+
+
+    if (resultWords.length > minLengthNeeded) {
+      var wordsToPush = [];      
+      for (var i = wordsPushedToTranscript; i < wordsPushedToTranscript + 5; i++) {
+        console.log(i, resultWords[i]);
+        
+        wordsToPush.push(resultWords[i]);
+      }
+      pushWordsToTranscript(wordsToPush);
+        wordsPushedToTranscript += 5;
+      
+      charLengthOfPushes += wordsToPush.join(' ').length;
+      console.log(wordsPushedToTranscript, charLengthOfPushes); 
+      console.log(resultText);           
+    }
+    if (charLengthOfPushes){
+      // the math here is to include the correct number of spaces in what we are removing from the
+      // beginning of the string. The goal is to not have the bottom fill up with text, obscuring the main
+      // part of the screen but also forcing people who are watching the the stream to wait for 
+      // a pause so that the transcript can catch up.
+      console.log(wordsPushedToTranscript / 5);
+      console.log(resultText);           
+      interim.textContent = resultText.substring(charLengthOfPushes + (wordsPushedToTranscript / 5));  
+      lastResultCache = resultText.substring(charLengthOfPushes + (wordsPushedToTranscript / 5));
+      console.log(interim.textContent);
+      
+    } else {
+      interim.textContent = resultText;     
+      lastResultCache = resultText;
+    }
+    zenscroll.toY(document.body.scrollHeight, 1000);
+
   };
 
   recognition.onend = function(event) {
@@ -164,7 +212,7 @@
     if (lastResultCache != '') {
       var words = lastResultCache.split(" ");
       var numWords = words.length;
-      var line = document.createElement('div');
+      line = document.createElement('div');
       for (var i = 0; i < words.length; i++ ){
         var snippetID = "snippet" + Date.now() + "-" + i;
         var span = document.createElement('span');
@@ -180,14 +228,16 @@
         addEditingListener(snippetID, span);
         }
       transcript.appendChild(line);
-      
-      lastResultCache = "";     
+      interim.textContent = '';
+      lastResultCache = "";
+      wordsPushedToTranscript = 0;
+      charLengthOfPushes = 0;
     }
 
     if (listening === false) {
       return
     } else {
-      window.scrollTo(0, document.body.scrollHeight);
+      zenscroll.toY(document.body.scrollHeight, 2000);
       recognition.start();
     }
   }
@@ -201,10 +251,33 @@
   function stop() {
     recognition.stop();
     document.querySelector("#status").textContent = "Not Listening";
+    interim.textContent = '';
     listening = false;
   }
 
+  function pushWordsToTranscript(arrayOfWords) {
+    console.log("will push this: ", arrayOfWords)
+    for (var i = 0; i < arrayOfWords.length; i++) {
+      var snippetID = "snippet" + Date.now() + "-" + i;
+      var span = document.createElement('span');
+      span.className = "snippet";
+      span.id = snippetID;
+      span.setAttribute('contenteditable', 'true');
+      span.append(arrayOfWords[i]);
+      if (transcriptID !== '') {
+        snippetIDs.push(snippetID);
+        database.ref('transcripts/' + transcriptID + '/' + snippetID).set(arrayOfWords[i], completion);
+      }
+      addEditingListener(snippetID, span);
+      transcript.appendChild(span);
+    }
+  }
+
   function saveTranscriptID(){
+    
+    firebase.initializeApp(config); 
+    database = firebase.database();
+    
     transcriptID = document.getElementById("newTranscriptID").value;
     var observeLink = observeLinkRoot + "?" + transcriptID;
     document.getElementById('name-transcript').innerHTML = "";
