@@ -154,9 +154,11 @@
   var listening = false;
   var wordsPushedToTranscript = 0;
   var charLengthOfPushes = 0;
-  var line;
+  var currentLineID = '';
   var lastResultCache = "";
-  var observeLinkRoot = 'https://markthomasnoonan.com/transcription/observe.html'
+  var observeLinkRoot = 'https://markthomasnoonan.com/transcription/observe.html';
+  var scrolling = false;
+
 
   document.getElementById("transcriptIDForm").addEventListener('submit', function (event) {
         event.preventDefault();
@@ -169,6 +171,15 @@
   recognition.maxAlternatives = 1;
   var interim = document.querySelector('#interim');
   recognition.onresult = function(event) {
+
+    if (!currentLineID) {
+      currentLineID = Date.now();
+      line = document.createElement('div');
+      line.id = 'line' + currentLineID;
+      transcript.appendChild(line);
+    }
+
+
     var resultText = event.results[0][0].transcript;
     var resultWords = resultText.split(' ');
     var minLengthNeeded = 10 + wordsPushedToTranscript;
@@ -177,33 +188,26 @@
     if (resultWords.length > minLengthNeeded) {
       var wordsToPush = [];      
       for (var i = wordsPushedToTranscript; i < wordsPushedToTranscript + 5; i++) {
-        console.log(i, resultWords[i]);
-        
         wordsToPush.push(resultWords[i]);
       }
       pushWordsToTranscript(wordsToPush);
         wordsPushedToTranscript += 5;
       
-      charLengthOfPushes += wordsToPush.join(' ').length;
-      console.log(wordsPushedToTranscript, charLengthOfPushes); 
-      console.log(resultText);           
+      charLengthOfPushes += wordsToPush.join(' ').length;          
     }
     if (charLengthOfPushes){
       // the math here is to include the correct number of spaces in what we are removing from the
       // beginning of the string. The goal is to not have the bottom fill up with text, obscuring the main
       // part of the screen but also forcing people who are watching the the stream to wait for 
-      // a pause so that the transcript can catch up.
-      console.log(wordsPushedToTranscript / 5);
-      console.log(resultText);           
+      // a pause so that the transcript can catch up.       
       interim.textContent = resultText.substring(charLengthOfPushes + (wordsPushedToTranscript / 5));  
       lastResultCache = resultText.substring(charLengthOfPushes + (wordsPushedToTranscript / 5));
-      console.log(interim.textContent);
       
     } else {
       interim.textContent = resultText;     
       lastResultCache = resultText;
     }
-    zenscroll.toY(document.body.scrollHeight, 1000);
+    zenscroll.toY(document.body.scrollHeight, 1500);
 
   };
 
@@ -212,7 +216,9 @@
     if (lastResultCache != '') {
       var words = lastResultCache.split(" ");
       var numWords = words.length;
-      line = document.createElement('div');
+      if (!line) {
+        line = document.createElement('div');      
+      }
       for (var i = 0; i < words.length; i++ ){
         var snippetID = "snippet" + Date.now() + "-" + i;
         var span = document.createElement('span');
@@ -227,17 +233,18 @@
         }
         addEditingListener(snippetID, span);
         }
-      transcript.appendChild(line);
       interim.textContent = '';
-      lastResultCache = "";
+      lastResultCache = '';
       wordsPushedToTranscript = 0;
       charLengthOfPushes = 0;
+      currentLineID = '';
+      line = null;
     }
 
     if (listening === false) {
       return
     } else {
-      zenscroll.toY(document.body.scrollHeight, 2000);
+      zenscroll.toY(document.body.scrollHeight, 2000)     
       recognition.start();
     }
   }
@@ -269,7 +276,8 @@
         database.ref('transcripts/' + transcriptID + '/' + snippetID).set(arrayOfWords[i], completion);
       }
       addEditingListener(snippetID, span);
-      transcript.appendChild(span);
+
+      line.appendChild(span);
     }
   }
 
