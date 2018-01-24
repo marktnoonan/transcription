@@ -18,7 +18,16 @@
       scroll-behavior: smooth;
 		}
 
-    
+    a {
+      font-weight: bold;
+      text-decoration: none;
+      color: yellowgreen;
+      
+    }
+
+    a:visited {
+      color: yellowgreen;
+    }
 
 		header, .header-buffer {
 			background-color: #fff;
@@ -38,7 +47,7 @@
 		}
 
 		main {
-			/* margin-top: 80px; */
+			margin-top: 120px;
 			align-items: top;
 		}
 
@@ -87,14 +96,21 @@
     .transcript-id-form {
       margin-top: 6px;
     }
+
+    .status {
+      margin-top: 4px;
+    }
 	</style>
 </head>
 
 <body>
-	<header>
+  
+  <header id="header">
     <h1>Live Transcript</h1>
-		<button onclick="listen()">Start Listening</button>
-    <button onclick="stop()">Stop Listening</button> Status: <span id="status">Not Listening</span>
+    <button onclick="listen()">Start Listening</button>
+    <button onclick="stop()">Stop Listening</button> 
+    <button onclick="toggleDarkTheme()">Toggle Light/Dark</button>
+    <div class="status">Status: <span id="status">Not Listening</span></div>
     <form id="transcriptIDForm" class="transcript-id-form">
       <label>Transcript name (letters, numbers, and dashes only):
         <input type="text" id="newTranscriptID" pattern="[a-zA-Z0-9-]+">
@@ -102,18 +118,6 @@
       <button type="submit">Name Transcript</button>
     </form>
   </header>
-    <div class='header-buffer' aria-hidden="true">
-      <h1>Live Transcript</h1>
-      <button onclick="listen()">Start Listening</button>
-      <button onclick="stop()">Stop Listening</button> Status:
-      <span id="status">Not Listening</span>
-      <form id="header-form-buffer" class="transcript-id-form">
-        <label>Transcript name (letters, numbers, and dashes only):
-          <input type="text" id="newTranscriptID" pattern="[a-zA-Z0-9-]+">
-        </label>
-        <button type="submit">Name Transcript</button>
-      </form>
-    </div>
 	<main>
       
 		<section>
@@ -158,7 +162,7 @@
   var lastResultCache = "";
   var observeLinkRoot = 'https://markthomasnoonan.com/transcription/observe.html';
   var scrolling = false;
-
+  var darkThemeOn = false;
 
   document.getElementById("transcriptIDForm").addEventListener('submit', function (event) {
         event.preventDefault();
@@ -352,6 +356,30 @@ function addEditingListener(editedID, newElement){
 
 }
 
+  function toggleDarkTheme() {
+
+    if (darkThemeOn == false) {
+
+      document.body.style.background = '#121212';
+      document.body.style.color = '#ffffff';
+      document.querySelector("header").style.backgroundColor = '#121212';
+      document.querySelector(".credit").style.color = '#ffffff';
+      darkThemeOn = true;
+
+    }
+    else {
+
+      document.body.style.background = '#ffffff';
+      document.body.style.color = '#000000';
+      document.querySelector("header").style.backgroundColor = '#f0f8ff';
+      document.querySelector(".credit").style.color = '#000';
+      darkThemeOn = false;
+
+    }
+
+  }  
+
+
 function completion(error) {
   console.log('completed');
     if (error) {
@@ -359,6 +387,10 @@ function completion(error) {
     } else {
       console.log("Data saved successfully.");
     }
+  }
+
+  function darkTheme() {
+    console.log("toggle")
   }
 
 	</script>
