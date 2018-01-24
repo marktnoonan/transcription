@@ -93,8 +93,8 @@
 <body>
 	<header>
     <h1>Live Transcript</h1>
-		<button onclick="listen()">Start Listening</button>
-    <button onclick="stop()">Stop Listening</button> Status: <span id="status">Not Listening</span>
+		<button onclick="listen()" class='startListen'>Start Listening</button>
+    <button onclick="stop()" class="stopListen" style="display:none">Stop Listening</button> Status: <span id="status">Not Listening</span>
     <form id="transcriptIDForm" class="transcript-id-form">
       <label>Transcript name (letters, numbers, and dashes only):
         <input type="text" id="newTranscriptID" pattern="[a-zA-Z0-9-]+">
@@ -103,10 +103,10 @@
     </form>
   </header>
     <div class='header-buffer' aria-hidden="true">
-      <h1>Live Transcript</h1>
-      <button onclick="listen()">Start Listening</button>
-      <button onclick="stop()">Stop Listening</button> Status:
+      <button onclick="listen()" class="startListen">Start Listening</button>
+      <button onclick="stop()" class="stopListen" style="display:none">Stop Listening</button> Status:
       <span id="status">Not Listening</span>
+      <h1>Live Transcript</h1>
       <form id="header-form-buffer" class="transcript-id-form">
         <label>Transcript name (letters, numbers, and dashes only):
           <input type="text" id="newTranscriptID" pattern="[a-zA-Z0-9-]+">
@@ -252,12 +252,25 @@
   function listen() {
     listening = true
     document.querySelector("#status").textContent = "Listening";
+    Array.from(document.getElementsByClassName('startListen')).map(function(element) {
+      element.setAttribute('style', 'display:none');
+    });
+    Array.from(document.getElementsByClassName('stopListen')).map(function(element) {
+      element.setAttribute('style', 'display:inline');
+    });
     recognition.start();
   }
 
   function stop() {
     recognition.stop();
     document.querySelector("#status").textContent = "Not Listening";
+    Array.from(document.getElementsByClassName('startListen')).map(function(element) {
+      element.setAttribute('style', 'display:inline');
+    });
+    Array.from(document.getElementsByClassName('stopListen')).map(function(element) {
+      element.setAttribute('style', 'display:none');
+    });
+    recognition.stop();
     interim.textContent = '';
     listening = false;
   }
