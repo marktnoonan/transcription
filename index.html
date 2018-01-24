@@ -111,6 +111,8 @@
     <button onclick="stop()">Stop Listening</button> 
     <button onclick="toggleDarkTheme()">Toggle Light/Dark</button>
     <div class="status">Status: <span id="status">Not Listening</span></div>
+		<button onclick="toggle()" class='startListen'>Start Listening</button>
+    <button onclick="toggle()" class="stopListen" style="display:none">Stop Listening</button> Status: <span id="status">Not Listening</span>
     <form id="transcriptIDForm" class="transcript-id-form">
       <label>Transcript name (letters, numbers, and dashes only):
         <input type="text" id="newTranscriptID" pattern="[a-zA-Z0-9-]+">
@@ -118,6 +120,18 @@
       <button type="submit">Name Transcript</button>
     </form>
   </header>
+    <div class='header-buffer' aria-hidden="true">
+      <button onclick="toggle()" class="startListen">Start Listening</button>
+      <button onclick="toggle()" class="stopListen" style="display:none">Stop Listening</button> Status:
+      <span id="status">Not Listening</span>
+      <h1>Live Transcript</h1>
+      <form id="header-form-buffer" class="transcript-id-form">
+        <label>Transcript name (letters, numbers, and dashes only):
+          <input type="text" id="newTranscriptID" pattern="[a-zA-Z0-9-]+">
+        </label>
+        <button type="submit">Name Transcript</button>
+      </form>
+    </div>
 	<main>
       
 		<section>
@@ -253,17 +267,21 @@
     }
   }
 
-  function listen() {
-    listening = true
+  function toggle() {
+    listening = !listening;
     document.querySelector("#status").textContent = "Listening";
-    recognition.start();
-  }
-
-  function stop() {
-    recognition.stop();
-    document.querySelector("#status").textContent = "Not Listening";
-    interim.textContent = '';
-    listening = false;
+    Array.from(document.getElementsByClassName('startListen')).map(function(element) {
+      element.setAttribute('style', (listening ? 'display:none' : 'display:inline'));
+    });
+    Array.from(document.getElementsByClassName('stopListen')).map(function(element) {
+      element.setAttribute('style', (listening ? 'display:inline' : 'display:none'));
+    });
+    if (listening) {
+      recognition.stop();
+      interim.textContent = '';
+     } else {
+       recognition.start();
+     }
   }
 
   function pushWordsToTranscript(arrayOfWords) {
