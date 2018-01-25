@@ -22,7 +22,7 @@
       font-weight: bold;
       text-decoration: none;
       color: yellowgreen;
-      
+
     }
 
     a:visited {
@@ -47,9 +47,53 @@
 		}
 
 		main {
-			margin-top: 120px;
 			align-items: top;
 		}
+
+		/* Start Media Queries on Main for Changing screen size */
+		@media only screen and (min-width: 150px) and (max-width: 158px) {
+			main {
+				padding-top: 7em;
+			}
+		}
+
+		@media only screen and (min-width: 159px) and (max-width: 199px) {
+		  main {
+		    padding-top: 6em;
+		  }
+		}
+
+		@media only screen and (min-width: 200px) and (max-width:226px) {
+		  main {
+		    padding-top: 5em;
+		  }
+		}
+
+		@media only screen and (min-width: 227px) and (max-width:234px) {
+		  main {
+		    padding-top: 4em;
+		  }
+		}
+
+		@media only screen and (min-width: 235px) and (max-width:281px) {
+		  main {
+		    padding-top: 3.7em;
+		  }
+		}
+
+		@media only screen and (min-width: 282px) and (max-width:350px) {
+		  main {
+		    padding-top: 4em;
+		  }
+		}
+
+		@media only screen and (min-width: 351px) and (max-width:1200px) {
+		  main {
+		    padding-top: 2.5em;
+		  }
+		}
+
+		/* End Media Queries for Changing screen size */
 
 		p {
 			font-size: 30px;
@@ -92,7 +136,7 @@
     .name-transcript {
       font-size: 14px;
     }
-    
+
     .transcript-id-form {
       margin-top: 6px;
     }
@@ -104,11 +148,11 @@
 </head>
 
 <body>
-  
+
   <header id="header">
     <h1>Live Transcript</h1>
     <button onclick="listen()">Start Listening</button>
-    <button onclick="stop()">Stop Listening</button> 
+    <button onclick="stop()">Stop Listening</button>
     <button onclick="toggleDarkTheme()">Toggle Light/Dark</button>
     <div class="status">Status: <span id="status">Not Listening</span></div>
 		<button onclick="toggle()" class='startListen'>Start Listening</button>
@@ -133,7 +177,7 @@
       </form>
     </div>
 	<main>
-      
+
 		<section>
       <span class="credit">Made by Mark Noonan (
         <a href="https://twitter.com/marktnoonan">@marktnoonan</a>), based on David Walsh's
@@ -143,7 +187,7 @@
         You can name this transcript to save the results and allow others to access it live from their own devices. Or don't name
         it, and keep it private to just this browser window. If the transcript is not named, everything will be deleted when you
         close the page.
-        <hr> 
+        <hr>
       </aside>
 			<p id="transcript" contenteditable="false"></p>
 			<span class="interim" id="interim"></span>
@@ -204,25 +248,25 @@
 
 
     if (resultWords.length > minLengthNeeded) {
-      var wordsToPush = [];      
+      var wordsToPush = [];
       for (var i = wordsPushedToTranscript; i < wordsPushedToTranscript + 5; i++) {
         wordsToPush.push(resultWords[i]);
       }
       pushWordsToTranscript(wordsToPush);
         wordsPushedToTranscript += 5;
-      
-      charLengthOfPushes += wordsToPush.join(' ').length;          
+
+      charLengthOfPushes += wordsToPush.join(' ').length;
     }
     if (charLengthOfPushes){
       // the math here is to include the correct number of spaces in what we are removing from the
       // beginning of the string. The goal is to not have the bottom fill up with text, obscuring the main
-      // part of the screen but also forcing people who are watching the the stream to wait for 
-      // a pause so that the transcript can catch up.       
-      interim.textContent = resultText.substring(charLengthOfPushes + (wordsPushedToTranscript / 5));  
+      // part of the screen but also forcing people who are watching the the stream to wait for
+      // a pause so that the transcript can catch up.
+      interim.textContent = resultText.substring(charLengthOfPushes + (wordsPushedToTranscript / 5));
       lastResultCache = resultText.substring(charLengthOfPushes + (wordsPushedToTranscript / 5));
-      
+
     } else {
-      interim.textContent = resultText;     
+      interim.textContent = resultText;
       lastResultCache = resultText;
     }
     zenscroll.toY(document.body.scrollHeight, 1500);
@@ -230,12 +274,12 @@
   };
 
   recognition.onend = function(event) {
-    
+
     if (lastResultCache != '') {
       var words = lastResultCache.split(" ");
       var numWords = words.length;
       if (!line) {
-        line = document.createElement('div');      
+        line = document.createElement('div');
       }
       for (var i = 0; i < words.length; i++ ){
         var snippetID = "snippet" + Date.now() + "-" + i;
@@ -262,7 +306,7 @@
     if (listening === false) {
       return
     } else {
-      zenscroll.toY(document.body.scrollHeight, 2000)     
+      zenscroll.toY(document.body.scrollHeight, 2000)
       recognition.start();
     }
   }
@@ -304,18 +348,18 @@
   }
 
   function saveTranscriptID(){
-    
-    firebase.initializeApp(config); 
+
+    firebase.initializeApp(config);
     database = firebase.database();
-    
+
     transcriptID = document.getElementById("newTranscriptID").value;
     var observeLink = observeLinkRoot + "?" + transcriptID;
     document.getElementById('name-transcript').innerHTML = "";
-    document.getElementById('transcriptIDForm').innerHTML='Link for others to watch: <a href="' 
+    document.getElementById('transcriptIDForm').innerHTML='Link for others to watch: <a href="'
       + observeLink + '" target="_blank">' + observeLink + '</a>';
     document.getElementById('header-form-buffer').innerHTML = 'Link for others to watch: <a href="'
       + observeLink + '" target="_blank">' + observeLink + '</a>';
-    
+
   }
 
 function addEditingListener(editedID, newElement){
@@ -338,10 +382,10 @@ function addEditingListener(editedID, newElement){
       window.getSelection().removeAllRanges()
     }
 
-    if (!textChanged && e.keyCode == 9 || 
+    if (!textChanged && e.keyCode == 9 ||
     !textChanged && e.shiftKey && e.keyCode == 9){
       // do nothing - there must be a better way to express this!
-      } 
+      }
         else if (!blurListenerAdded && transcriptID !== '') {
         textChanged = true;
         blurListenerAdded = true;
@@ -395,7 +439,7 @@ function addEditingListener(editedID, newElement){
 
     }
 
-  }  
+  }
 
 
 function completion(error) {
