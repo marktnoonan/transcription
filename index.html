@@ -42,9 +42,18 @@
 			margin: 2px;
 		}
 
-		main {
-			align-items: top;
-		}
+/*  
+    TODO: solve the problem of having to update media queries every time the content of the header changes
+    Possiblities: 
+      1. just always set the margin on the <main> element with JS based on the height of the header?
+      something like :
+    window.addEventListener('resize', function(){
+      document.querySelector('main').style.marginTop = document.querySelector("header").clientHeight + 'px';
+      })
+      ... with a similar function firing when the page first loads.
+
+      2. Something else? Can CSS do this on its own, and not break if the user changes the default font, lineheight, spacing, etc etc or the content itself is changed?
+ */
 
 		/* Start Media Queries on Main for Changing screen size */
 		@media only screen and (min-width: 150px) and (max-width: 158px) {
@@ -162,12 +171,14 @@
   </header>
     
 	<main>
-
 		<section>
+  <!-- TODO: Well it's not just made by me any more :) so how about we do something that follows the all-contributors spec:
+  https://github.com/kentcdodds/all-contributors -->
       <span class="credit">Made by Mark Noonan (
         <a href="https://twitter.com/marktnoonan">@marktnoonan</a>), based on David Walsh's
         <a href="https://davidwalsh.name/speech-recognition">blog post</a>, and with apologies for only working in Google Chrome.</span>
       <hr>
+      <!-- TODO: the language here could be improved. The class and ID names could be more clear also. -->
       <aside class="name-transcript" id="name-transcript">
         You can name this transcript to save the results and allow others to access it live from their own devices. Or don't name
         it, and keep it private to just this browser window. If the transcript is not named, everything will be deleted when you
@@ -184,6 +195,14 @@
 <script>window.noZensmooth = true</script>
 <script src="zenscroll-min.js"></script>
 	<script>
+
+// TODO: these globals could all quite happily live in an object called "liveTranscript" or something, to avoid getting in the global namespace.
+// TODO: likewise, all these global functions can live in that object too.
+// TODO: this whole script can move to its own file.
+// TODO: we can establish stadards for the kind of JS permitted in the project. _This_ page requires chrome and could use most ES6+ features that are implemented in Chrome, but the observer page is targeted to any possible display that can run enough JS for firebase.
+// TODO: Transcripts should be really simple to use and broadcast. But right now there is just read/write access to the DB for anyody who wants it. I would like to have no login whatsoever and still have the person who started a listening session ALWAYS remain in charge of it, so it couldn't be over written. There are probably many ways to do it. Right now if I am recording a named transcript, and somebody else names their transcript the same name as mine, we are both then feeding into the same exact DB location. That's dumb. But there are cases where you WOULD want to resume an existing named transcript at right now you just type in the name and pick up where you left off. Really curious to see how we can make this "just work" by maybe caching something in a cookie or local storage or whatever.
+// TODO: I haven't dug into Zenscroll enough to know how it handles being called repeatedly, but sometimes I see jankyness and we may need to look at how to only call Zenscroll if we are not already scrolling. My naive version of that didn't work as expected.
+
 
   var config = {
 		apiKey: "AIzaSyD591s8Of9vqduC2ZAakt9mMQRin4wCFSQ",
@@ -217,6 +236,8 @@
   recognition.interimResults = true;
   recognition.maxAlternatives = 1;
   var interim = document.querySelector('#interim');
+
+  //TODO: refactor this onresult function for clarity. Especially, just extract it and give it a name so that it's just recognition.onresult = manageInterimResults or something... most of the blocks in this function could be given their own name.
   recognition.onresult = function(event) {
 
     if (!currentLineID) {
@@ -226,11 +247,9 @@
       transcript.appendChild(line);
     }
 
-
     var resultText = event.results[0][0].transcript;
     var resultWords = resultText.split(' ');
     var minLengthNeeded = 10 + wordsPushedToTranscript;
-
 
     if (resultWords.length > minLengthNeeded) {
       var wordsToPush = [];
@@ -255,9 +274,9 @@
       lastResultCache = resultText;
     }
     zenscroll.toY(document.body.scrollHeight, 1500);
-
   };
 
+  // TODO: name, extract, and refactor the on-end function for clarity. Maybe I should comment some of the weirder stuff here to explain its purpose better.
   recognition.onend = function(event) {
 
     if (lastResultCache != '') {
@@ -296,6 +315,8 @@
     }
   }
 
+// TODO: remove logging. Give a more descriptive name than toggle, since we have this toggle for using the mic, and another for using the light/dark themes.
+// TODO: Mark ask Jared about this Array.from syntax and getting elements by class name then doing the map, vs other approaches.
   function toggle() {
     console.log(listening);
     
@@ -317,6 +338,7 @@
      }
   }
 
+// TODO: move the call to Date.now() to before the for-loop starts, because it often ticks over during the loop and that just looks a little funny, and makes the snippet IDs less predictable in case we need them later. So I would just have a var store Date.now() at the top of this function, and refer to it in the loop. Plus it saves a bunch of calls to that function for what that's worth.
   function pushWordsToTranscript(arrayOfWords) {
     console.log("will push this: ", arrayOfWords)
     for (var i = 0; i < arrayOfWords.length; i++) {
@@ -335,7 +357,7 @@
       line.appendChild(span);
     }
   }
-
+// TODO I think I can make this a little clearer.
   function saveTranscriptID(){
 
     firebase.initializeApp(config);
@@ -359,6 +381,7 @@ function addEditingListener(editedID, newElement){
   element.addEventListener('click', selectWord);
   element.addEventListener('focus', selectWord);
 
+// TODO: name and extract this function that runs on keydown
   element.addEventListener('keydown', function(e){
 
   // esc and enter should confirm the edited word
@@ -374,6 +397,7 @@ function addEditingListener(editedID, newElement){
     if (!textChanged && e.keyCode == 9 ||
     !textChanged && e.shiftKey && e.keyCode == 9){
       // do nothing - there must be a better way to express this!
+      // TODO: rewrite this conditional to be more clear. Maybe using something more obvious than the keycodes would be a good start?
       }
         else if (!blurListenerAdded && transcriptID !== '') {
         textChanged = true;
@@ -390,6 +414,7 @@ function addEditingListener(editedID, newElement){
     })
   }
 
+// TODO: This came from a stackoverflow answer and seems to work just fine, but I'm open to any other/better ways of selecting a word when it is clicked on so that the user can replace it just by typing.
   function selectWord () {
     var range, selection;
     if (window.getSelection && document.createRange) {
@@ -407,6 +432,7 @@ function addEditingListener(editedID, newElement){
 
 }
 
+// TODO: let's store references to elements we refer to a lot.
   function toggleDarkTheme() {
 
     if (darkThemeOn == false) {
@@ -430,7 +456,7 @@ function addEditingListener(editedID, newElement){
 
   }
 
-
+// TODO: rename this. It's just the callback that runs when firebase is done saving what we put in there. Maybe call it firebaseCompletion or something is better?
 function completion(error) {
   console.log('completed');
     if (error) {
@@ -440,6 +466,7 @@ function completion(error) {
     }
   }
 
+// TODO: delete this function. It was just a tiny test.
   function darkTheme() {
     console.log("toggle")
   }
