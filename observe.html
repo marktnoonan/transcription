@@ -71,8 +71,9 @@
       <label>Transcript name:
         <input type="text" id="newTranscriptID">
       </label>
-      <button type="submit">Watch Transcript</button>
+			<button type="submit">Watch Transcript</button>
     </form>
+			<button onclick="translateText()">Translate</button>
 
     <span class="credit">Made by Mark Noonan (<a href="https://twitter.com/marktnoonan">@marktnoonan</a>), based on David Walsh's <a href="https://davidwalsh.name/speech-recognition">blog post</a>.</span>
 	</header>
@@ -99,7 +100,8 @@
   var database = firebase.database();
   var transcriptID = '';
   var transcriptIDForm = document.getElementById("transcriptIDForm");
-  
+  var transcript = document.querySelector('#transcript');
+
 
   transcriptIDForm.addEventListener('submit', function(event) {
     event.preventDefault();
@@ -121,7 +123,6 @@ function processUpdate(id) {
 
 function updateTranscriptID() {
   transcriptID = document.getElementById("newTranscriptID").value;
-  var transcript = document.querySelector('#transcript');
   var snippetsArray = [];
   document.querySelector('#transcript-id').textContent = '(ID: ' + transcriptID + ')';
   var transcriptRef = database.ref('transcripts/' + transcriptID);
@@ -150,9 +151,35 @@ function updateTranscriptID() {
     window.scrollTo(0, document.body.scrollHeight);
   });
 }
-  
 
-		
+	function getAllWords() {
+		var words = document.querySelectorAll('.snippet');
+		return Array.prototype.map.call(words, 
+			function (snippet) { 
+				return snippet.textContent; 
+				}
+			);
+	}
+
+
+function translateText() {
+
+	var yandexApiKey = "trnsl.1.1.20180130T012212Z.d0c7c8f7f3d14aa8.bf92828f085a7e1a17b6f83c774a5ca50e8fb7e5";
+	var text = getAllWords();
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', 
+		'https://translate.yandex.net/api/v1.5/tr.json/translate?key=' + yandexApiKey + '&text=' + text.join('%20') + '&lang=en-es'
+		);
+	xhr.onload = function () {
+		if (xhr.status === 200) {
+			transcript.innerHTML = JSON.parse(xhr.responseText).text;
+		}
+		else {
+			alert('Request failed.  Returned status of ' + xhr.status);
+		}
+	};
+	xhr.send();
+}
 
 
 	</script>
