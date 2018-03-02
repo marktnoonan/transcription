@@ -161,6 +161,7 @@
     <button onclick="toggleDarkTheme()">Toggle Light/Dark</button>
 		<button onclick="toggle()" class='startListen'>Start Listening</button>
     <button onclick="toggle()" class="stopListen" style="display:none">Stop Listening</button> 
+    <button onclick="getExport()">Export Transcript</button>
     <div class="status">Status:
       <span id="status">Not Listening</span>
     </div>
@@ -227,6 +228,29 @@
   var observeLinkRoot = 'https://markthomasnoonan.com/transcription/observe.html';
   var scrolling = false;
   var darkThemeOn = false;
+  var transcriptStartTime = '';
+  var haveListenedOnce = false;
+
+  function getExport () {
+    var text = exportCurrentTranscript();
+    window.alert(text)
+  }
+
+  function exportCurrentTranscript () {
+    var transcriptExportAsJSON = {};
+    var lines = Array.from(transcript.querySelectorAll('div'));
+    lines.forEach(function (line) {
+      var lineContent = Array.from(line.querySelectorAll('span')).map(
+        line => line.textContent
+      ).join(' ');      
+      var msSinceStart = Number(line.id.substr(4)) - Number(transcriptStartTime);
+
+      transcriptExportAsJSON[msSinceStart] = lineContent;
+    })
+    return JSON.stringify(transcriptExportAsJSON);
+  }
+
+
 
   document.getElementById("transcriptIDForm").addEventListener('submit', function (event) {
         event.preventDefault();
@@ -287,8 +311,9 @@
       if (!line) {
         line = document.createElement('div');
       }
+      var snippetIdRoot = Date.now();
       for (var i = 0; i < words.length; i++ ){
-        var snippetID = "snippet" + Date.now() + "-" + i;
+        var snippetID = "snippet" + snippetIdRoot + "-" + i;
         var span = document.createElement('span');
         span.className = "snippet";
         span.id = snippetID;
@@ -320,11 +345,14 @@
 // TODO: remove logging. Give a more descriptive name than toggle, since we have this toggle for using the mic, and another for using the light/dark themes.
 // TODO: Mark ask Jared about this Array.from syntax and getting elements by class name then doing the map, vs other approaches.
   function toggle() {
-    console.log(listening);
-    
+    if (!haveListenedOnce) {
+      haveListenedOnce = true;
+      transcriptStartTime = Date.now();
+      console.log('transcript started at ' + transcriptStartTime)
+    }
+
     listening = !listening;
-    console.log(listening);
-    
+
     document.querySelector("#status").textContent = "Listening";
     Array.from(document.getElementsByClassName('startListen')).map(function(element) {
       element.setAttribute('style', (listening ? 'display:none' : 'display:inline'));
@@ -335,16 +363,15 @@
     if (!listening) {
       recognition.stop();
       interim.textContent = '';
-     } else {
-       recognition.start();
-     }
+    } else {
+      recognition.start();
+    }
   }
 
-// TODO: move the call to Date.now() to before the for-loop starts, because it often ticks over during the loop and that just looks a little funny, and makes the snippet IDs less predictable in case we need them later. So I would just have a var store Date.now() at the top of this function, and refer to it in the loop. Plus it saves a bunch of calls to that function for what that's worth.
   function pushWordsToTranscript(arrayOfWords) {
-    console.log("will push this: ", arrayOfWords)
+    var snippetIdRoot = Date.now();
     for (var i = 0; i < arrayOfWords.length; i++) {
-      var snippetID = "snippet" + Date.now() + "-" + i;
+      var snippetID = "snippet" + snippetIdRoot + "-" + i;
       var span = document.createElement('span');
       span.className = "snippet";
       span.id = snippetID;
