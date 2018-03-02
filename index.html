@@ -222,7 +222,7 @@
   recognition.onresult = function(event) {
 
     if (!currentLineID) {
-      currentLineID = Date.now();
+      currentLineID = Date.now(); // this is what we will really use to handle "replay" timing I think. - Mark
       line = document.createElement('div');
       line.id = 'line' + currentLineID;
       transcript.appendChild(line);
@@ -317,9 +317,10 @@
   }
 
   function pushWordsToTranscript(arrayOfWords) {
+    var snippetIdRoot = Date.now()
     console.log("will push this: ", arrayOfWords)
     for (var i = 0; i < arrayOfWords.length; i++) {
-      var snippetID = "snippet" + Date.now() + "-" + i;
+      var snippetID = "snippet" + snippetIdRoot + "-" + i;
       var span = document.createElement('span');
       span.className = "snippet";
       span.id = snippetID;
