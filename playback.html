@@ -190,7 +190,7 @@
     var transcriptStartTime = '';
     var haveListenedOnce = false;
     var exampleJSON = { "1319": "let's see how json stringify works with it", "11310": "if I add more text I get more words", "17192": "not let me figure out the time after that I  I need to replay on the other side" }
-    
+
     function playTranscript () {
       transcript.innerHTML = "Starting subtitles <br>";
       const transcriptJsonStr = JSON.parse(document.querySelector('#paste-transcript').value);
@@ -208,8 +208,11 @@
         progressThroughLines++;
         console.log(numberOfLines, progressThroughLines)
         if (progressThroughLines === numberOfLines) {
-          console.log("I'm going to repeat.")
-          playTranscript()
+          console.log("I'm going to repeat in 25s.") // needs to be user-configureable, obviously! TODO
+          setTimeout(function () {
+            playTranscript()
+          },23000)
+          
         }
       }, Number(timestamp));
       }
