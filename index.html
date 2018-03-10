@@ -15,21 +15,21 @@
 			font-family: sans-serif;
 			margin: 0;
 			padding: 0;
-      scroll-behavior: smooth;
+			scroll-behavior: smooth;
 		}
 
-    a {
-      font-weight: bold;
-      text-decoration: none;
-      color: yellowgreen;
+		a {
+			font-weight: bold;
+			text-decoration: none;
+			color: yellowgreen;
+		}
 
-    }
+		a:visited {
+			color: yellowgreen;
+		}
 
-    a:visited {
-      color: yellowgreen;
-    }
-
-		header, .header-buffer {
+		header,
+		.header-buffer {
 			background-color: #fff;
 			position: fixed;
 			width: 100%;
@@ -42,7 +42,7 @@
 			margin: 2px;
 		}
 
-/*  
+		/*  
     TODO: solve the problem of having to update media queries every time the content of the header changes
     Possiblities: 
       1. just always set the margin on the <main> element with JS based on the height of the header?
@@ -56,6 +56,7 @@
  */
 
 		/* Start Media Queries on Main for Changing screen size */
+
 		@media only screen and (min-width: 150px) and (max-width: 167px) {
 			main {
 				padding-top: 17em;
@@ -63,43 +64,47 @@
 		}
 
 		@media only screen and (min-width: 168px) and (max-width: 195px) {
-		  main {
-		    padding-top: 16em;
-		  }
+			main {
+				padding-top: 16em;
+			}
 		}
 
 		@media only screen and (min-width: 196px) and (max-width:225px) {
-		  main {
-		    padding-top: 15em;
-		  }
+			main {
+				padding-top: 15em;
+			}
 		}
 
 		@media only screen and (min-width: 226px) and (max-width:251px) {
-		  main {
-		    padding-top: 14em;
-		  }
+			main {
+				padding-top: 14em;
+			}
 		}
 
 		@media only screen and (min-width: 252px) and (max-width:260px) {
-		  main {
-		    padding-top: 10.4em;
-		  }
+			main {
+				padding-top: 10.4em;
+			}
 		}
+
 		@media only screen and (min-width: 261px) and (max-width:354px) {
-		  main {
-		    padding-top: 9.4em;
-		  }
+			main {
+				padding-top: 9.4em;
+			}
 		}
+
 		@media only screen and (min-width: 354px) and (max-width:637px) {
-		  main {
-		    padding-top: 8.6em;
-		  }
+			main {
+				padding-top: 8.6em;
+			}
 		}
-    @media only screen and (min-width: 637px) {
-		  main {
-		    padding-top: 7.4em;
-		  }
-      }
+
+		@media only screen and (min-width: 637px) {
+			main {
+				padding-top: 7.4em;
+			}
+		}
+
 		/* End Media Queries for Changing screen size */
 
 		p {
@@ -107,8 +112,8 @@
 			line-height: 1.2;
 			white-space: pre-wrap;
 			outline: none;
-      margin: 2px;
-      margin-bottom: 62px;
+			margin: 2px;
+			margin-bottom: 62px;
 		}
 
 		section {
@@ -116,391 +121,390 @@
 		}
 
 		.interim {
-      font-size: 22px;
-      color: #555;
-      bottom: 0;
-      left: 0;
-      background-color: #FFF;
-      padding: 8px;
-      width: 100%;
-      border-top: 1px solid gray;
-      position: fixed;
+			font-size: 22px;
+			color: #555;
+			bottom: 0;
+			left: 0;
+			background-color: #FFF;
+			padding: 8px;
+			width: 100%;
+			border-top: 1px solid gray;
+			position: fixed;
 		}
 
 		.credit {
-      margin-top: 4px;
+			margin-top: 4px;
 			font-size: 12px;
-			color:#333;
-      display: block;
+			color: #333;
+			display: block;
 		}
 
-    .snippet {
-      margin: .15em;
-      outline: none;
-      display: inline-block;
-    }
+		.snippet {
+			margin: .15em;
+			outline: none;
+			display: inline-block;
+		}
 
-    .name-transcript {
-      font-size: 14px;
-    }
+		.name-transcript {
+			font-size: 14px;
+		}
 
-    .transcript-id-form {
-      margin-top: 6px;
-    }
+		.transcript-id-form {
+			margin-top: 6px;
+		}
 
-    .status {
-      margin-top: 4px;
-    }
+		.status {
+			margin-top: 4px;
+		}
 	</style>
 </head>
 
 <body>
 
-  <header id="header">
-    <h1>Live Transcript</h1>
-    <button onclick="toggleDarkTheme()">Toggle Light/Dark</button>
+	<header id="header">
+		<h1>Live Transcript</h1>
+		<button onclick="toggleDarkTheme()">Toggle Light/Dark</button>
 		<button onclick="toggle()" class='startListen'>Start Listening</button>
-    <button onclick="toggle()" class="stopListen" style="display:none">Stop Listening</button> 
-    <button onclick="getExport()">Export Transcript</button>
-    <div class="status">Status:
-      <span id="status">Not Listening</span>
-    </div>
-    <form id="transcriptIDForm" class="transcript-id-form">
-      <label>Transcript name (letters, numbers, and dashes only):
+		<button onclick="toggle()" class="stopListen" style="display:none">Stop Listening</button>
+		<button onclick="getExport()">Export Transcript</button>
+		<div class="status">Status:
+			<span id="status">Not Listening</span>
+		</div>
+		<form id="transcriptIDForm" class="transcript-id-form">
+			<label>Transcript name (letters, numbers, and dashes only):
         <input type="text" id="newTranscriptID" pattern="[a-zA-Z0-9-]+">
       </label>
-      <button type="submit">Name Transcript</button>
-    </form>
-  </header>
-    
+			<button type="submit">Name Transcript</button>
+		</form>
+	</header>
+
 	<main>
 		<section>
-  <!-- TODO: Well it's not just made by me any more :) so how about we do something that follows the all-contributors spec:
+			<!-- TODO: Well it's not just made by me any more :) so how about we do something that follows the all-contributors spec:
   https://github.com/kentcdodds/all-contributors -->
-      <span class="credit">Made by Mark Noonan (
+			<span class="credit">Made by Mark Noonan (
         <a href="https://twitter.com/marktnoonan">@marktnoonan</a>), based on David Walsh's
         <a href="https://davidwalsh.name/speech-recognition">blog post</a>, and with apologies for only working in Google Chrome.</span>
-      <hr>
-      <!-- TODO: the language here could be improved. The class and ID names could be more clear also. -->
-      <aside class="name-transcript" id="name-transcript">
-        You can name this transcript to save the results and allow others to access it live from their own devices. Or don't name
-        it, and keep it private to just this browser window. If the transcript is not named, everything will be deleted when you
-        close the page.
-        <hr>
-      </aside>
+			<hr>
+			<!-- TODO: the language here could be improved. The class and ID names could be more clear also. -->
+			<aside class="name-transcript" id="name-transcript">
+				You can name this transcript to save the results and allow others to access it live from their own devices. Or don't name it, and keep it private to just this browser window. If the transcript is not named, everything will be deleted when you close the
+				page.
+				<hr>
+			</aside>
 			<p id="transcript" contenteditable="false"></p>
 			<span class="interim" id="interim"></span>
 		</section>
 	</main>
 
 
-<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
-<script>window.noZensmooth = true</script>
-<script src="zenscroll-min.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
 	<script>
-
-// TODO: these globals could all quite happily live in an object called "liveTranscript" or something, to avoid getting in the global namespace.
-// TODO: likewise, all these global functions can live in that object too.
-// TODO: this whole script can move to its own file.
-// TODO: we can establish stadards for the kind of JS permitted in the project. _This_ page requires chrome and could use most ES6+ features that are implemented in Chrome, but the observer page is targeted to any possible display that can run enough JS for firebase.
-// TODO: Transcripts should be really simple to use and broadcast. But right now there is just read/write access to the DB for anyody who wants it. I would like to have no login whatsoever and still have the person who started a listening session ALWAYS remain in charge of it, so it couldn't be over written. There are probably many ways to do it. Right now if I am recording a named transcript, and somebody else names their transcript the same name as mine, we are both then feeding into the same exact DB location. That's dumb. But there are cases where you WOULD want to resume an existing named transcript at right now you just type in the name and pick up where you left off. Really curious to see how we can make this "just work" by maybe caching something in a cookie or local storage or whatever.
-// TODO: I haven't dug into Zenscroll enough to know how it handles being called repeatedly, but sometimes I see jankyness and we may need to look at how to only call Zenscroll if we are not already scrolling. My naive version of that didn't work as expected.
-
-
-  var config = {
-		apiKey: "AIzaSyD591s8Of9vqduC2ZAakt9mMQRin4wCFSQ",
-		authDomain: "live-transcript.firebaseapp.com",
-		databaseURL: "https://live-transcript.firebaseio.com",
-		projectId: "live-transcript",
-		storageBucket: "",
-		messagingSenderId: "1024703297861"
-	};
-
-  var database;
-  var transcript = document.querySelector('#transcript')
-  var transcriptID = '';
-  var snippetIDs = [];
-  var listening = false;
-  var wordsPushedToTranscript = 0;
-  var charLengthOfPushes = 0;
-  var currentLineID = '';
-  var lastResultCache = "";
-  var observeLinkRoot = 'https://markthomasnoonan.com/transcription/observe.html';
-  var scrolling = false;
-  var darkThemeOn = false;
-  var transcriptStartTime = '';
-  var haveListenedOnce = false;
-
-  function getExport () {
-    var text = exportCurrentTranscript();
-    console.log(text)
-    window.alert(text)
-  }
-
-  function exportCurrentTranscript () {
-    var transcriptExportAsJSON = {};
-    var lines = Array.from(transcript.querySelectorAll('div'));
-    lines.forEach(function (line) {
-      var lineContent = Array.from(line.querySelectorAll('span')).map(
-        line => line.textContent
-      ).join(' ');      
-      var msSinceStart = Number(line.id.substr(4)) - Number(transcriptStartTime);
-
-      transcriptExportAsJSON[msSinceStart] = lineContent;
-    })
-    return JSON.stringify(transcriptExportAsJSON);
-  }
+		window.noZensmooth = true
+	</script>
+	<script src="zenscroll-min.js"></script>
+	<script>
+		// TODO: these globals could all quite happily live in an object called "liveTranscript" or something, to avoid getting in the global namespace.
+		// TODO: likewise, all these global functions can live in that object too.
+		// TODO: this whole script can move to its own file.
+		// TODO: we can establish stadards for the kind of JS permitted in the project. _This_ page requires chrome and could use most ES6+ features that are implemented in Chrome, but the observer page is targeted to any possible display that can run enough JS for firebase.
+		// TODO: Transcripts should be really simple to use and broadcast. But right now there is just read/write access to the DB for anyody who wants it. I would like to have no login whatsoever and still have the person who started a listening session ALWAYS remain in charge of it, so it couldn't be over written. There are probably many ways to do it. Right now if I am recording a named transcript, and somebody else names their transcript the same name as mine, we are both then feeding into the same exact DB location. That's dumb. But there are cases where you WOULD want to resume an existing named transcript at right now you just type in the name and pick up where you left off. Really curious to see how we can make this "just work" by maybe caching something in a cookie or local storage or whatever.
+		// TODO: I haven't dug into Zenscroll enough to know how it handles being called repeatedly, but sometimes I see jankyness and we may need to look at how to only call Zenscroll if we are not already scrolling. My naive version of that didn't work as expected.
 
 
+		var config = {
+			apiKey: "AIzaSyD591s8Of9vqduC2ZAakt9mMQRin4wCFSQ",
+			authDomain: "live-transcript.firebaseapp.com",
+			databaseURL: "https://live-transcript.firebaseio.com",
+			projectId: "live-transcript",
+			storageBucket: "",
+			messagingSenderId: "1024703297861"
+		};
 
-  document.getElementById("transcriptIDForm").addEventListener('submit', function (event) {
-        event.preventDefault();
-        saveTranscriptID();
-      })
+		var database;
+		var transcript = document.querySelector('#transcript')
+		var transcriptID = '';
+		var snippetIDs = [];
+		var listening = false;
+		var wordsPushedToTranscript = 0;
+		var charLengthOfPushes = 0;
+		var currentLineID = '';
+		var lastResultCache = "";
+		var observeLinkRoot = 'https://markthomasnoonan.com/transcription/observe.html';
+		var scrolling = false;
+		var darkThemeOn = false;
+		var transcriptStartTime = '';
+		var haveListenedOnce = false;
 
-  var recognition = new(window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
-  recognition.lang = 'en-US';
-  recognition.interimResults = true;
-  recognition.maxAlternatives = 1;
-  var interim = document.querySelector('#interim');
+		function getExport() {
+			var text = exportCurrentTranscript();
+			console.log(text)
+			window.alert(text)
+		}
 
-  //TODO: refactor this onresult function for clarity. Especially, just extract it and give it a name so that it's just recognition.onresult = manageInterimResults or something... most of the blocks in this function could be given their own name.
-  recognition.onresult = function(event) {
+		function exportCurrentTranscript() {
+			var transcriptExportAsJSON = {};
+			var lines = Array.from(transcript.querySelectorAll('div'));
+			lines.forEach(function(line) {
+				var lineContent = Array.from(line.querySelectorAll('span')).map(
+					line => line.textContent
+				).join(' ');
+				var msSinceStart = Number(line.id.substr(4)) - Number(transcriptStartTime);
 
-    if (!currentLineID) {
-      currentLineID = Date.now();
-      line = document.createElement('div');
-      line.id = 'line' + currentLineID;
-      transcript.appendChild(line);
-    }
+				transcriptExportAsJSON[msSinceStart] = lineContent;
+			})
+			return JSON.stringify(transcriptExportAsJSON);
+		}
 
-    var resultText = event.results[0][0].transcript;
-    var resultWords = resultText.split(' ');
-    var minLengthNeeded = 10 + wordsPushedToTranscript;
 
-    if (resultWords.length > minLengthNeeded) {
-      var wordsToPush = [];
-      for (var i = wordsPushedToTranscript; i < wordsPushedToTranscript + 5; i++) {
-        wordsToPush.push(resultWords[i]);
-      }
-      pushWordsToTranscript(wordsToPush);
-        wordsPushedToTranscript += 5;
 
-      charLengthOfPushes += wordsToPush.join(' ').length;
-    }
-    if (charLengthOfPushes){
-      // the math here is to include the correct number of spaces in what we are removing from the
-      // beginning of the string. The goal is to not have the bottom fill up with text, obscuring the main
-      // part of the screen but also forcing people who are watching the the stream to wait for
-      // a pause so that the transcript can catch up.
-      interim.textContent = resultText.substring(charLengthOfPushes + (wordsPushedToTranscript / 5));
-      lastResultCache = resultText.substring(charLengthOfPushes + (wordsPushedToTranscript / 5));
+		document.getElementById("transcriptIDForm").addEventListener('submit', function(event) {
+			event.preventDefault();
+			saveTranscriptID();
+		})
 
-    } else {
-      interim.textContent = resultText;
-      lastResultCache = resultText;
-    }
-    zenscroll.toY(document.body.scrollHeight, 1500);
-  };
+		var recognition = new(window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+		recognition.lang = 'en-US';
+		recognition.interimResults = true;
+		recognition.maxAlternatives = 1;
+		var interim = document.querySelector('#interim');
 
-  // TODO: name, extract, and refactor the on-end function for clarity. Maybe I should comment some of the weirder stuff here to explain its purpose better.
-  recognition.onend = function(event) {
+		//TODO: refactor this onresult function for clarity. Especially, just extract it and give it a name so that it's just recognition.onresult = manageInterimResults or something... most of the blocks in this function could be given their own name.
+		recognition.onresult = function(event) {
 
-    if (lastResultCache != '') {
-      var words = lastResultCache.split(" ");
-      var numWords = words.length;
-      if (!line) {
-        line = document.createElement('div');
-      }
-      var snippetIdRoot = Date.now();
-      for (var i = 0; i < words.length; i++ ){
-        var snippetID = "snippet" + snippetIdRoot + "-" + i;
-        var span = document.createElement('span');
-        span.className = "snippet";
-        span.id = snippetID;
-        span.setAttribute('contenteditable', 'true');
-        span.append(words[i]);
-        line.appendChild(span);
-        if (transcriptID !== '') {
-          snippetIDs.push(snippetID);
-          database.ref('transcripts/' + transcriptID + '/' + snippetID).set(words[i], completion);
-        }
-        addEditingListener(snippetID, span);
-        }
-      interim.textContent = '';
-      lastResultCache = '';
-      wordsPushedToTranscript = 0;
-      charLengthOfPushes = 0;
-      currentLineID = '';
-      line = null;
-    }
+			if (!currentLineID) {
+				currentLineID = Date.now(); // this is what we will really use to handle "replay" timing I think. - Mark
+				line = document.createElement('div');
+				line.id = 'line' + currentLineID;
+				transcript.appendChild(line);
+			}
 
-    if (listening === false) {
-      return
-    } else {
-      zenscroll.toY(document.body.scrollHeight, 2000)
-      recognition.start();
-    }
-  }
+			var resultText = event.results[0][0].transcript;
+			var resultWords = resultText.split(' ');
+			var minLengthNeeded = 10 + wordsPushedToTranscript;
 
-// TODO: remove logging. Give a more descriptive name than toggle, since we have this toggle for using the mic, and another for using the light/dark themes.
-// TODO: Mark ask Jared about this Array.from syntax and getting elements by class name then doing the map, vs other approaches.
-  function toggle() {
-    if (!haveListenedOnce) {
-      haveListenedOnce = true;
-      transcriptStartTime = Date.now();
-      console.log('transcript started at ' + transcriptStartTime)
-    }
+			if (resultWords.length > minLengthNeeded) {
+				var wordsToPush = [];
+				for (var i = wordsPushedToTranscript; i < wordsPushedToTranscript + 5; i++) {
+					wordsToPush.push(resultWords[i]);
+				}
+				pushWordsToTranscript(wordsToPush);
+				wordsPushedToTranscript += 5;
 
-    listening = !listening;
+				charLengthOfPushes += wordsToPush.join(' ').length;
+			}
+			if (charLengthOfPushes) {
+				// the math here is to include the correct number of spaces in what we are removing from the
+				// beginning of the string. The goal is to not have the bottom fill up with text, obscuring the main
+				// part of the screen but also forcing people who are watching the the stream to wait for
+				// a pause so that the transcript can catch up.
+				interim.textContent = resultText.substring(charLengthOfPushes + (wordsPushedToTranscript / 5));
+				lastResultCache = resultText.substring(charLengthOfPushes + (wordsPushedToTranscript / 5));
 
-    document.querySelector("#status").textContent = "Listening";
-    Array.from(document.getElementsByClassName('startListen')).map(function(element) {
-      element.setAttribute('style', (listening ? 'display:none' : 'display:inline'));
-    });
-    Array.from(document.getElementsByClassName('stopListen')).map(function(element) {
-      element.setAttribute('style', (listening ? 'display:inline' : 'display:none'));
-    });
-    if (!listening) {
-      recognition.stop();
-      interim.textContent = '';
-    } else {
-      recognition.start();
-    }
-  }
+			} else {
+				interim.textContent = resultText;
+				lastResultCache = resultText;
+			}
+			zenscroll.toY(document.body.scrollHeight, 1500);
+		};
 
-  function pushWordsToTranscript(arrayOfWords) {
-    var snippetIdRoot = Date.now();
-    for (var i = 0; i < arrayOfWords.length; i++) {
-      var snippetID = "snippet" + snippetIdRoot + "-" + i;
-      var span = document.createElement('span');
-      span.className = "snippet";
-      span.id = snippetID;
-      span.setAttribute('contenteditable', 'true');
-      span.append(arrayOfWords[i]);
-      if (transcriptID !== '') {
-        snippetIDs.push(snippetID);
-        database.ref('transcripts/' + transcriptID + '/' + snippetID).set(arrayOfWords[i], completion);
-      }
-      addEditingListener(snippetID, span);
+		// TODO: name, extract, and refactor the on-end function for clarity. Maybe I should comment some of the weirder stuff here to explain its purpose better.
+		recognition.onend = function(event) {
 
-      line.appendChild(span);
-    }
-  }
-// TODO I think I can make this a little clearer.
-  function saveTranscriptID(){
+			if (lastResultCache != '') {
+				var words = lastResultCache.split(" ");
+				var numWords = words.length;
+				if (!line) {
+					line = document.createElement('div');
+				}
+				var snippetIdRoot = Date.now();
+				for (var i = 0; i < words.length; i++) {
+					var snippetID = "snippet" + snippetIdRoot + "-" + i;
+					var span = document.createElement('span');
+					span.className = "snippet";
+					span.id = snippetID;
+					span.setAttribute('contenteditable', 'true');
+					span.append(words[i]);
+					line.appendChild(span);
+					if (transcriptID !== '') {
+						snippetIDs.push(snippetID);
+						database.ref('transcripts/' + transcriptID + '/' + snippetID).set(words[i], completion);
+					}
+					addEditingListener(snippetID, span);
+				}
+				interim.textContent = '';
+				lastResultCache = '';
+				wordsPushedToTranscript = 0;
+				charLengthOfPushes = 0;
+				currentLineID = '';
+				line = null;
+			}
 
-    firebase.initializeApp(config);
-    database = firebase.database();
+			if (listening === false) {
+				return
+			} else {
+				zenscroll.toY(document.body.scrollHeight, 2000)
+				recognition.start();
+			}
+		}
 
-    transcriptID = document.getElementById("newTranscriptID").value;
-    var observeLink = observeLinkRoot + "?" + transcriptID;
-    document.getElementById('name-transcript').innerHTML = "";
-    document.getElementById('transcriptIDForm').innerHTML='Link for others to watch: <a href="'
-      + observeLink + '" target="_blank">' + observeLink + '</a>';
-    document.getElementById('header-form-buffer').innerHTML = 'Link for others to watch: <a href="'
-      + observeLink + '" target="_blank">' + observeLink + '</a>';
+		// TODO: remove logging. Give a more descriptive name than toggle, since we have this toggle for using the mic, and another for using the light/dark themes.
+		// TODO: Mark ask Jared about this Array.from syntax and getting elements by class name then doing the map, vs other approaches.
+		function toggle() {
+			if (!haveListenedOnce) {
+				haveListenedOnce = true;
+				transcriptStartTime = Date.now();
+				console.log('transcript started at ' + transcriptStartTime)
+			}
 
-  }
+			listening = !listening;
 
-function addEditingListener(editedID, newElement){
-  var textChanged = false;
-  var blurListenerAdded = false;
-  var element = newElement;
-  //document.getElementById(editedID);
-  element.addEventListener('click', selectWord);
-  element.addEventListener('focus', selectWord);
+			document.querySelector("#status").textContent = "Listening";
+			Array.from(document.getElementsByClassName('startListen')).map(function(element) {
+				element.setAttribute('style', (listening ? 'display:none' : 'display:inline'));
+			});
+			Array.from(document.getElementsByClassName('stopListen')).map(function(element) {
+				element.setAttribute('style', (listening ? 'display:inline' : 'display:none'));
+			});
+			if (!listening) {
+				recognition.stop();
+				interim.textContent = '';
+				document.querySelector("#status").textContent = "Not Listening";
+			} else {
+				recognition.start();
+				document.querySelector("#status").textContent = "Listening";
+			}
+		}
 
-// TODO: name and extract this function that runs on keydown
-  element.addEventListener('keydown', function(e){
+		function pushWordsToTranscript(arrayOfWords) {
+			var snippetIdRoot = Date.now();
+			for (var i = 0; i < arrayOfWords.length; i++) {
+				var snippetID = "snippet" + snippetIdRoot + "-" + i;
+				var span = document.createElement('span');
+				span.className = "snippet";
+				span.id = snippetID;
+				span.setAttribute('contenteditable', 'true');
+				span.append(arrayOfWords[i]);
+				if (transcriptID !== '') {
+					snippetIDs.push(snippetID);
+					database.ref('transcripts/' + transcriptID + '/' + snippetID).set(arrayOfWords[i], completion);
+				}
+				addEditingListener(snippetID, span);
 
-  // esc and enter should confirm the edited word
-  if (e.keyCode == 27) {
-      element.blur();
-      window.getSelection().removeAllRanges()
-    } else if (e.keyCode == 13) {
-      element.blur();
-      e.preventDefault();
-      window.getSelection().removeAllRanges()
-    }
+				line.appendChild(span);
+			}
+		}
+		// TODO I think I can make this a little clearer.
+		function saveTranscriptID() {
 
-    if (!textChanged && e.keyCode == 9 ||
-    !textChanged && e.shiftKey && e.keyCode == 9){
-      // do nothing - there must be a better way to express this!
-      // TODO: rewrite this conditional to be more clear. Maybe using something more obvious than the keycodes would be a good start?
-      }
-        else if (!blurListenerAdded && transcriptID !== '') {
-        textChanged = true;
-        blurListenerAdded = true;
-        addBlurListener();
-      }
-  })
+			firebase.initializeApp(config);
+			database = firebase.database();
 
-  function addBlurListener() {
-    element.addEventListener('blur', function (e) {
-    var newText = element.textContent;
-    database.ref('transcripts/' + transcriptID + '/' + editedID).set(newText, completion);
-    database.ref('transcripts/' + transcriptID + '/just-updated').set(editedID, completion);
-    })
-  }
+			transcriptID = document.getElementById("newTranscriptID").value;
+			var observeLink = observeLinkRoot + "?" + transcriptID;
+			document.getElementById('name-transcript').innerHTML = "";
+			document.getElementById('transcriptIDForm').innerHTML = 'Link for others to watch: <a href="' +
+				observeLink + '" target="_blank">' + observeLink + '</a>';
+			document.getElementById('header-form-buffer').innerHTML = 'Link for others to watch: <a href="' +
+				observeLink + '" target="_blank">' + observeLink + '</a>';
 
-// TODO: This came from a stackoverflow answer and seems to work just fine, but I'm open to any other/better ways of selecting a word when it is clicked on so that the user can replace it just by typing.
-  function selectWord () {
-    var range, selection;
-    if (window.getSelection && document.createRange) {
-      selection = window.getSelection();
-      range = document.createRange();
-      range.selectNodeContents(this);
-      selection.removeAllRanges();
-      selection.addRange(range);
-    } else if (document.selection && document.body.createTextRange) {
-      range = document.body.createTextRange();
-      range.moveToElementText(this);
-      range.select();
-    }
-  }
+		}
 
-}
+		function addEditingListener(editedID, newElement) {
+			var textChanged = false;
+			var blurListenerAdded = false;
+			var element = newElement;
+			//document.getElementById(editedID);
+			element.addEventListener('click', selectWord);
+			element.addEventListener('focus', selectWord);
 
-// TODO: let's store references to elements we refer to a lot.
-  function toggleDarkTheme() {
+			// TODO: name and extract this function that runs on keydown
+			element.addEventListener('keydown', function(e) {
 
-    if (darkThemeOn == false) {
+				// esc and enter should confirm the edited word
+				if (e.keyCode == 27) {
+					element.blur();
+					window.getSelection().removeAllRanges()
+				} else if (e.keyCode == 13) {
+					element.blur();
+					e.preventDefault();
+					window.getSelection().removeAllRanges()
+				}
 
-      document.body.style.background = '#121212';
-      document.body.style.color = '#ffffff';
-      document.querySelector("header").style.backgroundColor = '#121212';
-      document.querySelector(".credit").style.color = '#ffffff';
-      darkThemeOn = true;
+				if (!textChanged && e.keyCode == 9 ||
+					!textChanged && e.shiftKey && e.keyCode == 9) {
+					// do nothing - there must be a better way to express this!
+					// TODO: rewrite this conditional to be more clear. Maybe using something more obvious than the keycodes would be a good start?
+				} else if (!blurListenerAdded && transcriptID !== '') {
+					textChanged = true;
+					blurListenerAdded = true;
+					addBlurListener();
+				}
+			})
 
-    }
-    else {
+			function addBlurListener() {
+				element.addEventListener('blur', function(e) {
+					var newText = element.textContent;
+					database.ref('transcripts/' + transcriptID + '/' + editedID).set(newText, completion);
+					database.ref('transcripts/' + transcriptID + '/just-updated').set(editedID, completion);
+				})
+			}
 
-      document.body.style.background = '#ffffff';
-      document.body.style.color = '#000000';
-      document.querySelector("header").style.backgroundColor = '#f0f8ff';
-      document.querySelector(".credit").style.color = '#000';
-      darkThemeOn = false;
+			// TODO: This came from a stackoverflow answer and seems to work just fine, but I'm open to any other/better ways of selecting a word when it is clicked on so that the user can replace it just by typing.
+			function selectWord() {
+				var range, selection;
+				if (window.getSelection && document.createRange) {
+					selection = window.getSelection();
+					range = document.createRange();
+					range.selectNodeContents(this);
+					selection.removeAllRanges();
+					selection.addRange(range);
+				} else if (document.selection && document.body.createTextRange) {
+					range = document.body.createTextRange();
+					range.moveToElementText(this);
+					range.select();
+				}
+			}
 
-    }
+		}
 
-  }
+		// TODO: let's store references to elements we refer to a lot.
+		function toggleDarkTheme() {
 
-// TODO: rename this. It's just the callback that runs when firebase is done saving what we put in there. Maybe call it firebaseCompletion or something is better?
-function completion(error) {
-  console.log('completed');
-    if (error) {
-      console.log("Data could not be saved." + error);
-    } else {
-      console.log("Data saved successfully.");
-    }
-  }
+			if (darkThemeOn == false) {
 
-// TODO: delete this function. It was just a tiny test.
-  function darkTheme() {
-    console.log("toggle")
-  }
+				document.body.style.background = '#121212';
+				document.body.style.color = '#ffffff';
+				document.querySelector("header").style.backgroundColor = '#121212';
+				document.querySelector(".credit").style.color = '#ffffff';
+				darkThemeOn = true;
 
+			} else {
+
+				document.body.style.background = '#ffffff';
+				document.body.style.color = '#000000';
+				document.querySelector("header").style.backgroundColor = '#f0f8ff';
+				document.querySelector(".credit").style.color = '#000';
+				darkThemeOn = false;
+
+			}
+
+		}
+
+		// TODO: rename this. It's just the callback that runs when firebase is done saving what we put in there. Maybe call it firebaseCompletion or something is better?
+		function completion(error) {
+			console.log('completed');
+			if (error) {
+				console.log("Data could not be saved." + error);
+			} else {
+				console.log("Data saved successfully.");
+			}
+		}
+
+		// TODO: delete this function. It was just a tiny test.
+		function darkTheme() {
+			console.log("toggle")
+		}
 	</script>
 </body>
 
