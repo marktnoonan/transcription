@@ -239,7 +239,6 @@
 		function getExport() {
 			var text = exportCurrentTranscript();
 			console.log(text)
-			window.alert(text)
 		}
 
 		function exportCurrentTranscript() {
@@ -256,7 +255,33 @@
 			return JSON.stringify(transcriptExportAsJSON);
 		}
 
+		function getSubTime(timeInMs) {
+			var hours = Math.floor(timeInMs / (1000 * 60 * 60))
+			var hh = hours > 9 ? hours : '0' + hours
 
+			var minutes = Math.floor((timeInMs - (hours * 60 * 60 * 1000)) / (1000 * 60))
+			var mm = minutes > 9 ? minutes : '0' + minutes
+			debugger
+			var seconds = Math.floor((timeInMs - ((hours * 60 * 60 * 1000) - (minutes * 60 * 1000))) / 1000)
+			var ss = seconds > 9 ? seconds : '0' + seconds
+
+			var milliseconds = Math.floor((timeInMs - ((hours * 60 * 60 * 1000) - (minutes * 60 * 1000) - (seconds * 1000))))
+			var ms = milliseconds > 9 ? milliseconds.toString().substring(0, 2) : '0' + milliseconds
+
+			return hh + ':' + mm + ':' + ss + '.' + ms
+
+		}
+
+		function convertToSubFormat(transcriptAsJson) {
+			var subText = ''
+			var previousEndTime = '00:00:00.00'
+
+			for (var line in transcriptAsJson) {
+				subText += '\n' + previousEndTime
+				subText += line
+			}
+			return subText
+		}
 
 		document.getElementById("transcriptIDForm").addEventListener('submit', function(event) {
 			event.preventDefault();
@@ -349,7 +374,6 @@
 		}
 
 		// TODO: remove logging. Give a more descriptive name than toggle, since we have this toggle for using the mic, and another for using the light/dark themes.
-		// TODO: Mark ask Jared about this Array.from syntax and getting elements by class name then doing the map, vs other approaches.
 		function toggle() {
 			if (!haveListenedOnce) {
 				haveListenedOnce = true;
