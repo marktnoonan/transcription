@@ -10,8 +10,8 @@ wordsToSayInput.addEventListener('keyup', ()  => {
 })
 
 function searchForWordInTranscript (word) {
-    var wordsInTranscript = [].slice.call(transcript.getElementsByClassName('snippet')).map(el => el.textContent)
-    if (wordsInTranscript.includes(word)) {
+    var wordsInTranscript = [].slice.call(transcript.getElementsByClassName('snippet')).map(el => el.textContent.toLowerCase())
+    if (wordsInTranscript.includes(word.toLowerCase())) {
         window.alert('Nice job! You said "' + word + '"!')
         transcript.innerHTML = ''
     }
