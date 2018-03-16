@@ -71,12 +71,15 @@ function convertToSubFormat(transcriptAsJson) {
 	return subText
 }
 
-document
-	.getElementById('transcriptIDForm')
-	.addEventListener('submit', function(event) {
-		event.preventDefault()
-		saveTranscriptID()
+if(document.getElementById('transcriptIDForm')) {
+	document
+		.getElementById('transcriptIDForm')
+		.addEventListener('submit', function(event) {
+			event.preventDefault()
+			saveTranscriptID()
 	})
+}
+
 
 var recognition = new (window.SpeechRecognition ||
 	window.webkitSpeechRecognition ||
@@ -170,6 +173,11 @@ recognition.onend = function(event) {
 	} else {
 		zenscroll.toY(document.body.scrollHeight, 2000)
 		recognition.start()
+	}
+
+	if (checkingWords) {
+		console.log('checking words')
+		checkWords()
 	}
 }
 

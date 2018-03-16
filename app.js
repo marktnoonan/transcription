@@ -17,3 +17,7 @@ app.get('/observe', function (req, res) {
 app.get('/playback', function (req, res) {
   res.sendFile(__dirname + '/playback.html');
 });
+
+app.get('/sayword', function (req, res) {
+  res.sendFile(__dirname + '/sayword.html');
+});
