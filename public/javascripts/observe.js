@@ -1,15 +1,120 @@
 firebase.initializeApp(config)
 var database = firebase.database()
+var transcriptRef
 var transcriptID = ''
+var mostRecentSnippetTime = ''
 var transcriptIDForm = document.getElementById('transcriptIDForm')
 var transcript = document.querySelector('#transcript')
+var translating = false
+var languageSelect = document.querySelector('#language-select')
+var yandexApiKey =
+	'trnsl.1.1.20180130T012212Z.d0c7c8f7f3d14aa8.bf92828f085a7e1a17b6f83c774a5ca50e8fb7e5'
+var yandexLangs = {
+	af: 'Afrikaans',
+	am: 'Amharic',
+	ar: 'Arabic',
+	az: 'Azerbaijani',
+	ba: 'Bashkir',
+	be: 'Belarusian',
+	bg: 'Bulgarian',
+	bn: 'Bengali',
+	bs: 'Bosnian',
+	ca: 'Catalan',
+	ceb: 'Cebuano',
+	cs: 'Czech',
+	cy: 'Welsh',
+	da: 'Danish',
+	de: 'German',
+	el: 'Greek',
+	en: 'English',
+	eo: 'Esperanto',
+	es: 'Spanish',
+	et: 'Estonian',
+	eu: 'Basque',
+	fa: 'Persian',
+	fi: 'Finnish',
+	fr: 'French',
+	ga: 'Irish',
+	gd: 'Scottish Gaelic',
+	gl: 'Galician',
+	gu: 'Gujarati',
+	he: 'Hebrew',
+	hi: 'Hindi',
+	hr: 'Croatian',
+	ht: 'Haitian',
+	hu: 'Hungarian',
+	hy: 'Armenian',
+	id: 'Indonesian',
+	is: 'Icelandic',
+	it: 'Italian',
+	ja: 'Japanese',
+	jv: 'Javanese',
+	ka: 'Georgian',
+	kk: 'Kazakh',
+	km: 'Khmer',
+	kn: 'Kannada',
+	ko: 'Korean',
+	ky: 'Kyrgyz',
+	la: 'Latin',
+	lb: 'Luxembourgish',
+	lo: 'Lao',
+	lt: 'Lithuanian',
+	lv: 'Latvian',
+	mg: 'Malagasy',
+	mhr: 'Mari',
+	mi: 'Maori',
+	mk: 'Macedonian',
+	ml: 'Malayalam',
+	mn: 'Mongolian',
+	mr: 'Marathi',
+	mrj: 'Hill Mari',
+	ms: 'Malay',
+	mt: 'Maltese',
+	my: 'Burmese',
+	ne: 'Nepali',
+	nl: 'Dutch',
+	no: 'Norwegian',
+	pa: 'Punjabi',
+	pap: 'Papiamento',
+	pl: 'Polish',
+	pt: 'Portuguese',
+	ro: 'Romanian',
+	ru: 'Russian',
+	si: 'Sinhalese',
+	sk: 'Slovak',
+	sl: 'Slovenian',
+	sq: 'Albanian',
+	sr: 'Serbian',
+	su: 'Sundanese',
+	sv: 'Swedish',
+	sw: 'Swahili',
+	ta: 'Tamil',
+	te: 'Telugu',
+	tg: 'Tajik',
+	th: 'Thai',
+	tl: 'Tagalog',
+	tr: 'Turkish',
+	tt: 'Tatar',
+	udm: 'Udmurt',
+	uk: 'Ukrainian',
+	ur: 'Urdu',
+	uz: 'Uzbek',
+	vi: 'Vietnamese',
+	xh: 'Xhosa',
+	yi: 'Yiddish',
+	zh: 'Chinese'
+}
+
+languageSelect.addEventListener('change', function() {
+	translating = false
+})
 
 transcriptIDForm.addEventListener('submit', function(event) {
 	event.preventDefault()
 	updateTranscriptID()
 })
 
-if (window.location.search) {
+if (window.location.search && !transcriptID) {
 	document.getElementById(
 		'newTranscriptID'
 	).value = window.location.search.substr(1)
@@ -21,73 +126,135 @@ function processUpdate(id) {
 		.ref('transcripts/' + transcriptID + '/' + id)
 		.once('value')
 		.then(function(snapshot) {
-			document.getElementById(id).textContent = snapshot.val()
+			if (!translating) {
+				document.getElementById(id).textContent = snapshot.val()
+			}
 		})
 }
 
 function updateTranscriptID() {
 	transcriptID = document.getElementById('newTranscriptID').value
+	transcriptRef = database.ref('transcripts/' + transcriptID)
+	getPreExistingTranscript()
+}
+
+function getPreExistingTranscript() {
 	var snippetsArray = []
 	document.querySelector('#transcript-id').textContent =
 		'(ID: ' + transcriptID + ')'
-	var transcriptRef = database.ref('transcripts/' + transcriptID)
 	var htmlBuffer = ''
 
-	transcriptRef.on('value', function(snapshot) {
-		console.log('update')
+	transcriptRef.once('value').then(function(snapshot) {
+		console.log('initial data grab')
 
 		var snippets = snapshot.val()
-		for (var snippet in snippets) {
-			if (!snippetsArray.includes(snippet) && snippet !== 'just-updated') {
-				snippetsArray.push(snippet)
+		var sentence = ''
+		var translationBuffer = ''
+		for (var snippetID in snippets) {
+			if (!snippetsArray.includes(snippetID) && snippetID !== 'just-updated') {
+				mostRecentSnippetTime = snippetID
+				sentence = snippets[snippetID].replace(/\|/g, ' ')
+				snippetsArray.push(snippetID)
 				htmlBuffer +=
 					'<span class="snippet" id="' +
-					snippet +
+					snippetID +
 					'">' +
-					snippets[snippet] +
-					'</span>'
-				var snippetIterator = snippet.split('-')[1]
-				if (snippetIterator === '0') {
+					snippets[snippetID].replace(/\|/g, ' ') +
+					'</span> <br />'
+
+				if (translating) {
+					console.log('pushing a line after translating')
+					translateText(sentence).then(result => {
+						var line = document.createElement('div')
+						line.textContent = result[0]
+						transcript.appendChild(line)
+						window.scrollTo(0, document.body.scrollHeight)
+					})
 					htmlBuffer += '<br />'
+					sentence = ''
 				}
 				window.scrollTo(0, document.body.scrollHeight)
-			} else if (snippet === 'just-updated') {
-				if (document.getElementById(snippets[snippet])) {
-					processUpdate(snippets[snippet])
+			} else if (snippetID === 'just-updated') {
+				if (document.getElementById(snippets[snippetID])) {
+					processUpdate(snippets[snippetID])
 				}
 			}
 		}
-		transcript.innerHTML = htmlBuffer
-		window.scrollTo(0, document.body.scrollHeight)
-	})
-}
-
-function getAllWords() {
-	var words = document.querySelectorAll('.snippet')
-	return Array.prototype.map.call(words, function(snippet) {
-		return snippet.textContent
-	})
-}
-
-function translateText() {
-	var yandexApiKey =
-		'trnsl.1.1.20180130T012212Z.d0c7c8f7f3d14aa8.bf92828f085a7e1a17b6f83c774a5ca50e8fb7e5'
-	var text = getAllWords()
-	var xhr = new XMLHttpRequest()
-	xhr.open(
-		'GET',
-		'https://translate.yandex.net/api/v1.5/tr.json/translate?key=' +
-			yandexApiKey +
-			'&text=' +
-			text.join('%20') +
-			'&lang=en-es'
-	)
-	xhr.onload = function() {
-		if (xhr.status === 200) {
-			transcript.innerHTML = JSON.parse(xhr.responseText).text
-		} else {
-			alert('Request failed.  Returned status of ' + xhr.status)
+		if (!translating) {
+			transcript.innerHTML = htmlBuffer
 		}
+		window.scrollTo(0, document.body.scrollHeight)
+		listenForNewLines()
+	})
+}
+
+function listenForNewLines() {
+	transcriptRef.on('value', function(snapshot) {
+		var htmlBuffer = ''
+		var snippets = snapshot.val()
+		for (var snippetID in snippets) {
+			if (snippetID !== 'just-updated') {
+				var timestamp = snippetID
+				if (timestamp > mostRecentSnippetTime) {
+					if (translating) {
+						htmlBuffer = '' // undoing the work above
+						console.log('pushing a line after translating')
+						translateText(snippets[snippetID].replace(/\|/g, ' ')).then(
+							result => {
+								var line = document.createElement('div')
+								line.textContent = result[0]
+								transcript.appendChild(line)
+								window.scrollTo(0, document.body.scrollHeight)
+							}
+						)
+					} else {
+						htmlBuffer +=
+							'<span class="snippet" id="' +
+							snippetID +
+							'">' +
+							snippets[snippetID].replace(/\|/g, ' ') +
+							'</span>'
+						htmlBuffer += '<br>'
+						transcript.innerHTML += htmlBuffer
+						window.scrollTo(0, document.body.scrollHeight)
+					}
+				}
+			}
+		}
+		mostRecentSnippetTime = timestamp
+	})
+}
+
+function translateText(text) {
+	if (!translating) {
+		document.querySelector('#interim').innerHTML =
+			'<a href="http://translate.yandex.com/">Powered by Yandex.Translate</a>'
+		translating = true
+		transcript.innerHTML = ''
+		getPreExistingTranscript()
 	}
-	xhr.send()
+
+	var targetLanguage = languageSelect.value
+
+	return new Promise(function(resolve, reject) {
+		var xhr = new XMLHttpRequest()
+		xhr.open(
+			'GET',
+			'https://translate.yandex.net/api/v1.5/tr.json/translate?key=' +
+				yandexApiKey +
+				'&text=' +
+				encodeURIComponent(text) +
+				'&lang=en-' +
+				targetLanguage
+		)
+		xhr.onload = function() {
+			if (xhr.status === 200) {
+				//			transcript.innerHTML = JSON.parse(xhr.responseText).text
+				resolve(JSON.parse(xhr.responseText).text)
+			} else {
+				reject('Request failed.  Returned status of ' + xhr.status)
+			}
+		}
+		xhr.send()
+	})
 }

@@ -71,15 +71,14 @@ function convertToSubFormat(transcriptAsJson) {
 	return subText
 }
 
-if(document.getElementById('transcriptIDForm')) {
+if (document.getElementById('transcriptIDForm')) {
 	document
 		.getElementById('transcriptIDForm')
 		.addEventListener('submit', function(event) {
 			event.preventDefault()
 			saveTranscriptID()
-	})
+		})
 }
-
 
 var recognition = new (window.SpeechRecognition ||
 	window.webkitSpeechRecognition ||
@@ -152,14 +151,16 @@ recognition.onend = function(event) {
 			span.setAttribute('contenteditable', 'true')
 			span.append(words[i])
 			line.appendChild(span)
-			if (transcriptID !== '') {
-				snippetIDs.push(snippetID)
-				database
-					.ref('transcripts/' + transcriptID + '/' + snippetID)
-					.set(words[i], completion)
-			}
 			addEditingListener(snippetID, span)
 		}
+
+		if (transcriptID !== '') {
+			snippetIDs.push(snippetID)
+			database
+				.ref('transcripts/' + transcriptID + '/' + snippetIdRoot)
+				.set(words.join('|'), completion)
+		}
+
 		interim.textContent = ''
 		lastResultCache = ''
 		wordsPushedToTranscript = 0
@@ -173,11 +174,6 @@ recognition.onend = function(event) {
 	} else {
 		zenscroll.toY(document.body.scrollHeight, 2000)
 		recognition.start()
-	}
-
-	if (checkingWords) {
-		console.log('checking words')
-		checkWords()
 	}
 }
 
@@ -221,15 +217,14 @@ function pushWordsToTranscript(arrayOfWords) {
 		span.id = snippetID
 		span.setAttribute('contenteditable', 'true')
 		span.append(arrayOfWords[i])
-		if (transcriptID !== '') {
-			snippetIDs.push(snippetID)
-			database
-				.ref('transcripts/' + transcriptID + '/' + snippetID)
-				.set(arrayOfWords[i], completion)
-		}
 		addEditingListener(snippetID, span)
-
 		line.appendChild(span)
+	}
+	if (transcriptID !== '') {
+		snippetIDs.push(snippetID)
+		database
+			.ref('transcripts/' + transcriptID + '/' + snippetIdRoot)
+			.set(arrayOfWords.join('|'), completion)
 	}
 }
 // TODO I think I can make this a little clearer.
@@ -284,12 +279,12 @@ function addEditingListener(editedID, newElement) {
 	function addBlurListener() {
 		element.addEventListener('blur', function(e) {
 			var newText = element.textContent
-			database
-				.ref('transcripts/' + transcriptID + '/' + editedID)
-				.set(newText, completion)
-			database
-				.ref('transcripts/' + transcriptID + '/just-updated')
-				.set(editedID, completion)
+			// database
+			// 	.ref('transcripts/' + transcriptID + '/' + editedID)
+			// 	.set(newText, completion)
+			// database
+			// 	.ref('transcripts/' + transcriptID + '/just-updated')
+			// 	.set(editedID, completion)
 		})
 	}
 
