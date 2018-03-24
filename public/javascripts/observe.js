@@ -164,9 +164,10 @@ function getPreExistingTranscript() {
 
 				if (translating) {
 					console.log('pushing a line after translating')
-					translateText(sentence).then(result => {
+					translateText(sentence, snippetID).then(result => {
 						var line = document.createElement('div')
-						line.textContent = result[0]
+						line.id = result.id
+						line.textContent = result.text[0]
 						transcript.appendChild(line)
 						window.scrollTo(0, document.body.scrollHeight)
 					})
@@ -193,20 +194,36 @@ function listenForNewLines() {
 		var htmlBuffer = ''
 		var snippets = snapshot.val()
 		for (var snippetID in snippets) {
-			if (snippetID !== 'just-updated') {
+			if (snippetID === 'just-updated') {
+				if (!translating) {
+					document.getElementById(
+						snippets['just-updated']
+					).textContent = snippets[snippets['just-updated']].replace(/\|/g, ' ')
+				} else {
+					translateText(
+						snippets[snippets['just-updated']].replace(/\|/g, ' '),
+						snippetID
+					).then(function(result) {
+						document.getElementById(snippets['just-updated']).textContent =
+							result.text[0]
+					})
+				}
+			} else {
 				var timestamp = snippetID
 				if (timestamp > mostRecentSnippetTime) {
 					if (translating) {
 						htmlBuffer = '' // undoing the work above
 						console.log('pushing a line after translating')
-						translateText(snippets[snippetID].replace(/\|/g, ' ')).then(
-							result => {
-								var line = document.createElement('div')
-								line.textContent = result[0]
-								transcript.appendChild(line)
-								window.scrollTo(0, document.body.scrollHeight)
-							}
-						)
+						translateText(
+							snippets[snippetID].replace(/\|/g, ' '),
+							snippetID
+						).then(result => {
+							var line = document.createElement('div')
+							line.id = result.id
+							line.textContent = result.text[0]
+							transcript.appendChild(line)
+							window.scrollTo(0, document.body.scrollHeight)
+						})
 					} else {
 						htmlBuffer +=
 							'<span class="snippet" id="' +
@@ -225,7 +242,7 @@ function listenForNewLines() {
 	})
 }
 
-function translateText(text) {
+function translateText(text, id) {
 	if (!translating) {
 		document.querySelector('#interim').innerHTML =
 			'<a href="http://translate.yandex.com/">Powered by Yandex.Translate</a>'
@@ -250,7 +267,10 @@ function translateText(text) {
 		xhr.onload = function() {
 			if (xhr.status === 200) {
 				//			transcript.innerHTML = JSON.parse(xhr.responseText).text
-				resolve(JSON.parse(xhr.responseText).text)
+				resolve({
+					text: JSON.parse(xhr.responseText).text,
+					id: id
+				})
 			} else {
 				reject('Request failed.  Returned status of ' + xhr.status)
 			}

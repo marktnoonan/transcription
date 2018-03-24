@@ -279,12 +279,22 @@ function addEditingListener(editedID, newElement) {
 	function addBlurListener() {
 		element.addEventListener('blur', function(e) {
 			var newText = element.textContent
-			// database
-			// 	.ref('transcripts/' + transcriptID + '/' + editedID)
-			// 	.set(newText, completion)
-			// database
-			// 	.ref('transcripts/' + transcriptID + '/just-updated')
-			// 	.set(editedID, completion)
+			var editedTimestamp = editedID.substr(7, 13)
+			var editedIndex = editedID.split('-')[1]
+			database
+				.ref('transcripts/' + transcriptID + '/' + editedTimestamp)
+				.once('value')
+				.then(function(snapshot) {
+					var lineAsArry = snapshot.val().split('|')
+					lineAsArry[editedIndex] = newText
+					var updatedLine = lineAsArry.join('|')
+					database
+						.ref('transcripts/' + transcriptID + '/' + editedTimestamp)
+						.set(updatedLine, completion)
+					database
+						.ref('transcripts/' + transcriptID + '/just-updated')
+						.set(editedTimestamp, completion)
+				})
 		})
 	}
 
