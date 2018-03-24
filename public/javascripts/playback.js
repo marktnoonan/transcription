@@ -69,12 +69,17 @@ function toggleDarkTheme() {
 	if (darkThemeOn == false) {
 		document.body.style.background = '#121212'
 		document.body.style.color = '#ffffff'
-		document.querySelector('header').style.backgroundColor = '#121212'
+		if (document.querySelector('.credit')) {
+			document.querySelector('.credit').style.color = '#ffffff'
+		}
 		darkThemeOn = true
 	} else {
 		document.body.style.background = '#ffffff'
 		document.body.style.color = '#000000'
 		document.querySelector('header').style.backgroundColor = '#f0f8ff'
+		if (document.querySelector('.credit')) {
+			document.querySelector('.credit').style.color = '#000'
+		}
 		darkThemeOn = false
 	}
 }
