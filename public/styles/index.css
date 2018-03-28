@@ -130,11 +130,19 @@
 			display: block;
 		}
 
-		.snippet {
-			margin: .15em;
-			outline: none;
-			display: inline-block;
-		}
+.snippet {
+	outline: none;
+	display: inline-block;
+	animation: bgFlash 5s;
+	margin-left:2px;
+	padding:0 2px;
+	border-radius:2px;
+}
+
+@keyframes bgFlash {
+  0%   {background: #99f;}
+  100% {background: white;}
+}
 
 		.name-transcript {
 			font-size: 14px;
