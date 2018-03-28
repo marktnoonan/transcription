@@ -1,8 +1,9 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+const port = 3000;
 
-app.listen(3000, () => console.log('Server started'));
+app.listen(port, () => console.log(`Server started on port ${port}`));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
