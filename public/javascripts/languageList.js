@@ -60,3 +60,11 @@ const languageList = [['Afrikaans',       ['af-ZA']],
                      ['yue-Hant-HK', '粵語 (香港)']],
  ['日本語',           ['ja-JP']],
  ['Lingua latīna',   ['la']]];
+
+ languageList.forEach(language => {
+  const option = document.createElement("option")
+  const languageName = language[0]
+  option.value = languageName
+  option.text = languageName
+  document.getElementById('selectLanguage').appendChild(option)
+ })

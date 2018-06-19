@@ -80,6 +80,8 @@ if (document.getElementById('transcriptIDForm')) {
 		})
 }
 
+var language = (document.getElementById('selectLanguage').value.toLowerCase)
+
 var recognition = new (window.SpeechRecognition ||
 	window.webkitSpeechRecognition ||
 	window.mozSpeechRecognition ||
