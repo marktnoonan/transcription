@@ -13,20 +13,52 @@
 
 	<header id="header">
 		<h1>Live Transcript</h1>
-		<button onclick="toggleDarkTheme()">Toggle Light/Dark</button>
-		<button onclick="toggle()" class='startListen'>Start Listening</button>
-		<button onclick="toggle()" class="stopListen" style="display:none">Stop Listening</button>
-		<button onclick="getExport()">Export Transcript</button>
+		<button id="theme-toggle">Toggle Light/Dark</button>
+		<button class='listen-toggle startListen'>Start Listening</button>
+		<button class="listen-toggle stopListen" style="display:none">Stop Listening</button>
+		<button id="export-button">Export Transcript</button>
 		<div class="status">Status:
 			<span id="status">Not Listening</span>
 		</div>
 		<form id="transcriptIDForm" class="transcript-id-form">
 			<label>Transcript name (letters, numbers, and dashes only):
-        <input type="text" id="newTranscriptID" pattern="[a-zA-Z0-9-]+">
-      </label>
+				<input type="text" id="newTranscriptID" pattern="[a-zA-Z0-9-]+">
+			</label>
 			<button type="submit">Name Transcript</button>
 		</form>
 		<select id="selectLanguage">
+			<option value="Afrikaans">Afrikaans</option>
+			<option value="Bahasa Indonesia">Bahasa Indonesia</option>
+			<option value="Bahasa Melayu">Bahasa Melayu</option>
+			<option value="Català">Català</option>
+			<option value="Čeština">Čeština</option>
+			<option value="Deutsch">Deutsch</option>
+			<option value="English">English</option>
+			<option value="Español">Español</option>
+			<option value="Euskara">Euskara</option>
+			<option value="Français">Français</option>
+			<option value="Galego">Galego</option>
+			<option value="Hrvatski">Hrvatski</option>
+			<option value="IsiZulu">IsiZulu</option>
+			<option value="Íslenska">Íslenska</option>
+			<option value="Italiano">Italiano</option>
+			<option value="Magyar">Magyar</option>
+			<option value="Nederlands">Nederlands</option>
+			<option value="Norsk bokmål">Norsk bokmål</option>
+			<option value="Polski">Polski</option>
+			<option value="Português">Português</option>
+			<option value="Română">Română</option>
+			<option value="Slovenčina">Slovenčina</option>
+			<option value="Suomi">Suomi</option>
+			<option value="Svenska">Svenska</option>
+			<option value="Türkçe">Türkçe</option>
+			<option value="български">български</option>
+			<option value="Pусский">Pусский</option>
+			<option value="Српски">Српски</option>
+			<option value="한국어">한국어</option>
+			<option value="中文">中文</option>
+			<option value="日本語">日本語</option>
+			<option value="Lingua latīna">Lingua latīna</option>
 		</select>
 	</header>
 
@@ -35,13 +67,14 @@
 			<!-- TODO: Well it's not just made by me any more :) so how about we do something that follows the all-contributors spec:
   https://github.com/kentcdodds/all-contributors -->
 			<span class="credit">Made by Mark Noonan (
-        <a href="https://twitter.com/marktnoonan">@marktnoonan</a>), based on David Walsh's
-        <a href="https://davidwalsh.name/speech-recognition">blog post</a>, and with apologies for only working in Google Chrome.</span>
+				<a href="https://twitter.com/marktnoonan">@marktnoonan</a>), based on David Walsh's
+				<a href="https://davidwalsh.name/speech-recognition">blog post</a>, and with apologies for only working in Google Chrome.</span>
 			<hr>
 			<!-- TODO: the language here could be improved. The class and ID names could be more clear also. -->
 			<aside class="name-transcript" id="name-transcript">
-				You can name this transcript to save the results and allow others to access it live from their own devices. Or don't name it, and keep it private to just this browser window. If the transcript is not named, everything will be deleted when you close the
-				page.
+				You can name this transcript to save the results and allow others to access it live from their own devices. Or don't name
+				it, and keep it private to just this browser window. If the transcript is not named, everything will be deleted when
+				you close the page.
 				<hr>
 			</aside>
 			<p id="transcript" contenteditable="false"></p>
@@ -54,9 +87,6 @@
 	<script>
 		window.noZensmooth = true
 	</script>
-	<script src="javascripts/zenscroll-min.js"></script>
-	<script src="javascripts/common.js"></script>
-  <script src="javascripts/languageList.js"></script>
 	<script src="javascripts/listen.js"></script>
 </body>
 
