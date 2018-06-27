@@ -8,7 +8,8 @@ NOTE: This requires the Chrome browser for the speaker. It uses a built in featu
 
 1. node.js
 2. git
-3. Chrome browser
+3. parcel.js
+4. Chrome browser
 
 # Getting started
 
@@ -23,3 +24,9 @@ pracel index.html
 point your Chrome browser to localhost:1234
 
 ```
+
+This should get you up and running. Please report failures/problems with the build process.
+
+# Deployment
+
+Triggered manually from the master branch Netlify when we are ready to publish.
