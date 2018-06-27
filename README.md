@@ -19,7 +19,7 @@ git clone https://github.com/marktnoonan/transcription.git
 
 npm install
 
-pracel index.html
+parcel index.html
 
 point your Chrome browser to localhost:1234
 
