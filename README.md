@@ -18,8 +18,8 @@ git clone https://github.com/marktnoonan/transcription.git
 
 npm install
 
-npm start
+pracel index.html
 
-point your Chrome browser to localhost:3000
+point your Chrome browser to localhost:1234
 
 ```
