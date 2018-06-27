@@ -8,23 +8,30 @@
 import { config, darkThemeOn, toggleDarkTheme } from "./common";
 import zenscroll from "zenscroll";
 
-var database;
-var transcript = document.querySelector("#transcript");
-var transcriptID = "";
-var snippetIDs = [];
-var listening = false;
-var wordsPushedToTranscript = 0;
-var charLengthOfPushes = 0;
-var currentLineID = "";
-var lastResultCache = "";
-var observeLinkRoot = "https://markthomasnoonan.com/transcription/observe.html";
-var scrolling = false;
-var transcriptStartTime = "";
-var haveListenedOnce = false;
-var line;
-
+// ----------------------------------------------------------------------------
+// Create a singleton to hold global variables.
+//
+// "ftl" stands for "free live transcript."
+var ftl =
+{
+    database: null,
+    transcript: document.querySelector("#transcript"),
+    transcriptID: "",
+    snippetIDs: [],
+    listening: false,
+    wordsPushedToTranscript: 0,
+    charLengthOfPushes: 0,
+    currentLineID: "",
+    lastResultCache: "",
+    observeLinkRoot: "https://markthomasnoonan.com/transcription/observe.html",
+//    scrolling: false,
+    transcriptStartTime: "",
+    haveListenedOnce: false,
+    line: null,
+};
+// ----------------------------------------------------------------------------
 function getExport() {
-	if (listening) {
+	if (ftl.listening) {
 		// important, cause things go crazy if we're still adding to the transcript after export.
 		toggle();
 	}
@@ -35,17 +42,17 @@ function getExport() {
 	textArea.textContent = text;
 	textArea.setAttribute("class", "transcript-export");
 	wrapper.appendChild(textArea);
-	transcript.appendChild(wrapper);
+	ftl.transcript.appendChild(wrapper);
 }
 
 function exportCurrentTranscript() {
 	var transcriptExportAsJSON = {};
-	var lines = Array.from(transcript.querySelectorAll("div"));
+	var lines = Array.from(ftl.transcript.querySelectorAll("div"));
 	lines.forEach(function(line) {
 		var lineContent = Array.from(line.querySelectorAll("span"))
 			.map(line => line.textContent)
 			.join(" ");
-		var msSinceStart = Number(line.id.substr(4)) - Number(transcriptStartTime);
+		var msSinceStart = Number(line.id.substr(4)) - Number(ftl.transcriptStartTime);
 
 		transcriptExportAsJSON[msSinceStart] = lineContent;
 	});
@@ -108,56 +115,56 @@ var interim = document.querySelector("#interim");
 
 //TODO: refactor this onresult function for clarity. Especially, just extract it and give it a name so that it's just recognition.onresult = manageInterimResults or something... most of the blocks in this function could be given their own name.
 recognition.onresult = function(event) {
-	if (!currentLineID) {
-		currentLineID = Date.now(); // this is what we will really use to handle "replay" timing I think. - Mark
-		line = document.createElement("div");
-		line.id = "line" + currentLineID;
-		transcript.appendChild(line);
+	if (!ftl.currentLineID) {
+		ftl.currentLineID = Date.now(); // this is what we will really use to handle "replay" timing I think. - Mark
+		ftl.line = document.createElement("div");
+		ftl.line.id = "line" + ftl.currentLineID;
+		ftl.transcript.appendChild(ftl.line);
 	}
 
 	var resultText = event.results[0][0].transcript;
 	var resultWords = resultText.split(" ");
-	var minLengthNeeded = 10 + wordsPushedToTranscript;
+	var minLengthNeeded = 10 + ftl.wordsPushedToTranscript;
 
 	if (resultWords.length > minLengthNeeded) {
 		var wordsToPush = [];
 		for (
-			var i = wordsPushedToTranscript;
-			i < wordsPushedToTranscript + 5;
+			var i = ftl.wordsPushedToTranscript;
+			i < ftl.wordsPushedToTranscript + 5;
 			i++
 		) {
 			wordsToPush.push(resultWords[i]);
 		}
 		pushWordsToTranscript(wordsToPush);
-		wordsPushedToTranscript += 5;
+		ftl.wordsPushedToTranscript += 5;
 
-		charLengthOfPushes += wordsToPush.join(" ").length;
+		ftl.charLengthOfPushes += wordsToPush.join(" ").length;
 	}
-	if (charLengthOfPushes) {
+	if (ftl.charLengthOfPushes) {
 		// the math here is to include the correct number of spaces in what we are removing from the
 		// beginning of the string. The goal is to not have the bottom fill up with text, obscuring the main
 		// part of the screen but also forcing people who are watching the the stream to wait for
 		// a pause so that the transcript can catch up.
 		interim.textContent = resultText.substring(
-			charLengthOfPushes + wordsPushedToTranscript / 5
+			ftl.charLengthOfPushes + ftl.wordsPushedToTranscript / 5
 		);
-		lastResultCache = resultText.substring(
-			charLengthOfPushes + wordsPushedToTranscript / 5
+		ftl.lastResultCache = resultText.substring(
+			ftl.charLengthOfPushes + ftl.wordsPushedToTranscript / 5
 		);
 	} else {
 		interim.textContent = resultText;
-		lastResultCache = resultText;
+		ftl.lastResultCache = resultText;
 	}
 	zenscroll.toY(document.body.scrollHeight, 1500);
 };
 
 // TODO: name, extract, and refactor the on-end function for clarity. Maybe I should comment some of the weirder stuff here to explain its purpose better.
 recognition.onend = function(event) {
-	if (lastResultCache != "") {
-		var words = lastResultCache.split(" ");
+	if (ftl.lastResultCache != "") {
+		var words = ftl.lastResultCache.split(" ");
 		var numWords = words.length;
-		if (!line) {
-			line = document.createElement("div");
+		if (!ftl.line) {
+			ftl.line = document.createElement("div");
 		}
 		var snippetIdRoot = Date.now();
 		for (var i = 0; i < words.length; i++) {
@@ -167,26 +174,26 @@ recognition.onend = function(event) {
 			span.id = snippetID;
 			span.setAttribute("contenteditable", "true");
 			span.append(words[i]);
-			line.appendChild(span);
+			ftl.line.appendChild(span);
 			addEditingListener(snippetID, span);
 		}
 
-		if (transcriptID !== "") {
-			snippetIDs.push(snippetID);
-			database
-				.ref("transcripts/" + transcriptID + "/" + snippetIdRoot)
+		if (ftl.transcriptID !== "") {
+			ftl.snippetIDs.push(snippetID);
+			ftl.database
+				.ref("transcripts/" + ftl.transcriptID + "/" + snippetIdRoot)
 				.set(words.join("|"), completion);
 		}
 
 		interim.textContent = "";
-		lastResultCache = "";
-		wordsPushedToTranscript = 0;
-		charLengthOfPushes = 0;
-		currentLineID = "";
-		line = null;
+		ftl.lastResultCache = "";
+		ftl.wordsPushedToTranscript = 0;
+		ftl.charLengthOfPushes = 0;
+		ftl.currentLineID = "";
+		ftl.line = null;
 	}
 
-	if (listening === false) {
+	if (ftl.listening === false) {
 		return;
 	} else {
 		zenscroll.toY(document.body.scrollHeight, 2000);
@@ -196,13 +203,13 @@ recognition.onend = function(event) {
 
 // TODO: remove logging. Give a more descriptive name than toggle, since we have this toggle for using the mic, and another for using the light/dark themes.
 function toggle() {
-	if (!haveListenedOnce) {
-		haveListenedOnce = true;
-		transcriptStartTime = Date.now();
-		console.log("transcript started at " + transcriptStartTime);
+	if (!ftl.haveListenedOnce) {
+		ftl.haveListenedOnce = true;
+		ftl.transcriptStartTime = Date.now();
+		console.log("transcript started at " + ftl.transcriptStartTime);
 	}
 
-	listening = !listening;
+	ftl.listening = !ftl.listening;
 
 	var domStatus = document.querySelector("#status");
 	domStatus.textContent = "Listening";
@@ -213,7 +220,7 @@ function toggle() {
 	) {
 		element.setAttribute(
 			"style",
-			listening ? "display:none" : "display:inline"
+			ftl.listening ? "display:none" : "display:inline"
 		);
 	});
 	Array.from(document.getElementsByClassName("stopListen")).map(function(
@@ -221,10 +228,10 @@ function toggle() {
 	) {
 		element.setAttribute(
 			"style",
-			listening ? "display:inline" : "display:none"
+			ftl.listening ? "display:inline" : "display:none"
 		);
 	});
-	if (!listening) {
+	if (!ftl.listening) {
 		recognition.stop();
 		interim.textContent = "";
 		domStatus.textContent = "Not Listening";
@@ -246,22 +253,22 @@ function pushWordsToTranscript(arrayOfWords) {
 		span.setAttribute("contenteditable", "true");
 		span.append(arrayOfWords[i]);
 		addEditingListener(snippetID, span);
-		line.appendChild(span);
+		ftl.line.appendChild(span);
 	}
-	if (transcriptID !== "") {
-		snippetIDs.push(snippetID);
-		database
-			.ref("transcripts/" + transcriptID + "/" + snippetIdRoot)
+	if (ftl.transcriptID !== "") {
+		ftl.snippetIDs.push(snippetID);
+		ftl.database
+			.ref("transcripts/" + ftl.transcriptID + "/" + snippetIdRoot)
 			.set(arrayOfWords.join("|"), completion);
 	}
 }
 // TODO I think I can make this a little clearer.
 function saveTranscriptID() {
 	firebase.initializeApp(config);
-	database = firebase.database();
+	ftl.database = firebase.database();
 
-	transcriptID = document.getElementById("newTranscriptID").value;
-	var observeLink = observeLinkRoot + "?" + transcriptID;
+	ftl.transcriptID = document.getElementById("newTranscriptID").value;
+	var observeLink = ftl.observeLinkRoot + "?" + ftl.transcriptID;
 	document.getElementById("name-transcript").innerHTML = "";
 	document.getElementById("transcriptIDForm").innerHTML =
 		'Link for others to watch: <a href="' +
@@ -297,7 +304,7 @@ function addEditingListener(editedID, newElement) {
 		) {
 			// do nothing - there must be a better way to express this!
 			// TODO: rewrite this conditional to be more clear. Maybe using something more obvious than the keycodes would be a good start?
-		} else if (!blurListenerAdded && transcriptID !== "") {
+		} else if (!blurListenerAdded && ftl.transcriptID !== "") {
 			textChanged = true;
 			blurListenerAdded = true;
 			addBlurListener();
@@ -309,18 +316,18 @@ function addEditingListener(editedID, newElement) {
 			var newText = element.textContent;
 			var editedTimestamp = editedID.substr(7, 13);
 			var editedIndex = editedID.split("-")[1];
-			database
-				.ref("transcripts/" + transcriptID + "/" + editedTimestamp)
+			ftl.database
+				.ref("transcripts/" + ftl.transcriptID + "/" + editedTimestamp)
 				.once("value")
 				.then(function(snapshot) {
 					var lineAsArry = snapshot.val().split("|");
 					lineAsArry[editedIndex] = newText;
 					var updatedLine = lineAsArry.join("|");
-					database
-						.ref("transcripts/" + transcriptID + "/" + editedTimestamp)
+					ftl.database
+						.ref("transcripts/" + ftl.transcriptID + "/" + editedTimestamp)
 						.set(updatedLine, completion);
-					database
-						.ref("transcripts/" + transcriptID + "/just-updated")
+					ftl.database
+						.ref("transcripts/" + ftl.transcriptID + "/just-updated")
 						.set(editedTimestamp, completion);
 				});
 		});
