@@ -17,7 +17,7 @@ NOTE: This requires the Chrome browser for the speaker. It uses a built in featu
 
 git clone https://github.com/marktnoonan/transcription.git
 
-npm install
+npm install --global parcel
 
 parcel index.html
 
