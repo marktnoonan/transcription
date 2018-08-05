@@ -33,7 +33,7 @@ var flt =
 flt.getExport = function() {
 	if (flt.listening) {
 		// important, cause things go crazy if we're still adding to the transcript after export.
-		toggle();
+		flt.toggle();
 	}
 	var wrapper = document.createElement("div");
 	wrapper.innerHTML = "<hr><b>Transcript in JSON format:<b>";
