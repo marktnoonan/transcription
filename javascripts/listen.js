@@ -201,9 +201,8 @@ recognition.onend = function(event) {
 	}
 };
 // ----------------------------------------------------------------------------
-flt.
 // TODO: remove logging. Give a more descriptive name than toggle, since we have this toggle for using the mic, and another for using the light/dark themes.
-function toggle() {
+flt.toggle = function() {
 	if (!flt.haveListenedOnce) {
 		flt.haveListenedOnce = true;
 		flt.transcriptStartTime = Date.now();
@@ -369,7 +368,7 @@ function init() {
 		.addEventListener("click", toggleDarkTheme);
 }
 Array.from(document.querySelectorAll(".listen-toggle")).forEach(element => {
-	element.addEventListener("click", toggle);
+	element.addEventListener("click", flt.toggle);
 });
 document.querySelector("#export-button").addEventListener("click", flt.getExport);
 
