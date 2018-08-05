@@ -28,6 +28,9 @@ var flt =
     transcriptStartTime: "",
     haveListenedOnce: false,
     line: null,
+    language: null,
+    recognition: null,
+    interim: null,
 };
 // ----------------------------------------------------------------------------
 flt.getExport = function() {
@@ -102,19 +105,19 @@ if (document.getElementById("transcriptIDForm")) {
 		});
 }
 
-var language = document.getElementById("selectLanguage").value.toLowerCase;
+flt.language = document.getElementById("selectLanguage").value.toLowerCase;
 // ----------------------------------------------------------------------------
-var recognition = new (window.SpeechRecognition ||
+flt.recognition = new (window.SpeechRecognition ||
 	window.webkitSpeechRecognition ||
 	window.mozSpeechRecognition ||
 	window.msSpeechRecognition)();
-recognition.lang = "en-US";
-recognition.interimResults = true;
-recognition.maxAlternatives = 1;
-var interim = document.querySelector("#interim");
+flt.recognition.lang = "en-US";
+flt.recognition.interimResults = true;
+flt.recognition.maxAlternatives = 1;
+flt.interim = document.querySelector("#interim");
 
 //TODO: refactor this onresult function for clarity. Especially, just extract it and give it a name so that it's just recognition.onresult = manageInterimResults or something... most of the blocks in this function could be given their own name.
-recognition.onresult = function(event) {
+flt.recognition.onresult = function(event) {
 	if (!flt.currentLineID) {
 		flt.currentLineID = Date.now(); // this is what we will really use to handle "replay" timing I think. - Mark
 		flt.line = document.createElement("div");
@@ -145,21 +148,21 @@ recognition.onresult = function(event) {
 		// beginning of the string. The goal is to not have the bottom fill up with text, obscuring the main
 		// part of the screen but also forcing people who are watching the the stream to wait for
 		// a pause so that the transcript can catch up.
-		interim.textContent = resultText.substring(
+		flt.interim.textContent = resultText.substring(
 			flt.charLengthOfPushes + flt.wordsPushedToTranscript / 5
 		);
 		flt.lastResultCache = resultText.substring(
 			flt.charLengthOfPushes + flt.wordsPushedToTranscript / 5
 		);
 	} else {
-		interim.textContent = resultText;
+		flt.interim.textContent = resultText;
 		flt.lastResultCache = resultText;
 	}
 	zenscroll.toY(document.body.scrollHeight, 1500);
 };
 // ----------------------------------------------------------------------------
 // TODO: name, extract, and refactor the on-end function for clarity. Maybe I should comment some of the weirder stuff here to explain its purpose better.
-recognition.onend = function(event) {
+flt.recognition.onend = function(event) {
 	if (flt.lastResultCache != "") {
 		var words = flt.lastResultCache.split(" ");
 		var numWords = words.length;
@@ -185,7 +188,7 @@ recognition.onend = function(event) {
 				.set(words.join("|"), completion);
 		}
 
-		interim.textContent = "";
+		flt.interim.textContent = "";
 		flt.lastResultCache = "";
 		flt.wordsPushedToTranscript = 0;
 		flt.charLengthOfPushes = 0;
@@ -197,7 +200,7 @@ recognition.onend = function(event) {
 		return;
 	} else {
 		zenscroll.toY(document.body.scrollHeight, 2000);
-		recognition.start();
+		flt.recognition.start();
 	}
 };
 // ----------------------------------------------------------------------------
@@ -232,12 +235,12 @@ flt.toggle = function() {
 		);
 	});
 	if (!flt.listening) {
-		recognition.stop();
-		interim.textContent = "";
+		flt.recognition.stop();
+		flt.interim.textContent = "";
 		domStatus.textContent = "Not Listening";
 		domStatus.setAttribute("class", "dead");
 	} else {
-		recognition.start();
+		flt.recognition.start();
 		domStatus.textContent = "Listening";
 		domStatus.setAttribute("class", "live");
 	}
