@@ -30,22 +30,22 @@ var flt =
     line: null,
 };
 // ----------------------------------------------------------------------------
-flt.getExport = function() {
+function getExport() {
 	if (flt.listening) {
 		// important, cause things go crazy if we're still adding to the transcript after export.
-		flt.toggle();
+		toggle();
 	}
 	var wrapper = document.createElement("div");
 	wrapper.innerHTML = "<hr><b>Transcript in JSON format:<b>";
-	var text = flt.exportCurrentTranscript();
+	var text = exportCurrentTranscript();
 	var textArea = document.createElement("textarea");
 	textArea.textContent = text;
 	textArea.setAttribute("class", "transcript-export");
 	wrapper.appendChild(textArea);
 	flt.transcript.appendChild(wrapper);
 }
-// ----------------------------------------------------------------------------
-flt.exportCurrentTranscript = function() {
+
+function exportCurrentTranscript() {
 	var transcriptExportAsJSON = {};
 	var lines = Array.from(flt.transcript.querySelectorAll("div"));
 	lines.forEach(function(line) {
@@ -58,8 +58,8 @@ flt.exportCurrentTranscript = function() {
 	});
 	return JSON.stringify(transcriptExportAsJSON);
 }
-// ----------------------------------------------------------------------------
-flt.getSubTime = function(timeInMs) {
+
+function getSubTime(timeInMs) {
 	var hours = Math.floor(timeInMs / (1000 * 60 * 60));
 	var hh = hours > 9 ? hours : "0" + hours;
 
@@ -81,8 +81,8 @@ flt.getSubTime = function(timeInMs) {
 
 	return hh + ":" + mm + ":" + ss + "." + ms;
 }
-// ----------------------------------------------------------------------------
-flt.convertToSubFormat = function(transcriptAsJson) {
+
+function convertToSubFormat(transcriptAsJson) {
 	var subText = "";
 	var previousEndTime = "00:00:00.00";
 
@@ -92,18 +92,18 @@ flt.convertToSubFormat = function(transcriptAsJson) {
 	}
 	return subText;
 }
-// ----------------------------------------------------------------------------
+
 if (document.getElementById("transcriptIDForm")) {
 	document
 		.getElementById("transcriptIDForm")
 		.addEventListener("submit", function(event) {
 			event.preventDefault();
-			flt.saveTranscriptID();
+			saveTranscriptID();
 		});
 }
 
 var language = document.getElementById("selectLanguage").value.toLowerCase;
-// ----------------------------------------------------------------------------
+
 var recognition = new (window.SpeechRecognition ||
 	window.webkitSpeechRecognition ||
 	window.mozSpeechRecognition ||
@@ -112,7 +112,7 @@ recognition.lang = "en-US";
 recognition.interimResults = true;
 recognition.maxAlternatives = 1;
 var interim = document.querySelector("#interim");
-// ----------------------------------------------------------------------------
+
 //TODO: refactor this onresult function for clarity. Especially, just extract it and give it a name so that it's just recognition.onresult = manageInterimResults or something... most of the blocks in this function could be given their own name.
 recognition.onresult = function(event) {
 	if (!flt.currentLineID) {
@@ -135,7 +135,7 @@ recognition.onresult = function(event) {
 		) {
 			wordsToPush.push(resultWords[i]);
 		}
-		flt.pushWordsToTranscript(wordsToPush);
+		pushWordsToTranscript(wordsToPush);
 		flt.wordsPushedToTranscript += 5;
 
 		flt.charLengthOfPushes += wordsToPush.join(" ").length;
@@ -157,7 +157,7 @@ recognition.onresult = function(event) {
 	}
 	zenscroll.toY(document.body.scrollHeight, 1500);
 };
-// ----------------------------------------------------------------------------
+
 // TODO: name, extract, and refactor the on-end function for clarity. Maybe I should comment some of the weirder stuff here to explain its purpose better.
 recognition.onend = function(event) {
 	if (flt.lastResultCache != "") {
@@ -175,14 +175,14 @@ recognition.onend = function(event) {
 			span.setAttribute("contenteditable", "true");
 			span.append(words[i]);
 			flt.line.appendChild(span);
-			flt.addEditingListener(snippetID, span);
+			addEditingListener(snippetID, span);
 		}
 
 		if (flt.transcriptID !== "") {
 			flt.snippetIDs.push(snippetID);
 			flt.database
 				.ref("transcripts/" + flt.transcriptID + "/" + snippetIdRoot)
-				.set(words.join("|"), flt.completion);
+				.set(words.join("|"), completion);
 		}
 
 		interim.textContent = "";
@@ -200,9 +200,9 @@ recognition.onend = function(event) {
 		recognition.start();
 	}
 };
-// ----------------------------------------------------------------------------
+
 // TODO: remove logging. Give a more descriptive name than toggle, since we have this toggle for using the mic, and another for using the light/dark themes.
-flt.toggle = function() {
+function toggle() {
 	if (!flt.haveListenedOnce) {
 		flt.haveListenedOnce = true;
 		flt.transcriptStartTime = Date.now();
@@ -242,8 +242,8 @@ flt.toggle = function() {
 		domStatus.setAttribute("class", "live");
 	}
 }
-// ----------------------------------------------------------------------------
-flt.pushWordsToTranscript = function(arrayOfWords) {
+
+function pushWordsToTranscript(arrayOfWords) {
 	var snippetIdRoot = Date.now();
 	for (var i = 0; i < arrayOfWords.length; i++) {
 		var snippetID = "snippet" + snippetIdRoot + "-" + i;
@@ -252,19 +252,18 @@ flt.pushWordsToTranscript = function(arrayOfWords) {
 		span.id = snippetID;
 		span.setAttribute("contenteditable", "true");
 		span.append(arrayOfWords[i]);
-		flt.addEditingListener(snippetID, span);
+		addEditingListener(snippetID, span);
 		flt.line.appendChild(span);
 	}
 	if (flt.transcriptID !== "") {
 		flt.snippetIDs.push(snippetID);
 		flt.database
 			.ref("transcripts/" + flt.transcriptID + "/" + snippetIdRoot)
-			.set(arrayOfWords.join("|"), flt.completion);
+			.set(arrayOfWords.join("|"), completion);
 	}
 }
-// ----------------------------------------------------------------------------
 // TODO I think I can make this a little clearer.
-flt.saveTranscriptID = function() {
+function saveTranscriptID() {
 	firebase.initializeApp(config);
 	flt.database = firebase.database();
 
@@ -278,8 +277,8 @@ flt.saveTranscriptID = function() {
 		observeLink +
 		"</a>";
 }
-// ----------------------------------------------------------------------------
-flt.addEditingListener = function(editedID, newElement) {
+
+function addEditingListener(editedID, newElement) {
 	var textChanged = false;
 	var blurListenerAdded = false;
 	var element = newElement;
@@ -326,10 +325,10 @@ flt.addEditingListener = function(editedID, newElement) {
 					var updatedLine = lineAsArry.join("|");
 					flt.database
 						.ref("transcripts/" + flt.transcriptID + "/" + editedTimestamp)
-						.set(updatedLine, flt.completion);
+						.set(updatedLine, completion);
 					flt.database
 						.ref("transcripts/" + flt.transcriptID + "/just-updated")
-						.set(editedTimestamp, flt.completion);
+						.set(editedTimestamp, completion);
 				});
 		});
 	}
@@ -350,9 +349,9 @@ flt.addEditingListener = function(editedID, newElement) {
 		}
 	}
 }
-// ----------------------------------------------------------------------------
+
 // TODO: rename this. It's just the callback that runs when firebase is done saving what we put in there. Maybe call it firebaseCompletion or something is better?
-flt.completion = function(error) {
+function completion(error) {
 	console.log("completed");
 	if (error) {
 		console.log("Data could not be saved." + error);
@@ -360,7 +359,7 @@ flt.completion = function(error) {
 		console.log("Data saved successfully.");
 	}
 }
-// ----------------------------------------------------------------------------
+
 // init will add all our listeners and do any other set up that we need.
 function init() {
 	document
@@ -368,8 +367,8 @@ function init() {
 		.addEventListener("click", toggleDarkTheme);
 }
 Array.from(document.querySelectorAll(".listen-toggle")).forEach(element => {
-	element.addEventListener("click", flt.toggle);
+	element.addEventListener("click", toggle);
 });
-document.querySelector("#export-button").addEventListener("click", flt.getExport);
+document.querySelector("#export-button").addEventListener("click", getExport);
 
 init();
