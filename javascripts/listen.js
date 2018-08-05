@@ -30,7 +30,7 @@ var flt =
     line: null,
 };
 // ----------------------------------------------------------------------------
-function getExport() {
+flt.getExport = function() {
 	if (flt.listening) {
 		// important, cause things go crazy if we're still adding to the transcript after export.
 		toggle();
@@ -369,6 +369,6 @@ function init() {
 Array.from(document.querySelectorAll(".listen-toggle")).forEach(element => {
 	element.addEventListener("click", toggle);
 });
-document.querySelector("#export-button").addEventListener("click", getExport);
+document.querySelector("#export-button").addEventListener("click", flt.getExport);
 
 init();
