@@ -27,7 +27,6 @@ var flt = {
   transcriptStartTime: "",
   haveListenedOnce: false,
   line: null,
-  language: null,
   recognition: null,
   interim: null
 };
@@ -105,13 +104,12 @@ if (document.getElementById("transcriptIDForm")) {
     });
 }
 
-flt.language = document.getElementById("selectLanguage").value.toLowerCase;
 // ----------------------------------------------------------------------------
 flt.recognition = new (window.SpeechRecognition ||
   window.webkitSpeechRecognition ||
   window.mozSpeechRecognition ||
   window.msSpeechRecognition)();
-flt.recognition.lang = "en-US";
+flt.recognition.lang = document.getElementById("select-language").value;
 flt.recognition.interimResults = true;
 flt.recognition.maxAlternatives = 1;
 flt.interim = document.querySelector("#interim");
@@ -185,7 +183,7 @@ flt.recognition.onend = function(event) {
       flt.snippetIDs.push(snippetID);
       flt.database
         .ref("transcripts/" + flt.transcriptID + "/" + snippetIdRoot)
-        .set(words.join("|"), completion);
+        .set(flt.recognition.lang + "|" + words.join("|"), flt.completion);
     }
 
     flt.interim.textContent = "";
@@ -262,7 +260,7 @@ flt.pushWordsToTranscript = function(arrayOfWords) {
     flt.snippetIDs.push(snippetID);
     flt.database
       .ref("transcripts/" + flt.transcriptID + "/" + snippetIdRoot)
-      .set(arrayOfWords.join("|"), completion);
+      .set(arrayOfWords.join("|"), flt.completion);
   }
 };
 // ----------------------------------------------------------------------------
@@ -369,6 +367,12 @@ function init() {
   document
     .querySelector("#theme-toggle")
     .addEventListener("click", toggleDarkTheme);
+
+  document
+    .querySelector("#select-language")
+    .addEventListener("change", function(event) {
+      flt.recognition.lang = event.target.value;
+    });
 }
 Array.from(document.querySelectorAll(".listen-toggle")).forEach(element => {
   element.addEventListener("click", flt.toggle);

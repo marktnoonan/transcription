@@ -12,7 +12,7 @@
 <body>
 
 	<header id="header">
-		<h1>Live Transcript</h1>
+		<h1>Free Live Transcript</h1>
 		<div>
 			<button id="start-listen" class='listen-toggle startListen'>Start Listening</button>
 			<button id="start-listen" class="listen-toggle stopListen" style="display:none">Stop Listening</button>
@@ -22,24 +22,26 @@
 		<div class="status">Status:
 			<span id="status">Not Listening</span>
 		</div>
+		<br>
 		<form id="transcriptIDForm" class="transcript-id-form">
 			<label>Transcript name (letters, numbers, and dashes only):
 				<input type="text" id="newTranscriptID" pattern="[a-zA-Z0-9-]+">
 			</label>
 			<button type="submit">Name Transcript</button>
 		</form>
-
+		<br>
 		<label for="select-language">
+			I am speaking in:
 			<select id="select-language" name="select-language">
-				<option value="Afrikaans">Afrikaans</option>
+				<!-- <option value="Afrikaans">Afrikaans</option>
 				<option value="Bahasa Indonesia">Bahasa Indonesia</option>
 				<option value="Bahasa Melayu">Bahasa Melayu</option>
 				<option value="Català">Català</option>
 				<option value="Čeština">Čeština</option>
-				<option value="Deutsch">Deutsch</option>
-				<option value="English" default>English</option>
-				<option value="Español">Español</option>
-				<option value="Euskara">Euskara</option>
+				<option value="Deutsch">Deutsch</option> -->
+				<option value="en-US" default>English (US)</option>
+				<option value="es">Español</option>
+				<!--	<option value="Euskara">Euskara</option>
 				<option value="Français">Français</option>
 				<option value="Galego">Galego</option>
 				<option value="Hrvatski">Hrvatski</option>
@@ -62,7 +64,7 @@
 				<option value="한국어">한국어</option>
 				<option value="中文">中文</option>
 				<option value="日本語">日本語</option>
-				<option value="Lingua latīna">Lingua latīna</option>
+				<option value="Lingua latīna">Lingua latīna</option> -->
 			</select>
 		</label>
 	</header>
