@@ -169,7 +169,7 @@ flt.recognition.onend = function(event) {
     }
     var snippetIdRoot = Date.now();
     for (var i = 0; i < words.length; i++) {
-      var snippetID = "snippet" + snippetIdRoot + "-" + i;
+      var snippetID = "snippet" + snippetIdRoot + "-" + (i + 1);
       var span = document.createElement("span");
       span.className = "snippet";
       span.id = snippetID;
@@ -322,9 +322,9 @@ flt.addEditingListener = function(editedID, newElement) {
         .ref("transcripts/" + flt.transcriptID + "/" + editedTimestamp)
         .once("value")
         .then(function(snapshot) {
-          var lineAsArry = snapshot.val().split("|");
-          lineAsArry[editedIndex] = newText;
-          var updatedLine = lineAsArry.join("|");
+          var lineAsArray = snapshot.val().split("|");
+          lineAsArray[editedIndex] = newText;
+          var updatedLine = lineAsArray.join("|");
           flt.database
             .ref("transcripts/" + flt.transcriptID + "/" + editedTimestamp)
             .set(updatedLine, flt.completion);
