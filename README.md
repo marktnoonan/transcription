@@ -12,7 +12,6 @@ NOTE: This requires the Chrome browser for the speaker. It uses a built in featu
 4. Chrome browser
 
 # Getting started
-
 ```javascript
 
 git clone https://github.com/marktnoonan/transcription.git
@@ -27,6 +26,11 @@ point your Chrome browser to localhost:1234
 
 This should get you up and running. Please report failures/problems with the build process.
 
+# Todo
+- [ ] Make decent landing page..... check in with @Nerajno... Twitter
+
+
 # Deployment
 
-Triggered manually from the master branch Netlify when we are ready to publish.
+Triggered manually from the master branch Netlify  we are ready to publish.
+
