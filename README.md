@@ -29,6 +29,11 @@ This should get you up and running. Please report failures/problems with the bui
 # Todo
 - [ ] Make decent landing page..... check in with @Nerajno... Twitter
 - [ ] Write a complete of things to do ===> Mark 
+- [ ] Make font-size user-selectable
+- [ ] Add Code for Atlanta logo
+- [ ] Add People Making Progress acknowledgement
+- [ ] Make header retractable
+- [ ] ADD MORE TODO
 
 # Deployment
 
