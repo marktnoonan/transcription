@@ -33,7 +33,13 @@ This should get you up and running. Please report failures/problems with the bui
 - [ ] Add Code for Atlanta logo
 - [ ] Add People Making Progress acknowledgement
 - [ ] Make header retractable
-- [ ] ADD MORE TODO
+- [ ] ADD MORE TODOS
+- [ ] Add options for displaying with line breaks on pauses or in more condensed formats
+- [ ] Make text color and background color editable
+- [ ] In fact, let's define a settings panel that will grab all these things together
+- [ ] Let's discuss usefulness of a SPA framework to handle all this (likely Vue)
+- [ ] Let's add user accounts via firebase to store preferred settings as a user
+
 
 # Deployment
 
