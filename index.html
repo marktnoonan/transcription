@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Live Transcript</title>
+	<title>Free Live Transcript</title>
 	<link rel="stylesheet" href="styles/index.css">
 </head>
 
@@ -13,12 +13,17 @@
 
 	<header id="header">
 		<h1>Free Live Transcript</h1>
+
+	</header>
+	<main>
 		<div>
 			<button id="start-listen" class='listen-toggle startListen'>Start Listening</button>
 			<button id="start-listen" class="listen-toggle stopListen" style="display:none">Stop Listening</button>
-		</div>
+		</div>	
 		<button id="theme-toggle" class="setting-button">Toggle Light/Dark</button>
 		<button id="export-button" class="setting-button">Export Transcript</button>
+
+
 		<div class="status">Status:
 			<span id="status">Not Listening</span>
 		</div>
@@ -67,9 +72,7 @@
 				<option value="Lingua latīna">Lingua latīna</option> -->
 			</select>
 		</label>
-	</header>
 
-	<main>
 		<section>
 			<!-- TODO: Well it's not just made by me any more :) so how about we do something that follows the all-contributors spec:
   https://github.com/kentcdodds/all-contributors -->
@@ -77,7 +80,7 @@
 				in real time on a big screen, or watched on anybody's personal device. The underlying transcription process is based
 				on David Walsh's
 				<a href="https://davidwalsh.name/speech-recognition">blog post</a>, and with apologies for only working in Google Chrome. The project was started by Mark Noonan at Code for
-				Atlanta, where are growing number of people are learning and making contributions. The code is available on
+				Atlanta, where a growing number of people are learning and making contributions. The code is available on
 				<a href="https://github.com/marktnoonan/transcription">GitHub</a>.
 				<b>Currently, any browser can watch a transcript, but only Chrome can generate them, because only Chrome has implemented
 					the experimental Web Speech Recognition API Specification, so you will need to use Chrome for this page to work.</b>
@@ -113,7 +116,7 @@
 			window.webkitSpeechRecognition ||
 			window.mozSpeechRecognition ||
 			window.msSpeechRecognition)) {
-			window.alert("Speech recognition is unavailable in your browser. Currently Web Speech Recognition is supported in Chrome (Desktop or Android) with support coming soon to Firefox.")
+			window.alert("Speech recognition is unavailable in your browser. You will be able to watch transcripts, but not generate them.")
 		}
 
 	</script>
