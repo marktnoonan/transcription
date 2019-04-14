@@ -59,6 +59,10 @@ section {
   padding: 10px;
 }
 
+#transcript {
+  font-size: 26px;
+}
+
 #start-listen {
   background: url("../microphone.png") no-repeat scroll 0 0 transparent;
   background-size: 18px;
