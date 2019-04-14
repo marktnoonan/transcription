@@ -11,7 +11,6 @@ var darkThemeOn = false;
 var database;
 
 function toggleDarkTheme() {
-	console.log("I ran!");
 	if (darkThemeOn == false) {
 		document.body.style.background = "#121212";
 		document.body.style.color = "#ffffff";
@@ -31,4 +30,14 @@ function toggleDarkTheme() {
 	}
 }
 
-export { config, darkThemeOn, toggleDarkTheme };
+function toggleHeader() {
+	var header = document.querySelector("header");
+	console.log(header.classList.contains('hidden'))
+	if (!header.classList.contains('hidden')) {
+		header.classList.add('hidden')
+	} else {
+		header.classList.remove('hidden')
+	}
+}
+
+export { config, toggleDarkTheme, toggleHeader };
