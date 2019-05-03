@@ -30,6 +30,23 @@ function toggleDarkTheme() {
 	}
 }
 
+function fontMinus() {
+	var transcript = document.querySelector("#transcript");
+	var currentSize = parseFloat(window.getComputedStyle(transcript).fontSize);
+	if (currentSize != 16) {
+		transcript.style.fontSize =  (currentSize - 10 ) + 'px';
+	}
+}
+
+function fontPlus() {
+	var transcript = document.querySelector("#transcript");
+	var currentSize = parseFloat(window.getComputedStyle(transcript).fontSize);
+	if (currentSize != 76) {
+		transcript.style.fontSize =  (currentSize + 10 ) + 'px';
+	}
+}
+
+
 function toggleHeader() {
 	var header = document.querySelector("header");
 	console.log(header.classList.contains('hidden'))
@@ -40,4 +57,20 @@ function toggleHeader() {
 	}
 }
 
-export { config, toggleDarkTheme, toggleHeader };
+export { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus };
+
+
+// function fontChanger() {
+// 	var currentSize = window.getComputedStyle(words).fontSize;
+// 	switch (currentSize) {
+// 	  case '25px':
+// 		words.style.fontSize = '50px';
+// 		break;
+// 	  case '50px':
+// 		words.style.fontSize = '75px';
+// 		break;
+// 	  case '75px':
+// 		words.style.fontSize = '25px';
+// 		break;
+// 	}
+//   }
