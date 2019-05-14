@@ -48,30 +48,39 @@ function fontPlus() {
 
 function toggleHeader() {
 	var header = document.querySelector("header");
-	console.log(header.classList.contains('translate'))
+	console.log(header.classList.contains('translate'));
 	if (!header.classList.contains('translate')) {
-		header.classList.add('translate')
+		header.classList.add('translate');
 	} else {
-		header.classList.remove('translate')
+		header.classList.remove('translate');
 	}
 }
 
 function settingsToggle() {
     const form = document.querySelector('.settings-box')
     if (form.classList.contains('hidden')) {
-		form.classList.remove('hidden')
+			form.classList.remove('hidden');
     } else {
-		form.classList.add('hidden')
+			form.classList.add('hidden');
 	}
 }
 
 function aboutToggle() {
 	const form = document.querySelector('.about-box')
     if (form.classList.contains('hidden')) {
-		form.classList.remove('hidden')
+			form.classList.remove('hidden');
     } else {
-		form.classList.add('hidden')
+			form.classList.add('hidden');
 	}
 }
 
-export { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus, settingsToggle, aboutToggle };
+function closePopup() {
+	const settings = document.querySelector('.settings-box')
+	const about = document.querySelector('.about-box')
+	if (!settings.classList.contains('hidden') || !about.classList.contains('hidden')) {
+		settings.classList.add('hidden');
+		about.classList.add('hidden');
+	}
+}
+
+export { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus, settingsToggle, aboutToggle, closePopup };
