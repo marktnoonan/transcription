@@ -5,7 +5,7 @@
 // TODO: Transcripts should be really simple to use and broadcast. But right now there is just read/write access to the DB for anyody who wants it. I would like to have no login whatsoever and still have the person who started a listening session ALWAYS remain in charge of it, so it couldn't be over written. There are probably many ways to do it. Right now if I am recording a named transcript, and somebody else names their transcript the same name as mine, we are both then feeding into the same exact DB location. That's dumb. But there are cases where you WOULD want to resume an existing named transcript at right now you just type in the name and pick up where you left off. Really curious to see how we can make this "just work" by maybe caching something in a cookie or local storage or whatever.
 // TODO: I haven't dug into Zenscroll enough to know how it handles being called repeatedly, but sometimes I see jankyness and we may need to look at how to only call Zenscroll if we are not already scrolling. My naive version of that didn't work as expected.
 
-import { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus } from "./common";
+import { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus, openForm, closeForm } from "./common";
 import zenscroll from "zenscroll";
 
 // ----------------------------------------------------------------------------
@@ -378,6 +378,13 @@ function init() {
     .querySelector("#font-plus")
     .addEventListener("click", fontPlus);
 
+  document
+    .querySelector("#settings-button")
+    .addEventListener("click", openForm)
+
+  document
+    .querySelector("#settings-exit-button")
+    .addEventListener("click", closeForm)
 
   document
     .querySelector("#showhide-button")

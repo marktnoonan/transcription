@@ -57,4 +57,16 @@ function toggleHeader() {
 	}
 }
 
-export { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus };
+function openForm() {
+    const form = document.querySelector('.settings-box')
+    if (form.classList.contains('hidden')) {
+        form.classList.remove('hidden')
+    }
+}
+
+function closeForm() {
+    const form = document.querySelector('.settings-box')
+    form.classList.add('hidden')
+}
+
+export { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus, openForm, closeForm };

@@ -7,12 +7,13 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Free Live Transcript</title>
 	<link rel="stylesheet" href="styles/index.css">
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 
 <body>
 
 	<header id="header">
-		<h1>Free Live Transcript</h1>
+		<h1>Free Live Transcript</h1>	
 		<div>
 			<button id="start-listen" class='listen-toggle startListen'>Start Transcribing</button>
 			<button id="stop-listen" class="listen-toggle stopListen" style="display:none">Stop Transcribing</button>
@@ -20,26 +21,27 @@
 		<div class="status">Status:
 			<span id="status">Not Listening</span>
 		</div>
-		<button id="theme-toggle" class="setting-button">Toggle Light/Dark</button>
-		<button id="font-minus" class="setting-button">-</button>
-		<button id="font-plus" class="setting-button">+</button>
-	<form id="transcriptIDForm" class="transcript-id-form">
+		<button id="settings-button">settings</button>
+		<!-- <button id="theme-toggle" class="setting-button">Toggle Light/Dark</button> -->
+		<!-- <button id="font-minus" class="setting-button">-</button>
+		<button id="font-plus" class="setting-button">+</button> -->
+		<form id="transcriptIDForm" class="transcript-id-form">
 			<label>Transcript name (letters, numbers, and dashes only):
 				<input type="text" id="newTranscriptID" pattern="[a-zA-Z0-9-]+">
 			</label>
 			<button type="submit">Name Transcript</button>
 		</form>
-		<label for="select-language">
+		<!-- <label for="select-language">
 			I am speaking in:
-			<select id="select-language" name="select-language">
+			<select id="select-language" name="select-language"> -->
 				<!-- <option value="Afrikaans">Afrikaans</option>
 				<option value="Bahasa Indonesia">Bahasa Indonesia</option>
 				<option value="Bahasa Melayu">Bahasa Melayu</option>
 				<option value="Català">Català</option>
 				<option value="Čeština">Čeština</option>
 				<option value="Deutsch">Deutsch</option> -->
-				<option value="en-US" default>English (US)</option>
-				<option value="es">Español</option>
+				<!-- <option value="en-US" default>English (US)</option>
+				<option value="es">Español</option> -->
 				<!--	<option value="Euskara">Euskara</option>
 				<option value="Français">Français</option>
 				<option value="Galego">Galego</option>
@@ -64,18 +66,77 @@
 				<option value="中文">中文</option>
 				<option value="日本語">日本語</option>
 				<option value="Lingua latīna">Lingua latīna</option> -->
-			</select>
-		</label>
+			<!-- </select>
+		</label> -->
 	<button id="export-button" class="setting-button">Export Transcript</button>
 	<button id="showhide-button" class="setting-button">Toggle Header</button>
 
 	</header>
 
 	<main>
+
+		<div class='settings-box hidden'>
+			<div>
+				<h1>Settings</h1>
+				<p>Customize our app for your needs!</p>
+			</div>
+			<div>
+				<h2>Font Size</h2>
+				<button id="font-minus" class="setting-button">-</button>
+				<button id="font-plus" class="setting-button">+</button>
+			</div>
+			<div>
+				<h2>Color</h2>
+				<button id="theme-toggle" class="setting-button">Toggle Light/Dark</button>
+			</div>
+			<div>
+				<h2>Language</h2>
+				<label for="select-language">
+						I am speaking in:
+						<select id="select-language" name="select-language">
+							<!-- <option value="Afrikaans">Afrikaans</option>
+							<option value="Bahasa Indonesia">Bahasa Indonesia</option>
+							<option value="Bahasa Melayu">Bahasa Melayu</option>
+							<option value="Català">Català</option>
+							<option value="Čeština">Čeština</option>
+							<option value="Deutsch">Deutsch</option> -->
+							<option value="en-US" default>English (US)</option>
+							<option value="es">Español</option>
+							<!--	<option value="Euskara">Euskara</option>
+							<option value="Français">Français</option>
+							<option value="Galego">Galego</option>
+							<option value="Hrvatski">Hrvatski</option>
+							<option value="IsiZulu">IsiZulu</option>
+							<option value="Íslenska">Íslenska</option>
+							<option value="Italiano">Italiano</option>
+							<option value="Magyar">Magyar</option>
+							<option value="Nederlands">Nederlands</option>
+							<option value="Norsk bokmål">Norsk bokmål</option>
+							<option value="Polski">Polski</option>
+							<option value="Português">Português</option>
+							<option value="Română">Română</option>
+							<option value="Slovenčina">Slovenčina</option>
+							<option value="Suomi">Suomi</option>
+							<option value="Svenska">Svenska</option>
+							<option value="Türkçe">Türkçe</option>
+							<option value="български">български</option>
+							<option value="Pусский">Pусский</option>
+							<option value="Српски">Српски</option>
+							<option value="한국어">한국어</option>
+							<option value="中文">中文</option>
+							<option value="日本語">日本語</option>
+							<option value="Lingua latīna">Lingua latīna</option> -->
+						</select>
+					</label>
+			</div>
+			<button id="settings-exit-button">exit</button>
+		</div>
+
+
 		<section>
 			<!-- TODO: Well it's not just made by me any more :) so how about we do something that follows the all-contributors spec:
 	https://github.com/kentcdodds/all-contributors -->
-				<h2>About this project</h2>
+			<h2>About this project</h2>
 			<p class="credit">This is an open-source exporation of creating live transcripts of speech on the web, that can be displayed (and edited) in real time on a big screen, or watched on anybody's personal device. The underlying transcription process is largely based on David Walsh's awesome <a href="https://davidwalsh.name/speech-recognition">blog post</a>. The project was started by Mark Noonan at Code for Atlanta, where a growing number of people are learning and making contributions. The code is available on <a href="https://github.com/marktnoonan/transcription">GitHub</a>. <b>Currently, any browser can watch a transcript, but only Chrome can generate them, because only Chrome has implemented the experimental Web Speech Recognition API Specification, so you will need to use Chrome for this page to work.</b>
 			</p>
 			<!-- TODO: the language here could be improved. The class and ID names could be more clear also. -->
@@ -84,7 +145,7 @@
 				You can name this transcript to save the results and allow others to access it live from their own devices. Or don't name it, and keep it private to just this browser window. If the transcript is not named, everything will be deleted when you close the page. If it has a name, it can be viewed in full by using that name on the Watch Transcript page.
 				<hr>
 			</aside>
-			<p id="transcript" contenteditable="false"></p>
+			<p id="transcript" contenteditable="false">test</p>
 			<span class="interim" id="interim"></span>
 		</section>
 	</main>

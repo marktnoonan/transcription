@@ -3,7 +3,7 @@
 }
 
 body {
-  font-family: Verdana, sans-serif;
+  font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
@@ -150,4 +150,49 @@ section {
   position: absolute;
   bottom: -40px;
   right: 20px;
+}
+
+
+/* Settings Box */
+.settings-box {
+  margin: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+  position: absolute;
+  width: 400px;
+  height: 500px;
+  background-color:rgb(31, 31, 31);
+  border-radius: 20px;
+  color: rgb(235, 235, 235);
+}
+
+.settings-box h1 {
+  font-weight: 500;
+  font-size: 35px;
+  margin: 20px 0 0 0;
+}
+
+.settings-box p {
+  margin: 0;
+  font-size: 14px;
+  color: rgb(173, 173, 173);
+}
+
+.settings-box h2 {
+  background-color: rgb(48, 48, 48);
+  padding: 10px 0 10px 0;
+  font-weight: 500;
+}
+
+.settings-box:focus {
+  bacground-color: red;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+#settings-exit-button {
+  margin-top: 40px;
 }
