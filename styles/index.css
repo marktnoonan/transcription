@@ -184,10 +184,6 @@ section {
   font-weight: 500;
 }
 
-.settings-box:focus {
-  bacground-color: red;
-}
-
 .hidden {
   visibility: hidden;
 }
