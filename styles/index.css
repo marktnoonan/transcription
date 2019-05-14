@@ -32,7 +32,7 @@ header {
   align-items: center;
 }
 
-header.hidden {
+header.translate {
   transform: translateY(-100%);
 }
 
@@ -146,12 +146,11 @@ section {
   margin: 10px;
 }
 
-#showhide-button {
+#header-toggle-button{
   position: absolute;
   bottom: -40px;
-  right: 20px;
+  right: 20px
 }
-
 
 /* Settings Box */
 .settings-box {
@@ -161,7 +160,7 @@ section {
   text-align: center;
   position: absolute;
   width: 400px;
-  height: 500px;
+  height: 450px;
   background-color:rgb(31, 31, 31);
   border-radius: 20px;
   color: rgb(235, 235, 235);
@@ -193,6 +192,16 @@ section {
   visibility: hidden;
 }
 
-#settings-exit-button {
-  margin-top: 40px;
+.about-box {
+  margin: auto;
+  padding: 20px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  position: absolute;
+  width: 600px;
+  height: 500px;
+  background-color:rgb(31, 31, 31);
+  border-radius: 20px;
+  color: rgb(235, 235, 235);
 }

@@ -46,27 +46,32 @@ function fontPlus() {
 	}
 }
 
-
 function toggleHeader() {
 	var header = document.querySelector("header");
-	console.log(header.classList.contains('hidden'))
-	if (!header.classList.contains('hidden')) {
-		header.classList.add('hidden')
+	console.log(header.classList.contains('translate'))
+	if (!header.classList.contains('translate')) {
+		header.classList.add('translate')
 	} else {
-		header.classList.remove('hidden')
+		header.classList.remove('translate')
 	}
 }
 
-function openForm() {
+function settingsToggle() {
     const form = document.querySelector('.settings-box')
     if (form.classList.contains('hidden')) {
-        form.classList.remove('hidden')
-    }
+		form.classList.remove('hidden')
+    } else {
+		form.classList.add('hidden')
+	}
 }
 
-function closeForm() {
-    const form = document.querySelector('.settings-box')
-    form.classList.add('hidden')
+function aboutToggle() {
+	const form = document.querySelector('.about-box')
+    if (form.classList.contains('hidden')) {
+		form.classList.remove('hidden')
+    } else {
+		form.classList.add('hidden')
+	}
 }
 
-export { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus, openForm, closeForm };
+export { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus, settingsToggle, aboutToggle };
