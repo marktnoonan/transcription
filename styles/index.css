@@ -208,3 +208,17 @@ section {
 #cfa-logo:hover{
   opacity: .75;
 }
+
+#exit-popup {
+  position: absolute;
+  border: none;
+  color: white;
+  background-color: transparent;
+  font-size: 30px;
+  right: 20px;
+  top: 10px;
+}
+
+button {
+  cursor: pointer;
+}

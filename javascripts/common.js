@@ -57,20 +57,24 @@ function toggleHeader() {
 }
 
 function settingsToggle() {
-    const form = document.querySelector('.settings-box')
-    if (form.classList.contains('hidden')) {
-			form.classList.remove('hidden');
+	const settings = document.querySelector('.settings-box')
+	const about = document.querySelector('.about-box')
+    if (settings.classList.contains('hidden')) {
+		settings.classList.remove('hidden');
+	} else if (!about.classList.contains('hidden')) {
+		about.classList.add('hidden');
     } else {
-			form.classList.add('hidden');
+			settings.classList.add('hidden');
 	}
 }
 
 function aboutToggle() {
-	const form = document.querySelector('.about-box')
-    if (form.classList.contains('hidden')) {
-			form.classList.remove('hidden');
+	const settings = document.querySelector('.settings-box')
+	const about = document.querySelector('.about-box')
+    if (about.classList.contains('hidden')) {
+			about.classList.remove('hidden');
     } else {
-			form.classList.add('hidden');
+			about.classList.add('hidden');
 	}
 }
 

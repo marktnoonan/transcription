@@ -391,8 +391,22 @@ function init() {
     .addEventListener("click", toggleHeader);
 
   document
-    .addEventListener('keydown', (e) => {
+    .addEventListener("keydown", (e) => {
       if (e.keyCode == 27) {
+        closePopup()
+      }
+    })
+
+  document
+  .querySelectorAll("#exit-popup")
+  .forEach(function(ele) {
+  ele.addEventListener("click", closePopup)
+  })
+
+  document
+    .addEventListener("click", (e) => {
+      console.log(e.target.tagName)
+      if (e.target.tagName == "HTML") {
         closePopup()
       }
     })
