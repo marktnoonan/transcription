@@ -48,7 +48,6 @@ function fontPlus() {
 
 function toggleHeader() {
 	var header = document.querySelector("header");
-	console.log(header.classList.contains('translate'));
 	if (!header.classList.contains('translate')) {
 		header.classList.add('translate');
 	} else {

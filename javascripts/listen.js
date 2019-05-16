@@ -405,7 +405,6 @@ function init() {
 
   document
     .addEventListener("click", (e) => {
-      console.log(e.target.tagName)
       if (e.target.tagName == "HTML") {
         closePopup()
       }
