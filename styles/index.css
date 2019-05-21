@@ -22,24 +22,49 @@ a:visited {
 header {
   position: fixed;
   width: 100%;
+  height: 150px;
   top: 0;
-  background-color: aliceblue;
-  border-bottom: 1px solid darkslateblue;
+  background-color:white;;
+  border-bottom: 1px solid rgb(131, 131, 131);
   padding: 10px;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
+  transform: translateY(0%);
+  transition: transform .25s;
+}
+
+header h1 {
+  margin: 0;
+  padding: 0px 8px;
+  border: 7px solid black;
+  box-shadow: 5px 5px rgba(0, 0, 0, 0.75);
+  font-weight: bold;
 }
 
 header.translate {
   transform: translateY(-100%);
+  transition: transform .25s;
 }
 
 header > * {
   margin-left: 20px;
   margin-bottom: 10px;
 }
+
+header h1 {
+  padding: 0px 8px;
+  border: 7px solid black;
+  box-shadow: 5px 5px rgba(0, 0, 0, 0.75);
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.status {
+  display: none;
+}
+
 
 /*
     TODO: solve the problem of having to update media queries every time the content of the header changes
