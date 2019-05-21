@@ -7,45 +7,34 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Free Live Transcript</title>
 	<link rel="stylesheet" href="styles/index.css">
-	<script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-	<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.green-red.min.css">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 
 <body>
 
 	<header id="header">
-		<h1>FreeLiveTranscript</h1>
+		<h1>Free Live Transcript</h1>	
 		<div>
-			<button id="start-listen"
-				class='listen-toggle startListen mdl-button mdl-js-button mdl-button--raised mdl-button--colored'>Start
-				Transcribing</button>
-			<button id="stop-listen"
-				class="listen-toggle stopListen mdl-button mdl-js-button mdl-button--raised mdl-button--accent"
-				style="display:none">Stop Transcribing</button>
-		</div>
+			<button id="start-listen" class='listen-toggle startListen'>Start Transcribing</button>
+			<button id="stop-listen" class="listen-toggle stopListen" style="display:none">Stop Transcribing</button>
+		</div>	
 		<div class="status">Status:
 			<span id="status">Not Listening</span>
 		</div>
-		<button id="settings-button"
-			class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Settings</button>
+		<button id="settings-button">Settings</button>
 		<form id="transcriptIDForm" class="transcript-id-form">
 			<label>Transcript name (letters, numbers, and dashes only):
 				<input type="text" id="newTranscriptID" pattern="[a-zA-Z0-9-]+">
 			</label>
-			<button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Name
-				Transcript</button>
+			<button type="submit">Name Transcript</button>
 		</form>
-		<button id="export-button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Export
-			Transcript</button>
-		<button id="about-button"
-			class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">About</button>
+		<button id="export-button" class="setting-button">Export Transcript</button>
+		<button id="about-button" class="setting-button">About</button>
 		<button id="header-toggle-button">Toggle Header</button>
 	</header>
 	<main>
 		<!-- Settings Popup -->
-		<div class="settings-box hidden">
+		<div class="settings-box hidden" class="setting-button">
 			<div>
 				<h1>Settings</h1>
 				<p>Customize our app for your needs!</p>
@@ -63,16 +52,16 @@
 				<h2>Language</h2>
 				<label for="select-language">
 					I am speaking in:</label>
-				<select id="select-language" name="select-language">
-					<!-- <option value="Afrikaans">Afrikaans</option>
+					<select id="select-language" name="select-language">
+						<!-- <option value="Afrikaans">Afrikaans</option>
 							<option value="Bahasa Indonesia">Bahasa Indonesia</option>
 							<option value="Bahasa Melayu">Bahasa Melayu</option>
 							<option value="Català">Català</option>
 							<option value="Čeština">Čeština</option>
 							<option value="Deutsch">Deutsch</option> -->
-					<option value="en-US" default>English (US)</option>
-					<option value="es">Español</option>
-					<!--	<option value="Euskara">Euskara</option>
+							<option value="en-US" default>English (US)</option>
+							<option value="es">Español</option>
+							<!--	<option value="Euskara">Euskara</option>
 								<option value="Français">Français</option>
 								<option value="Galego">Galego</option>
 								<option value="Hrvatski">Hrvatski</option>
@@ -96,41 +85,29 @@
 								<option value="中文">中文</option>
 								<option value="日本語">日本語</option>
 								<option value="Lingua latīna">Lingua latīna</option> -->
-				</select>
-				</label>
+						</select>
+					</label>
+				</div>
+				<button id="exit-popup">x</button>
 			</div>
-			<button id="exit-popup">clear</button>
-		</div>
-		<!-- About Popup -->
-		<div class="about-box hidden">
+				<!-- About Popup -->
+				<div class="about-box hidden">
 			<!-- TODO: Well it's not just made by me any more :) so how about we do something that follows the all-contributors spec:
-			https://github.com/kentcdodds/all-contributors -->
-			<div id="cfa-logo">
-				<a href="https://www.codeforatlanta.org/" target="_blank"><img src="./img/cfa-logo.png"
-						alt="Code for Atlanta Logo" width="400px"></a>
-			</div>
-			<h2>About this project</h2>
-			<p class="credit">This is an open-source exporation of creating live transcripts of speech on the web, that
-				can be displayed (and edited) in real time on a big screen, or watched on anybody's personal device. The
-				underlying transcription process is largely based on David Walsh's awesome <a
-					href="https://davidwalsh.name/speech-recognition">blog post</a>. The project was started by Mark
-				Noonan at Code for Atlanta, where a growing number of people are learning and making contributions. The
-				code is available on <a href="https://github.com/marktnoonan/transcription">GitHub</a>. <b>Currently,
-					any browser can watch a transcript, but only Chrome can generate them, because only Chrome has
-					implemented the experimental Web Speech Recognition API Specification, so you will need to use
-					Chrome for this page to work.</b>
-			</p>
-			<!-- TODO: the language here could be improved. The class and ID names could be more clear also. -->
-			<aside class="name-transcript" id="name-transcript">
-				<h2>Naming Transcipts</h2>
-				You can name this transcript to save the results and allow others to access it live from their own
-				devices. Or don't name it, and keep it private to just this browser window. If the transcript is not
-				named, everything will be deleted when you close the page. If it has a name, it can be viewed in full by
-				using that name on the Watch Transcript page.
-				<button id="exit-popup">clear</button>
-		</div>
-		<!-- transcript area -->
-		<p id="transcript" contenteditable="false">test</p>
+	https://github.com/kentcdodds/all-contributors -->
+	<div id="cfa-logo">
+		<a href="https://www.codeforatlanta.org/" target="_blank"><img src="./img/cfa-logo.png" alt="Code for Atlanta Logo" width="400px"></a>
+	</div>
+	<h2>About this project</h2>
+	<p class="credit">This is an open-source exporation of creating live transcripts of speech on the web, that can be displayed (and edited) in real time on a big screen, or watched on anybody's personal device. The underlying transcription process is largely based on David Walsh's awesome <a href="https://davidwalsh.name/speech-recognition">blog post</a>. The project was started by Mark Noonan at Code for Atlanta, where a growing number of people are learning and making contributions. The code is available on <a href="https://github.com/marktnoonan/transcription">GitHub</a>. <b>Currently, any browser can watch a transcript, but only Chrome can generate them, because only Chrome has implemented the experimental Web Speech Recognition API Specification, so you will need to use Chrome for this page to work.</b>
+	</p>
+	<!-- TODO: the language here could be improved. The class and ID names could be more clear also. -->
+	<aside class="name-transcript" id="name-transcript">
+		<h2>Naming Transcipts</h2>
+		You can name this transcript to save the results and allow others to access it live from their own devices. Or don't name it, and keep it private to just this browser window. If the transcript is not named, everything will be deleted when you close the page. If it has a name, it can be viewed in full by using that name on the Watch Transcript page.
+		<button id="exit-popup">x</button>
+	</div>
+	<!-- transcript area -->
+		<p id="transcript" contenteditable="false"></p>
 		<span class="interim" id="interim"></span>
 	</main>
 
