@@ -93,7 +93,8 @@ section {
   background: url("../img/microphone.png") no-repeat scroll 0 0 transparent;
   background-size: 14px;
   background-position: 12px 6px;
-  background-color: rgb(0, 192, 0);
+  background-color: rgb(1, 155, 1);
+  border: none;
   flex-grow: 1;
   padding: 10px;
   padding-left: 42px;
@@ -114,6 +115,7 @@ section {
   background-size: 14px;
   background-position: 12px 6px;
   background-color: rgb(192, 0, 0);
+  border: none;
   flex-grow: 1;
   padding: 10px;
   padding-left: 42px;
@@ -248,6 +250,8 @@ button {
   cursor: pointer;
 }
 
+/* ToDo: Add style to export box modal */
+
 .exportBox {
   width: 650px;
   height: 250px;
@@ -256,4 +260,16 @@ button {
 }
 
 .transcript-export {
+}
+
+.setting-button {
+  height: 30px;
+  box-shadow: none;
+  border: none;
+  border-radius: 3px;
+  background-color: rgb(101, 157, 175);
+  color: white;
+  font-family: "Roboto";
+  font-size: 20px;
+  font-weight: bold;
 }

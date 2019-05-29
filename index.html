@@ -21,14 +21,19 @@
 		<div class="status">Status:
 			<span id="status">Not Listening</span>
 		</div>
-		<button id="settings-button">Settings</button>
+		<button id="settings-button" class="setting-button">Settings</button>
+<!-- make this form into a modal, add button that makes the modal popup -->
 		<form id="transcriptIDForm" class="transcript-id-form">
 			<label>Transcript name (letters, numbers, and dashes only):
 				<input type="text" id="newTranscriptID" pattern="[a-zA-Z0-9-]+">
 			</label>
 			<button type="submit">Name Transcript</button>
 		</form>
+
 		<button id="export-button" class="setting-button">Export Transcript</button>
+		
+		<!-- This is a dummy button -->
+		<button id="name-button" class="setting-button">Name Transcript</button>
 		<button id="about-button" class="setting-button">About</button>
 		<button id="header-toggle-button">Toggle Header</button>
 	</header>
