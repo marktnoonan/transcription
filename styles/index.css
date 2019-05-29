@@ -253,23 +253,32 @@ button {
 /* ToDo: Add style to export box modal */
 
 .exportBox {
+  position: absolute;
   width: 650px;
   height: 250px;
   background-color: grey;
   text-align: center;
 }
 
+/* textarea inside the export modal */
 .transcript-export {
 }
 
 .setting-button {
-  height: 30px;
+  height: 35px;
   box-shadow: none;
   border: none;
-  border-radius: 3px;
+  border-radius: 5px;
   background-color: rgb(101, 157, 175);
   color: white;
   font-family: "Roboto";
   font-size: 20px;
   font-weight: bold;
+}
+
+.name-box {
+  position: absolute;
+  width: 500px;
+  height: 300px;
+  background-color:grey;
 }

@@ -81,10 +81,18 @@ function aboutToggle() {
 function exportToggle() {
 	const exporttext = document.querySelector(".exportBox")
 	if (exporttext.classList.contains('hidden')) {
-		console.log("yes")
 		exporttext.classList.remove('hidden');
 	} else {
 		exporttext.classList.add('hidden');
+	}
+}
+
+function nameToggle() {
+	const name = document.querySelector(".name-box")
+	if (name.classList.contains('hidden')) {
+		name.classList.remove('hidden');
+	} else {
+		name.classList.add('hidden');
 	}
 }
 
@@ -97,4 +105,4 @@ function closePopup() {
 	}
 }
 
-export { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus, settingsToggle, aboutToggle, closePopup, exportToggle };
+export { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus, settingsToggle, aboutToggle, closePopup, exportToggle, nameToggle };
