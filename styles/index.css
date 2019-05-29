@@ -247,3 +247,13 @@ section {
 button {
   cursor: pointer;
 }
+
+.exportBox {
+  width: 650px;
+  height: 250px;
+  background-color: grey;
+  text-align: center;
+}
+
+.transcript-export {
+}

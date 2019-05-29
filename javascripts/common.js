@@ -60,9 +60,9 @@ function settingsToggle() {
 	const settings = document.querySelector('.settings-box')
 	const about = document.querySelector('.about-box')
     if (settings.classList.contains('hidden')) {
-		settings.classList.remove('hidden');
+			settings.classList.remove('hidden');
 	} else if (!about.classList.contains('hidden')) {
-		about.classList.add('hidden');
+			about.classList.add('hidden');
     } else {
 			settings.classList.add('hidden');
 	}
@@ -78,6 +78,16 @@ function aboutToggle() {
 	}
 }
 
+function exportToggle() {
+	const exporttext = document.querySelector(".exportBox")
+	if (exporttext.classList.contains('hidden')) {
+		console.log("yes")
+		exporttext.classList.remove('hidden');
+	} else {
+		exporttext.classList.add('hidden');
+	}
+}
+
 function closePopup() {
 	const settings = document.querySelector('.settings-box')
 	const about = document.querySelector('.about-box')
@@ -87,4 +97,4 @@ function closePopup() {
 	}
 }
 
-export { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus, settingsToggle, aboutToggle, closePopup };
+export { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus, settingsToggle, aboutToggle, closePopup, exportToggle };
