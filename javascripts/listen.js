@@ -43,7 +43,7 @@ flt.getExport = function() {
   textArea.setAttribute("class", "transcript-export");
   var textbox = document.querySelector(".transcript-export")
     if (wrapper.contains(textbox)) {
-      wrapper.removeChild(wrapper.childNodes);
+      wrapper.removeChild(textbox);
       wrapper.appendChild(textArea);
       flt.transcript.appendChild(wrapper);
     } else {
