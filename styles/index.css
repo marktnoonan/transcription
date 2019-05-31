@@ -252,16 +252,30 @@ button {
 
 /* ToDo: Add style to export box modal */
 
-.exportBox {
-  position: absolute;
-  width: 650px;
-  height: 250px;
-  background-color: grey;
+.export-box {
+  margin: auto;
+  padding-top: 25px;
+  left: 0;
+  right: 0;
   text-align: center;
+  position: absolute;
+  width: 700px;
+  height: 450px;
+  background-color:rgb(31, 31, 31);
+  border-radius: 20px;
+  color: rgb(235, 235, 235);
+}
+
+.export-box h1 {
+  margin: 0;
+  padding-bottom: 15px;
+  font-size: 40px;
 }
 
 /* textarea inside the export modal */
 .transcript-export {
+  width: 650px;
+  height: 320px;
 }
 
 .setting-button {
@@ -277,8 +291,21 @@ button {
 }
 
 .name-box {
+  margin: auto;
+  padding-top: 25px;
+  left: 0;
+  right: 0;
+  text-align: center;
   position: absolute;
-  width: 500px;
-  height: 300px;
-  background-color:grey;
+  width: 700px;
+  height: 150px;
+  background-color:rgb(31, 31, 31);
+  border-radius: 20px;
+  color: rgb(235, 235, 235);
+}
+
+.name-box h1 {
+  margin: 0;
+  padding-bottom: 15px;
+  font-size: 35px;
 }

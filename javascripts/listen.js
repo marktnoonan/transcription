@@ -36,13 +36,14 @@ flt.getExport = function() {
     // important, cause things go crazy if we're still adding to the transcript after export.
     flt.toggle();
   }
-  var wrapper = document.querySelector(".exportBox");
+  var wrapper = document.querySelector(".export-box");
   var text = JSON.parse(flt.exportCurrentTranscript());
   var textArea = document.createElement("textarea");
   textArea.textContent = Object.values(text).join("\r\n");
   textArea.setAttribute("class", "transcript-export");
-    if (wrapper.hasChildNodes()) {
-      wrapper.removeChild(wrapper.firstChild);
+  var textbox = document.querySelector(".transcript-export")
+    if (wrapper.contains(textbox)) {
+      wrapper.removeChild(wrapper.childNodes);
       wrapper.appendChild(textArea);
       flt.transcript.appendChild(wrapper);
     } else {
