@@ -12,11 +12,12 @@ body {
 a {
   font-weight: bold;
   text-decoration: none;
-  color: darkslateblue;
+  color: #5eddfd;
+
 }
 
 a:visited {
-  color: darkslateblue;
+  color: #5eddfd;
 }
 
 header {
