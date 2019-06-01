@@ -122,11 +122,35 @@ flt.interim = document.querySelector("#interim");
 
 //TODO: refactor this onresult function for clarity. Especially, just extract it and give it a name so that it's just recognition.onresult = manageInterimResults or something... most of the blocks in this function could be given their own name.
 flt.recognition.onresult = function(event) {
+  const timeStamp = document.querySelector(".timeStamp")
+  var today = new Date()
+  var ampm
+  if (today.getHours() < 12) {
+    ampm = "AM"
+  } else {
+    ampm = "PM"
+  }
+  var minutes
+  if (today.getMinutes() < 10) {
+    minutes = "0" + today.getMinutes()
+  } else
+    minutes = today.getMinutes()
+  var seconds
+  if (today.getSeconds() < 10) {
+    seconds = "0" + today.getSeconds()
+  } else
+    seconds = today.getSeconds()
+  var time = today.getHours() % 12 + ":" + minutes + ":" + seconds +  ampm + " "
+  var timeSpan = document.createElement("span")
   if (!flt.currentLineID) {
     flt.currentLineID = Date.now(); // this is what we will really use to handle "replay" timing I think. - Mark
     flt.line = document.createElement("div");
     flt.line.id = "line" + flt.currentLineID;
     flt.transcript.appendChild(flt.line);
+    if (timeStamp.checked == true) {
+      timeSpan.innerText = time;
+      flt.line.appendChild(timeSpan);
+    }
   }
 
   var resultText = event.results[0][0].transcript;
@@ -183,6 +207,7 @@ flt.recognition.onend = function(event) {
       span.append(words[i]);
       flt.line.appendChild(span);
       flt.addEditingListener(snippetID, span);
+
     }
 
     if (flt.transcriptID !== "") {
