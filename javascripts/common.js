@@ -46,15 +46,87 @@ function fontPlus() {
 	}
 }
 
-
 function toggleHeader() {
 	var header = document.querySelector("header");
-	console.log(header.classList.contains('hidden'))
-	if (!header.classList.contains('hidden')) {
-		header.classList.add('hidden')
+	console.log(header.classList.contains('translate'));
+	if (!header.classList.contains('translate')) {
+		header.classList.add('translate');
 	} else {
-		header.classList.remove('hidden')
+		header.classList.remove('translate');
 	}
 }
 
-export { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus };
+function settingsToggle() {
+	const settings = document.querySelector('.settings-box')
+	const about = document.querySelector('.about-box')
+	const exporttext = document.querySelector(".export-box")
+	const name = document.querySelector(".name-box")
+    if (settings.classList.contains('hidden')) {
+			settings.classList.remove('hidden');
+			about.classList.add('hidden');
+			exporttext.classList.add('hidden');
+			name.classList.add('hidden');
+    } else {
+			settings.classList.add('hidden');
+	}
+}
+
+function aboutToggle() {
+	const settings = document.querySelector('.settings-box')
+	const about = document.querySelector('.about-box')
+	const exporttext = document.querySelector(".export-box")
+	const name = document.querySelector(".name-box")
+    if (about.classList.contains('hidden')) {
+			settings.classList.add('hidden');
+			about.classList.remove('hidden');
+			exporttext.classList.add('hidden');
+			name.classList.add('hidden');
+    } else {
+			about.classList.add('hidden');
+	}
+}
+
+function exportToggle() {
+	const settings = document.querySelector('.settings-box')
+	const about = document.querySelector('.about-box')
+	const exporttext = document.querySelector(".export-box")
+	const name = document.querySelector(".name-box")
+	if (exporttext.classList.contains('hidden')) {
+		settings.classList.add('hidden');
+		about.classList.add('hidden');
+		exporttext.classList.remove('hidden');
+		name.classList.add('hidden');
+	} else {
+		exporttext.classList.add('hidden');
+	}
+}
+
+function nameToggle() {
+	const settings = document.querySelector('.settings-box')
+	const about = document.querySelector('.about-box')
+	const exporttext = document.querySelector(".export-box")
+	const name = document.querySelector(".name-box")
+	if (name.classList.contains('hidden')) {
+		settings.classList.add('hidden');
+		about.classList.add('hidden');
+		exporttext.classList.add('hidden');
+		name.classList.remove('hidden');
+	} else {
+		name.classList.add('hidden');
+	}
+}
+
+function closePopup() {
+	const settings = document.querySelector('.settings-box')
+	const about = document.querySelector('.about-box');
+	const exportBox = document.querySelector(".export-box");
+	const name = document.querySelector(".name-box");
+	if (!settings.classList.contains('hidden') || !about.classList.contains('hidden') || !exportBox.classList.contains('hidden') || !name.classList.contains('hidden'))  {
+		settings.classList.add('hidden');
+		about.classList.add('hidden');
+		exportBox.classList.add('hidden');
+		name.classList.add('hidden');
+	}
+}
+
+export { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus, settingsToggle, aboutToggle, closePopup, exportToggle, nameToggle };

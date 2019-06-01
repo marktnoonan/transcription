@@ -3,7 +3,7 @@
 }
 
 body {
-  font-family: Verdana, sans-serif;
+  font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
@@ -22,24 +22,49 @@ a:visited {
 header {
   position: fixed;
   width: 100%;
+  height: 150px;
   top: 0;
-  background-color: aliceblue;
-  border-bottom: 1px solid darkslateblue;
+  background-color:white;;
+  border-bottom: 1px solid rgb(131, 131, 131);
   padding: 10px;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
+  transform: translateY(0%);
+  transition: transform .25s;
 }
 
-header.hidden {
+header h1 {
+  margin: 0;
+  padding: 0px 8px;
+  border: 7px solid black;
+  box-shadow: 5px 5px rgba(0, 0, 0, 0.75);
+  font-weight: bold;
+}
+
+header.translate {
   transform: translateY(-100%);
+  transition: transform .25s;
 }
 
 header > * {
   margin-left: 20px;
   margin-bottom: 10px;
 }
+
+header h1 {
+  padding: 0px 8px;
+  border: 7px solid black;
+  box-shadow: 5px 5px rgba(0, 0, 0, 0.75);
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.status {
+  display: none;
+}
+
 
 /*
     TODO: solve the problem of having to update media queries every time the content of the header changes
@@ -65,10 +90,11 @@ section {
 }
 
 #start-listen {
-  background: url("../microphone.png") no-repeat scroll 0 0 transparent;
+  background: url("../img/microphone.png") no-repeat scroll 0 0 transparent;
   background-size: 14px;
   background-position: 12px 6px;
-  background-color: rgb(0, 192, 0);
+  background-color: rgb(1, 155, 1);
+  border: none;
   flex-grow: 1;
   padding: 10px;
   padding-left: 42px;
@@ -85,10 +111,11 @@ section {
 }
 
 #stop-listen {
-  background: url("../microphone.png") no-repeat scroll 0 0 transparent;
+  background: url("../img/microphone.png") no-repeat scroll 0 0 transparent;
   background-size: 14px;
   background-position: 12px 6px;
   background-color: rgb(192, 0, 0);
+  border: none;
   flex-grow: 1;
   padding: 10px;
   padding-left: 42px;
@@ -146,8 +173,139 @@ section {
   margin: 10px;
 }
 
-#showhide-button {
+#header-toggle-button{
   position: absolute;
   bottom: -40px;
+  right: 20px
+}
+
+/* Settings Box */
+.settings-box {
+  margin: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+  position: absolute;
+  width: 400px;
+  height: 450px;
+  background-color:rgb(31, 31, 31);
+  border-radius: 20px;
+  color: rgb(235, 235, 235);
+}
+
+.settings-box h1 {
+  font-weight: 500;
+  font-size: 35px;
+  margin: 20px 0 0 0;
+}
+
+.settings-box p {
+  margin: 0;
+  font-size: 14px;
+  color: rgb(173, 173, 173);
+}
+
+.settings-box h2 {
+  background-color: rgb(48, 48, 48);
+  padding: 10px 0 10px 0;
+  font-weight: 500;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.about-box {
+  margin: auto;
+  padding: 25px 20px;
+  left: 0;
+  right: 0;
+  position: absolute;
+  width: 650px;
+  height: 600px;
+  background-color:rgb(31, 31, 31);
+  border-radius: 20px;
+  color: rgb(235, 235, 235);
+}
+
+#cfa-logo{
+  text-align: center;
+}
+
+#cfa-logo:hover{
+  opacity: .75;
+}
+
+#exit-popup {
+  position: absolute;
+  border: none;
+  color: white;
+  background-color: transparent;
+  font-size: 30px;
   right: 20px;
+  top: 10px;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* ToDo: Add style to export box modal */
+
+.export-box {
+  margin: auto;
+  padding-top: 25px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  position: absolute;
+  width: 700px;
+  height: 450px;
+  background-color:rgb(31, 31, 31);
+  border-radius: 20px;
+  color: rgb(235, 235, 235);
+}
+
+.export-box h1 {
+  margin: 0;
+  padding-bottom: 15px;
+  font-size: 40px;
+}
+
+/* textarea inside the export modal */
+.transcript-export {
+  width: 650px;
+  height: 320px;
+}
+
+.setting-button {
+  height: 35px;
+  box-shadow: none;
+  border: none;
+  border-radius: 5px;
+  background-color: rgb(101, 157, 175);
+  color: white;
+  font-family: "Roboto";
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.name-box {
+  margin: auto;
+  padding-top: 25px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  position: absolute;
+  width: 700px;
+  height: 150px;
+  background-color:rgb(31, 31, 31);
+  border-radius: 20px;
+  color: rgb(235, 235, 235);
+}
+
+.name-box h1 {
+  margin: 0;
+  padding-bottom: 15px;
+  font-size: 35px;
 }
