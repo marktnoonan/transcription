@@ -188,7 +188,7 @@ section {
   text-align: center;
   position: fixed;
   width: 400px;
-  height: 450px;
+  /*height: 450px;*/
   background-color:rgb(31, 31, 31);
   border-radius: 20px;
   color: rgb(235, 235, 235);
