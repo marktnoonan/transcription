@@ -413,6 +413,10 @@ function init() {
   })
 
   document
+  .querySelectorAll("#save-settings")
+  .addEventListener("click", closePopup)
+  
+  document
   .querySelector("#name-button")
   .addEventListener("click", nameToggle)
 
