@@ -413,8 +413,10 @@ function init() {
   })
 
   document
-  .getElementById("#save-settings")
-  .addEventListener("click", closePopup)
+  .querySelectorAll("#save-settings")
+  .forEach(function(ele) {
+  ele.addEventListener("click", closePopup)
+  })
   
   document
   .querySelector("#name-button")
