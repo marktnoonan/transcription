@@ -413,7 +413,7 @@ function init() {
   })
 
   document
-  .querySelectorAll("#save-settings")
+  .getElementById("#save-settings")
   .addEventListener("click", closePopup)
   
   document
