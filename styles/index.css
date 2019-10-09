@@ -219,9 +219,6 @@ section {
 .about-box {
   margin: auto;
   padding: 25px 20px;
-  left: 0;
-  right: 0;
-  position: absolute;
   width: 650px;
   height: 600px;
   background-color:rgb(31, 31, 31);
