@@ -392,7 +392,7 @@ function init() {
     .addEventListener("click", aboutToggle)
 
   document
-    .querySelector(".toggle-button")
+    .querySelector("#header-toggle-button")
     .addEventListener("click", toggleHeader);
 
   document

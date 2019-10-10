@@ -174,7 +174,7 @@ section {
   margin: 10px;
 }
 
-.toggle-button{
+#header-toggle-button{
   position: absolute;
   bottom: -40px;
   right: 20px
