@@ -183,10 +183,7 @@ section {
 /* Settings Box */
 .settings-box {
   margin: auto;
-  left: 0;
-  right: 0;
   text-align: center;
-  position: fixed;
   width: 400px;
   /*height: 450px;*/
   background-color:rgb(31, 31, 31);
@@ -277,6 +274,7 @@ button {
 }
 
 .setting-button {
+  margin: 5px;
   height: 35px;
   box-shadow: none;
   border: none;
