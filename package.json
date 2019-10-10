@@ -17,9 +17,10 @@
 	},
 	"homepage": "https://github.com/marktnoonan/transcription#readme",
 	"dependencies": {
+		"parcel": "^1.12.4",
 		"zenscroll": "^4.0.2"
 	},
 	"devDependencies": {
-		"parcel-bundler": "^1.9.2"
+		"parcel-bundler": "^1.12.4"
 	}
 }
