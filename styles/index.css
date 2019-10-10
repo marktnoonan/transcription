@@ -280,6 +280,7 @@ button {
 }
 
 .setting-button {
+  margin: 5px;
   height: 35px;
   box-shadow: none;
   border: none;
