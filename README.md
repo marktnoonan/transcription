@@ -49,9 +49,9 @@ This should get you up and running. Please report failures/problems with the bui
 - [ ] Make decent landing page..... check in with @Nerajno... Twitter
 - [ ] Write a complete of things to do ===> Mark 
 - [x] Make font-size user-selectable
-- [ ] Add Code for Atlanta logo
+- [x] Add Code for Atlanta logo
 - [ ] Add People Making Progress acknowledgement
-- [ ] Make header retractable
+- [x] Make header retractable
 - [ ] ADD MORE TODOS
 - [ ] Add options for displaying with line breaks on pauses or in more condensed formats
 - [ ] Make text color and background color editable
