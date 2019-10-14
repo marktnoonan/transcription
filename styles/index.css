@@ -186,13 +186,15 @@ section {
 /* Settings Box */
 .settings-box {
   margin: auto;
+  padding-top: 25px;
   left: 0;
   right: 0;
   text-align: center;
-  position: fixed;
-  width: 400px;
-  /*height: 450px;*/
-  background-color: rgb(31, 31, 31);
+  position: absolute;
+  width: 700px;
+  height: auto;
+  background-color:rgb(31, 31, 31);
+
   border-radius: 20px;
   color: rgb(235, 235, 235);
 }
@@ -224,10 +226,13 @@ section {
   padding: 25px 20px;
   left: 0;
   right: 0;
-  position: absolute;
-  width: 650px;
-  height: 600px;
-  background-color: rgb(31, 31, 31);
+
+  text-align: center;
+  position: relative;
+  width: 700px;
+  height: auto;
+  background-color:rgb(31, 31, 31);
+
   border-radius: 20px;
   color: rgb(235, 235, 235);
 }
@@ -243,7 +248,7 @@ section {
 #exit-popup {
   position: absolute;
   border: none;
-  color: white;
+  color: red;
   background-color: transparent;
   font-size: 30px;
   right: 20px;
@@ -262,10 +267,12 @@ button {
   left: 0;
   right: 0;
   text-align: center;
-  position: absolute;
+  position: relative;
   width: 700px;
-  height: 450px;
-  background-color: rgb(31, 31, 31);
+
+  height: auto;
+  background-color:rgb(31, 31, 31);
+
   border-radius: 20px;
   color: rgb(235, 235, 235);
 }
@@ -283,6 +290,7 @@ button {
 }
 
 .setting-button {
+  margin: 5px;
   height: 35px;
   box-shadow: none;
   border: none;
@@ -297,13 +305,16 @@ button {
 .name-box {
   margin: auto;
   padding-top: 25px;
+  padding-bottom: 25px;
   left: 0;
   right: 0;
   text-align: center;
   position: absolute;
   width: 700px;
-  height: 150px;
-  background-color: rgb(31, 31, 31);
+
+  height: auto;
+  background-color:rgb(31, 31, 31);
+
   border-radius: 20px;
   color: rgb(235, 235, 235);
 }

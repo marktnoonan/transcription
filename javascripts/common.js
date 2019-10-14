@@ -48,11 +48,13 @@ function fontPlus() {
 
 function toggleHeader() {
 	var header = document.querySelector("header");
-	console.log(header.classList.contains('translate'));
-	if (!header.classList.contains('translate')) {
-		header.classList.add('translate');
-	} else {
-		header.classList.remove('translate');
+	header.classList.toggle('translate');
+	var button = document.querySelector("#header-toggle-button");
+	if (button.innerText == "Hide Header") {
+		button.innerText = "Show Header";
+	}
+	else {
+		button.innerText = "Hide Header";
 	}
 }
 

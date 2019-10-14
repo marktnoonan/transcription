@@ -28,7 +28,7 @@
 		<!-- This is a dummy button -->
 		<button id="name-button" class="setting-button">Name Transcript</button>
 		<button id="about-button" class="setting-button">About</button>
-		<button id="header-toggle-button">Toggle Header</button>
+		<button id="header-toggle-button" class="setting-button">Hide Header</button>
 	</header>
 	<main>
 		<!-- Name Popup -->
@@ -43,22 +43,15 @@
 			</form>
 		</div>
 		<!-- Settings Popup -->
-		<div class="settings-box hidden" class="setting-button">
-			<div>
+		<div class="settings-box hidden">
 				<h1>Settings</h1>
 				<p>Customize our app for your needs!</p>
-				<button id="exit-popup">x</button>
-			</div>
-			<div>
+			<button id="exit-popup">x</button>
 				<h2>Font Size</h2>
 				<button id="font-minus" class="setting-button">-</button>
 				<button id="font-plus" class="setting-button">+</button>
-			</div>
-			<div>
 				<h2>Color</h2>
 				<button id="theme-toggle" class="setting-button">Toggle Light/Dark</button>
-			</div>
-			<div>
 				<h2>Language</h2>
 				<label for="select-language">
 					I am speaking in:</label>
@@ -97,7 +90,6 @@
 								<option value="Lingua latīna">Lingua latīna</option> -->
 				</select>
 				</label>
-			</div>
 		<div><button id="save-settings">Save</button></div>
 		</div>
 		<!-- About Popup -->
@@ -122,7 +114,7 @@
 			</p>
 			<!-- TODO: the language here could be improved. The class and ID names could be more clear also. -->
 			<aside class="name-transcript" id="name-transcript">
-				<h2>Naming Transcipts</h2>
+				<h2>Naming Transcripts</h2>
 				You can name this transcript to save the results and allow others to access it live from their own
 				devices. Or don't name it, and keep it private to just this browser window. If the transcript is not
 				named, everything will be deleted when you close the page. If it has a name, it can be viewed in full by
