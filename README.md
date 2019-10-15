@@ -1,8 +1,8 @@
-# Live Transcript 
+# Live Transcript
 
 A small application to use computer speech to text to show translation online and live. This makes sense for scenarios such as hearing impaired or recording something to be more machine readable.
 
-NOTE: This requires the Chrome browser for the transcription to work. It uses a built in feature in Chrome for text to speech. 
+NOTE: This requires the Chrome browser for the transcription to work. It uses a built in feature in Chrome for text to speech.
 
 Chrome's text-to-speech feature only works when the page is running on a server (localhost is fine), and the device has an internet connection.
 
@@ -46,8 +46,9 @@ Point your Chrome browser to `localhost:1234`.
 This should get you up and running. Please report failures/problems with the build process and we will update this file as needed.
 
 # Todo
+
 - [ ] Make decent landing page..... check in with @Nerajno... Twitter
-- [ ] Write a complete of things to do ===> Mark 
+- [ ] Write a complete of things to do ===> Mark
 - [x] Make font-size user-selectable
 - [x] Add Code for Atlanta logo
 - [ ] Add People Making Progress acknowledgement
@@ -58,7 +59,8 @@ This should get you up and running. Please report failures/problems with the bui
 - [ ] In fact, let's define a settings panel that will grab all these things together
 - [ ] Let's discuss usefulness of a SPA framework to handle all this (likely Vue)
 - [ ] Let's add user accounts via firebase to store preferred settings as a user
-
+- [ ] Format landing page with CSS
+- [ ] Use media queries to make app responsive to mobile and tablet screens
 
 # Git Branches
 
