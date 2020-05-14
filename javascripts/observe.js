@@ -17,6 +17,7 @@ var yandexLangs = {
   az: "Azerbaijani",
   ba: "Bashkir",
   be: "Belarusian",
+  my: "Burmese",
   bg: "Bulgarian",
   bn: "Bengali",
   bs: "Bosnian",
