@@ -1,0 +1,25 @@
+{
+	"name": "transcription",
+	"version": "1.0.0",
+	"description": "Free Live Transcript",
+	"main": "app.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/marktnoonan/transcription.git"
+	},
+	"author": "Mark Noonan",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/marktnoonan/transcription/issues"
+	},
+	"homepage": "https://github.com/marktnoonan/transcription#readme",
+	"dependencies": {
+		"zenscroll": "^4.0.2"
+	},
+	"devDependencies": {
+		"parcel-bundler": "^1.9.2"
+	}
+}
