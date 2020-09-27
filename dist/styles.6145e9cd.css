@@ -1,0 +1,374 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+a {
+  font-weight: bold;
+  text-decoration: none;
+  color: #5eddfd;
+
+}
+
+a:visited {
+  color: #5eddfd;
+}
+
+header {
+  position: fixed;
+  width: 100%;
+  height: 150px;
+  top: 0;
+  background-color: white;
+  ;
+  border-bottom: 1px solid rgb(131, 131, 131);
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  transform: translateY(0%);
+  transition: transform .25s;
+}
+
+header h1 {
+  margin: 0;
+  padding: 0px 8px;
+  border: 7px solid black;
+  box-shadow: 5px 5px rgba(0, 0, 0, 0.75);
+  font-weight: bold;
+}
+
+header.translate {
+  transform: translateY(-100%);
+  transition: transform .25s;
+}
+
+header>* {
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+header h1 {
+  padding: 0px 8px;
+  border: 7px solid black;
+  box-shadow: 5px 5px rgba(0, 0, 0, 0.75);
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.status {
+  display: none;
+}
+
+
+/*
+    TODO: solve the problem of having to update media queries every time the content of the header changes
+    Possiblities:
+      1. just always set the margin on the <main> element with JS based on the height of the header?
+      something like :
+    window.addEventListener('resize', function(){
+      document.querySelector('main').style.marginTop = document.querySelector("header").clientHeight + 'px';
+      })
+      ... with a similar function firing when the page first loads.
+
+      2. Something else? Can CSS do this on its own, and not break if the user changes the default font, lineheight, spacing, etc etc or the content itself is changed?
+ */
+
+
+section {
+  padding: 10px;
+}
+
+#transcript {
+  font-size: 26px;
+  margin-bottom: 40px;
+}
+
+#start-listen {
+  background: url("microphone.20be47c2.png") no-repeat scroll 0 0 transparent;
+  background-size: 14px;
+  background-position: 12px 6px;
+  background-color: rgb(1, 155, 1);
+  border: none;
+  flex-grow: 1;
+  padding: 10px;
+  padding-left: 42px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
+}
+
+#start-listen:hover {
+  background-color: rgb(0, 150, 0);
+}
+
+#stop-listen {
+  background: url("microphone.20be47c2.png") no-repeat scroll 0 0 transparent;
+  background-size: 14px;
+  background-position: 12px 6px;
+  background-color: rgb(192, 0, 0);
+  border: none;
+  flex-grow: 1;
+  padding: 10px;
+  padding-left: 42px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
+}
+
+#stop-listen:hover {
+  background-color: rgb(150, 0, 0);
+}
+
+.interim {
+  font-size: 22px;
+  color: #555;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  padding: 8px;
+  width: 100%;
+  border-top: 1px solid gray;
+  position: fixed;
+  min-height: 2em;
+}
+
+.snippet {
+  outline: none;
+  display: inline-block;
+  /* animation: bgFlash 1s; */
+  margin-left: 2px;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+@keyframes bgFlash {
+  0% {
+    background: rgba(192, 192, 255, 0.5);
+  }
+
+  100% {
+    opacity: rgba(192, 192, 255, 0);
+  }
+}
+
+.name-transcript,
+.credit {
+  font-size: 16px;
+  max-width: 80ch;
+}
+
+.transcript-export {
+  width: 600px;
+  height: 200px;
+  margin: 10px;
+}
+
+#header-toggle-button {
+  position: absolute;
+  bottom: -40px;
+  right: 20px
+}
+
+/* Settings Box */
+.settings-box {
+  margin: auto;
+  padding-top: 25px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  position: absolute;
+  width: 700px;
+  height: auto;
+  background-color:rgb(31, 31, 31);
+
+  border-radius: 20px;
+  color: rgb(235, 235, 235);
+}
+
+.settings-box h1 {
+  font-weight: 500;
+  font-size: 35px;
+  margin: 20px 0 0 0;
+}
+
+.settings-box p {
+  margin: 0;
+  font-size: 14px;
+  color: rgb(173, 173, 173);
+}
+
+.settings-box h2 {
+  background-color: rgb(48, 48, 48);
+  padding: 10px 0 10px 0;
+  font-weight: 500;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.about-box {
+  margin: auto;
+  padding: 25px 20px;
+  left: 0;
+  right: 0;
+
+  text-align: center;
+  position: relative;
+  width: 700px;
+  height: auto;
+  background-color:rgb(31, 31, 31);
+
+  border-radius: 20px;
+  color: rgb(235, 235, 235);
+}
+
+#cfa-logo {
+  text-align: center;
+}
+
+#cfa-logo:hover {
+  opacity: .75;
+}
+
+#exit-popup {
+  position: absolute;
+  border: none;
+  color: red;
+  background-color: transparent;
+  font-size: 30px;
+  right: 20px;
+  top: 10px;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* ToDo: Add style to export box modal */
+
+.export-box {
+  margin: auto;
+  padding-top: 25px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  position: relative;
+  width: 700px;
+
+  height: auto;
+  background-color:rgb(31, 31, 31);
+
+  border-radius: 20px;
+  color: rgb(235, 235, 235);
+}
+
+.export-box h1 {
+  margin: 0;
+  padding-bottom: 15px;
+  font-size: 40px;
+}
+
+/* textarea inside the export modal */
+.transcript-export {
+  width: 650px;
+  height: 320px;
+}
+
+.setting-button {
+  margin: 5px;
+  height: 35px;
+  box-shadow: none;
+  border: none;
+  border-radius: 5px;
+  background-color: rgb(101, 157, 175);
+  color: white;
+  font-family: "Roboto";
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.name-box {
+  margin: auto;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  position: absolute;
+  width: 700px;
+
+  height: auto;
+  background-color:rgb(31, 31, 31);
+
+  border-radius: 20px;
+  color: rgb(235, 235, 235);
+}
+
+.name-box h1 {
+  margin: 0;
+  padding-bottom: 15px;
+  font-size: 35px;
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  /* Styles */
+}
+
+/* Smartphones (landscape) ----------- */
+@media only screen and (min-width : 321px) {
+  /* Styles */
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen and (max-width : 320px) {
+  /* Styles */
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+  /* Styles */
+}
+
+/* iPads (landscape) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+  /* Styles */
+}
+
+/* iPads (portrait) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
+  /* Styles */
+}
+
+/* Desktops and laptops ----------- */
+@media only screen and (min-width : 1224px) {
+  /* Styles */
+}
+
+/* Large screens ----------- */
+@media only screen and (min-width : 1824px) {
+  /* Styles */
+}
+
+/* iPhone 4 ----------- */
+@media only screen and (-webkit-min-device-pixel-ratio : 1.5),
+only screen and (min-device-pixel-ratio : 1.5) {
+  /* Styles */
+}
+
+/*# sourceMappingURL=/styles.6145e9cd.css.map */
