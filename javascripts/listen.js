@@ -5,7 +5,7 @@
 // TODO: Transcripts should be really simple to use and broadcast. But right now there is just read/write access to the DB for anyody who wants it. I would like to have no login whatsoever and still have the person who started a listening session ALWAYS remain in charge of it, so it couldn't be over written. There are probably many ways to do it. Right now if I am recording a named transcript, and somebody else names their transcript the same name as mine, we are both then feeding into the same exact DB location. That's dumb. But there are cases where you WOULD want to resume an existing named transcript at right now you just type in the name and pick up where you left off. Really curious to see how we can make this "just work" by maybe caching something in a cookie or local storage or whatever.
 // TODO: I haven't dug into Zenscroll enough to know how it handles being called repeatedly, but sometimes I see jankyness and we may need to look at how to only call Zenscroll if we are not already scrolling. My naive version of that didn't work as expected.
 
-import { config, darkThemeOn, toggleDarkTheme } from "./common";
+import { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus, settingsToggle, aboutToggle, closePopup, exportToggle, nameToggle} from "./common";
 import zenscroll from "zenscroll";
 
 // ----------------------------------------------------------------------------
@@ -36,14 +36,20 @@ flt.getExport = function() {
     // important, cause things go crazy if we're still adding to the transcript after export.
     flt.toggle();
   }
-  var wrapper = document.createElement("div");
-  wrapper.innerHTML = "<hr><b>Transcript in JSON format:<b>";
-  var text = flt.exportCurrentTranscript();
+  var wrapper = document.querySelector(".export-box");
+  var text = JSON.parse(flt.exportCurrentTranscript());
   var textArea = document.createElement("textarea");
-  textArea.textContent = text;
+  textArea.textContent = Object.values(text).join("\r\n");
   textArea.setAttribute("class", "transcript-export");
-  wrapper.appendChild(textArea);
-  flt.transcript.appendChild(wrapper);
+  var textbox = document.querySelector(".transcript-export")
+    if (wrapper.contains(textbox)) {
+      wrapper.removeChild(textbox);
+      wrapper.appendChild(textArea);
+      flt.transcript.appendChild(wrapper);
+    } else {
+    wrapper.appendChild(textArea);
+    flt.transcript.appendChild(wrapper);
+    }
 };
 // ----------------------------------------------------------------------------
 flt.exportCurrentTranscript = function() {
@@ -202,12 +208,13 @@ flt.recognition.onend = function(event) {
   }
 };
 // ----------------------------------------------------------------------------
-// TODO: remove logging. Give a more descriptive name than toggle, since we have this toggle for using the mic, and another for using the light/dark themes.
+// TODO: Give a more descriptive name than toggle, since we have this toggle for using the mic, and another for using the light/dark themes.
 flt.toggle = function() {
+  console.log({flt})
+  console.log('toggling')
   if (!flt.haveListenedOnce) {
     flt.haveListenedOnce = true;
     flt.transcriptStartTime = Date.now();
-    console.log("transcript started at " + flt.transcriptStartTime);
   }
 
   flt.listening = !flt.listening;
@@ -367,6 +374,61 @@ function init() {
   document
     .querySelector("#theme-toggle")
     .addEventListener("click", toggleDarkTheme);
+
+  document
+    .querySelector("#font-minus")
+    .addEventListener("click", fontMinus);
+
+  document
+    .querySelector("#font-plus")
+    .addEventListener("click", fontPlus);
+
+  document
+    .querySelector("#settings-button")
+    .addEventListener("click", settingsToggle)
+
+  document
+    .querySelector("#about-button")
+    .addEventListener("click", aboutToggle)
+
+  document
+    .querySelector("#header-toggle-button")
+    .addEventListener("click", toggleHeader);
+
+  document
+    .addEventListener("keydown", (e) => {
+      if (e.keyCode == 27) {
+        closePopup()
+      }
+    })
+
+  document
+    .querySelector("#export-button")
+    .addEventListener("click", exportToggle)
+
+  document
+  .querySelectorAll("#exit-popup")
+  .forEach(function(ele) {
+  ele.addEventListener("click", closePopup)
+  })
+
+  document
+  .querySelectorAll("#save-settings")
+  .forEach(function(ele) {
+  ele.addEventListener("click", closePopup)
+  })
+  
+  document
+  .querySelector("#name-button")
+  .addEventListener("click", nameToggle)
+
+  document
+    .addEventListener("click", (e) => {
+      console.log(e.target.tagName)
+      if (e.target.tagName == "HTML" || e.target.tagName == "MAIN") {
+        closePopup()
+      }
+    })
 
   document
     .querySelector("#select-language")

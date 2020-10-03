@@ -92,7 +92,7 @@ section {
 }
 
 #start-listen {
-  background: url("../img/microphone.png") no-repeat scroll 0 0 transparent;
+  background: url("microphone.20be47c2.png") no-repeat scroll 0 0 transparent;
   background-size: 14px;
   background-position: 12px 6px;
   background-color: rgb(1, 155, 1);
@@ -113,7 +113,7 @@ section {
 }
 
 #stop-listen {
-  background: url("../img/microphone.png") no-repeat scroll 0 0 transparent;
+  background: url("microphone.20be47c2.png") no-repeat scroll 0 0 transparent;
   background-size: 14px;
   background-position: 12px 6px;
   background-color: rgb(192, 0, 0);
@@ -370,3 +370,5 @@ button {
 only screen and (min-device-pixel-ratio : 1.5) {
   /* Styles */
 }
+
+/*# sourceMappingURL=/styles.6145e9cd.css.map */

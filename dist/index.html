@@ -6,16 +6,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Free Live Transcript</title>
-	<link rel="stylesheet" href="styles/index.css">
+	<link rel="stylesheet" href="styles.6145e9cd.css">
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+<script src="styles.6145e9cd.js"></script>
 </head>
 
 <body>
 
 	<header id="header">
-		<h1>Free Live Transcript</h1>
+		
 		<div>
-			<button id="start-listen" class='listen-toggle startListen'>Start Transcribing</button>
+			<button id="start-listen" class="listen-toggle startListen">Start Transcribing</button>
 			<button id="stop-listen" class="listen-toggle stopListen" style="display:none">Stop Transcribing</button>
 		</div>
 		<div class="status">Status:
@@ -62,7 +63,7 @@
 							<option value="Català">Català</option>
 							<option value="Čeština">Čeština</option>
 							<option value="Deutsch">Deutsch</option> -->
-					<option value="en-US" default>English (US)</option>
+					<option value="en-US" default="">English (US)</option>
 					<option value="es">Español</option>
 					<!--	<option value="Euskara">Euskara</option>
 								<option value="Français">Français</option>
@@ -89,7 +90,7 @@
 								<option value="日本語">日本語</option>
 								<option value="Lingua latīna">Lingua latīna</option> -->
 				</select>
-				</label>
+				
 		<div><button id="save-settings">Save</button></div>
 		</div>
 		<!-- About Popup -->
@@ -97,15 +98,13 @@
 			<!-- TODO: Well it's not just made by me any more :) so how about we do something that follows the all-contributors spec:
 	https://github.com/kentcdodds/all-contributors -->
 			<div id="cfa-logo">
-				<a href="https://www.codeforatlanta.org/" target="_blank"><img src="./img/cfa-logo.png"
-						alt="Code for Atlanta Logo" width="400px"></a>
+				<a href="https://www.codeforatlanta.org/" target="_blank"><img src="cfa-logo.6186763c.png" alt="Code for Atlanta Logo" width="400px"></a>
 						<button id="exit-popup">x</button>
 					</div>
 			<h2>About this project</h2>
 			<p class="credit">This is an open-source exporation of creating live transcripts of speech on the web, that
 				can be displayed (and edited) in real time on a big screen, or watched on anybody's personal device. The
-				underlying transcription process is largely based on David Walsh's awesome <a
-					href="https://davidwalsh.name/speech-recognition">blog post</a>. The project was started by Mark
+				underlying transcription process is largely based on David Walsh's awesome <a href="https://davidwalsh.name/speech-recognition">blog post</a>. The project was started by Mark
 				Noonan at Code for Atlanta, where a growing number of people are learning and making contributions. The
 				code is available on <a href="https://github.com/marktnoonan/transcription">GitHub</a>. <b>Currently,
 					any browser can watch a transcript, but only Chrome can generate them, because only Chrome has
@@ -119,13 +118,13 @@
 				devices. Or don't name it, and keep it private to just this browser window. If the transcript is not
 				named, everything will be deleted when you close the page. If it has a name, it can be viewed in full by
 				using that name on the Watch Transcript page.
-		</div>
+		</aside></div>
 
 		<div class="export-box hidden">
 			<h1>Export Transcript</h1>
 			<button id="exit-popup">x</button>
 		</div>
-		</div>
+		
 		<!-- transcript area -->
 		<p id="transcript" contenteditable="false"></p>
 		<span class="interim" id="interim"></span>
@@ -134,27 +133,20 @@
 
 
 	<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
-	<script>
-		window.noZensmooth = true
+	<script>window.noZensmooth = true; // set top margin for main content based on the rendered height of the header.
 
-		// set top margin for main content based on the rendered height of the header.
-		function setMargin() {
-			document.querySelector('main').style.marginTop = document.querySelector("header").clientHeight + 'px';
-		}
-		setMargin()
+function setMargin() {
+  document.querySelector('main').style.marginTop = document.querySelector("header").clientHeight + 'px';
+}
 
-		// call set margin again when window is resized... can probably cache old height of header and only reset styles when the window resize caused a change in height.
-		window.addEventListener('resize', setMargin)
+setMargin(); // call set margin again when window is resized... can probably cache old height of header and only reset styles when the window resize caused a change in height.
 
-		if (!(window.SpeechRecognition ||
-			window.webkitSpeechRecognition ||
-			window.mozSpeechRecognition ||
-			window.msSpeechRecognition)) {
-			window.alert("Speech recognition is unavailable in your browser. You will be able to watch transcripts, but not generate them.")
-		}
+window.addEventListener('resize', setMargin);
 
-	</script>
-	<script src="javascripts/listen.js"></script>
+if (!(window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)) {
+  window.alert("Speech recognition is unavailable in your browser. You will be able to watch transcripts, but not generate them.");
+}</script>
+	<script src="listen.6de55b8d.js"></script>
 </body>
 
 </html>
