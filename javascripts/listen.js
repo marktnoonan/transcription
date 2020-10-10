@@ -5,8 +5,20 @@
 // TODO: Transcripts should be really simple to use and broadcast. But right now there is just read/write access to the DB for anyody who wants it. I would like to have no login whatsoever and still have the person who started a listening session ALWAYS remain in charge of it, so it couldn't be over written. There are probably many ways to do it. Right now if I am recording a named transcript, and somebody else names their transcript the same name as mine, we are both then feeding into the same exact DB location. That's dumb. But there are cases where you WOULD want to resume an existing named transcript at right now you just type in the name and pick up where you left off. Really curious to see how we can make this "just work" by maybe caching something in a cookie or local storage or whatever.
 // TODO: I haven't dug into Zenscroll enough to know how it handles being called repeatedly, but sometimes I see jankyness and we may need to look at how to only call Zenscroll if we are not already scrolling. My naive version of that didn't work as expected.
 
-import { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus, settingsToggle, aboutToggle, closePopup, exportToggle, nameToggle} from "./common";
+import {
+  config,
+  toggleDarkTheme,
+  toggleHeader,
+  fontMinus,
+  fontPlus,
+  settingsToggle,
+  aboutToggle,
+  closePopup,
+  exportToggle,
+  nameToggle,
+} from "./common";
 import zenscroll from "zenscroll";
+import getExport from "./export";
 
 // ----------------------------------------------------------------------------
 // Create a singleton to hold global variables.
@@ -28,86 +40,15 @@ var flt = {
   haveListenedOnce: false,
   line: null,
   recognition: null,
-  interim: null
+  interim: null,
 };
 // ----------------------------------------------------------------------------
-flt.getExport = function() {
-  if (flt.listening) {
-    // important, cause things go crazy if we're still adding to the transcript after export.
-    flt.toggle();
-  }
-  var wrapper = document.querySelector(".export-box");
-  var text = JSON.parse(flt.exportCurrentTranscript());
-  var textArea = document.createElement("textarea");
-  textArea.textContent = Object.values(text).join("\r\n");
-  textArea.setAttribute("class", "transcript-export");
-  var textbox = document.querySelector(".transcript-export")
-    if (wrapper.contains(textbox)) {
-      wrapper.removeChild(textbox);
-      wrapper.appendChild(textArea);
-      flt.transcript.appendChild(wrapper);
-    } else {
-    wrapper.appendChild(textArea);
-    flt.transcript.appendChild(wrapper);
-    }
-};
-// ----------------------------------------------------------------------------
-flt.exportCurrentTranscript = function() {
-  var transcriptExportAsJSON = {};
-  var lines = Array.from(flt.transcript.querySelectorAll("div"));
-  lines.forEach(function(line) {
-    var lineContent = Array.from(line.querySelectorAll("span"))
-      .map(line => line.textContent)
-      .join(" ");
-    var msSinceStart =
-      Number(line.id.substr(4)) - Number(flt.transcriptStartTime);
-
-    transcriptExportAsJSON[msSinceStart] = lineContent;
-  });
-  return JSON.stringify(transcriptExportAsJSON);
-};
-// ----------------------------------------------------------------------------
-flt.getSubTime = function(timeInMs) {
-  var hours = Math.floor(timeInMs / (1000 * 60 * 60));
-  var hh = hours > 9 ? hours : "0" + hours;
-
-  var minutes = Math.floor((timeInMs - hours * 60 * 60 * 1000) / (1000 * 60));
-  var mm = minutes > 9 ? minutes : "0" + minutes;
-  debugger;
-  var seconds = Math.floor(
-    (timeInMs - (hours * 60 * 60 * 1000 - minutes * 60 * 1000)) / 1000
-  );
-  var ss = seconds > 9 ? seconds : "0" + seconds;
-
-  var milliseconds = Math.floor(
-    timeInMs - (hours * 60 * 60 * 1000 - minutes * 60 * 1000 - seconds * 1000)
-  );
-  var ms =
-    milliseconds > 9
-      ? milliseconds.toString().substring(0, 2)
-      : "0" + milliseconds;
-
-  return hh + ":" + mm + ":" + ss + "." + ms;
-};
-// ----------------------------------------------------------------------------
-flt.convertToSubFormat = function(transcriptAsJson) {
-  var subText = "";
-  var previousEndTime = "00:00:00.00";
-
-  for (var line in transcriptAsJson) {
-    subText += "\n" + previousEndTime;
-    subText += line;
-  }
-  return subText;
-};
 // ----------------------------------------------------------------------------
 if (document.getElementById("transcriptIDForm")) {
-  document
-    .getElementById("transcriptIDForm")
-    .addEventListener("submit", function(event) {
-      event.preventDefault();
-      flt.saveTranscriptID();
-    });
+  document.getElementById("transcriptIDForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+    flt.saveTranscriptID();
+  });
 }
 
 // ----------------------------------------------------------------------------
@@ -121,7 +62,7 @@ flt.recognition.maxAlternatives = 1;
 flt.interim = document.querySelector("#interim");
 
 //TODO: refactor this onresult function for clarity. Especially, just extract it and give it a name so that it's just recognition.onresult = manageInterimResults or something... most of the blocks in this function could be given their own name.
-flt.recognition.onresult = function(event) {
+flt.recognition.onresult = function (event) {
   if (!flt.currentLineID) {
     flt.currentLineID = Date.now(); // this is what we will really use to handle "replay" timing I think. - Mark
     flt.line = document.createElement("div");
@@ -135,11 +76,7 @@ flt.recognition.onresult = function(event) {
 
   if (resultWords.length > minLengthNeeded) {
     var wordsToPush = [];
-    for (
-      var i = flt.wordsPushedToTranscript;
-      i < flt.wordsPushedToTranscript + 5;
-      i++
-    ) {
+    for (var i = flt.wordsPushedToTranscript; i < flt.wordsPushedToTranscript + 5; i++) {
       wordsToPush.push(resultWords[i]);
     }
     flt.pushWordsToTranscript(wordsToPush);
@@ -152,12 +89,8 @@ flt.recognition.onresult = function(event) {
     // beginning of the string. The goal is to not have the bottom fill up with text, obscuring the main
     // part of the screen but also forcing people who are watching the the stream to wait for
     // a pause so that the transcript can catch up.
-    flt.interim.textContent = resultText.substring(
-      flt.charLengthOfPushes + flt.wordsPushedToTranscript / 5
-    );
-    flt.lastResultCache = resultText.substring(
-      flt.charLengthOfPushes + flt.wordsPushedToTranscript / 5
-    );
+    flt.interim.textContent = resultText.substring(flt.charLengthOfPushes + flt.wordsPushedToTranscript / 5);
+    flt.lastResultCache = resultText.substring(flt.charLengthOfPushes + flt.wordsPushedToTranscript / 5);
   } else {
     flt.interim.textContent = resultText;
     flt.lastResultCache = resultText;
@@ -166,7 +99,7 @@ flt.recognition.onresult = function(event) {
 };
 // ----------------------------------------------------------------------------
 // TODO: name, extract, and refactor the on-end function for clarity. Maybe I should comment some of the weirder stuff here to explain its purpose better.
-flt.recognition.onend = function(event) {
+flt.recognition.onend = function (event) {
   if (flt.lastResultCache != "") {
     var words = flt.lastResultCache.split(" ");
     var numWords = words.length;
@@ -209,9 +142,9 @@ flt.recognition.onend = function(event) {
 };
 // ----------------------------------------------------------------------------
 // TODO: Give a more descriptive name than toggle, since we have this toggle for using the mic, and another for using the light/dark themes.
-flt.toggle = function() {
-  console.log({flt})
-  console.log('toggling')
+flt.toggle = function () {
+  console.log({ flt });
+  console.log("toggling");
   if (!flt.haveListenedOnce) {
     flt.haveListenedOnce = true;
     flt.transcriptStartTime = Date.now();
@@ -223,21 +156,11 @@ flt.toggle = function() {
   domStatus.textContent = "Listening";
   domStatus.setAttribute("class", "live");
 
-  Array.from(document.getElementsByClassName("startListen")).map(function(
-    element
-  ) {
-    element.setAttribute(
-      "style",
-      flt.listening ? "display:none" : "display:inline"
-    );
+  Array.from(document.getElementsByClassName("startListen")).map(function (element) {
+    element.setAttribute("style", flt.listening ? "display:none" : "display:inline");
   });
-  Array.from(document.getElementsByClassName("stopListen")).map(function(
-    element
-  ) {
-    element.setAttribute(
-      "style",
-      flt.listening ? "display:inline" : "display:none"
-    );
+  Array.from(document.getElementsByClassName("stopListen")).map(function (element) {
+    element.setAttribute("style", flt.listening ? "display:inline" : "display:none");
   });
   if (!flt.listening) {
     flt.recognition.stop();
@@ -251,7 +174,7 @@ flt.toggle = function() {
   }
 };
 // ----------------------------------------------------------------------------
-flt.pushWordsToTranscript = function(arrayOfWords) {
+flt.pushWordsToTranscript = function (arrayOfWords) {
   var snippetIdRoot = Date.now();
   for (var i = 0; i < arrayOfWords.length; i++) {
     var snippetID = "snippet" + snippetIdRoot + "-" + i;
@@ -272,7 +195,7 @@ flt.pushWordsToTranscript = function(arrayOfWords) {
 };
 // ----------------------------------------------------------------------------
 // TODO I think I can make this a little clearer.
-flt.saveTranscriptID = function() {
+flt.saveTranscriptID = function () {
   firebase.initializeApp(config);
   flt.database = firebase.database();
 
@@ -280,14 +203,10 @@ flt.saveTranscriptID = function() {
   var observeLink = flt.observeLinkRoot + "?" + flt.transcriptID;
   document.getElementById("name-transcript").innerHTML = "";
   document.getElementById("transcriptIDForm").innerHTML =
-    'Link for others to watch: <a href="' +
-    observeLink +
-    '" target="_blank">' +
-    observeLink +
-    "</a>";
+    'Link for others to watch: <a href="' + observeLink + '" target="_blank">' + observeLink + "</a>";
 };
 // ----------------------------------------------------------------------------
-flt.addEditingListener = function(editedID, newElement) {
+flt.addEditingListener = function (editedID, newElement) {
   var textChanged = false;
   var blurListenerAdded = false;
   var element = newElement;
@@ -296,7 +215,7 @@ flt.addEditingListener = function(editedID, newElement) {
   element.addEventListener("focus", selectWord);
 
   // TODO: name and extract this function that runs on keydown
-  element.addEventListener("keydown", function(e) {
+  element.addEventListener("keydown", function (e) {
     // esc and enter should confirm the edited word
     if (e.keyCode == 27) {
       element.blur();
@@ -307,10 +226,7 @@ flt.addEditingListener = function(editedID, newElement) {
       window.getSelection().removeAllRanges();
     }
 
-    if (
-      (!textChanged && e.keyCode == 9) ||
-      (!textChanged && e.shiftKey && e.keyCode == 9)
-    ) {
+    if ((!textChanged && e.keyCode == 9) || (!textChanged && e.shiftKey && e.keyCode == 9)) {
       // do nothing - there must be a better way to express this!
       // TODO: rewrite this conditional to be more clear. Maybe using something more obvious than the keycodes would be a good start?
     } else if (!blurListenerAdded && flt.transcriptID !== "") {
@@ -321,23 +237,19 @@ flt.addEditingListener = function(editedID, newElement) {
   });
 
   function addBlurListener() {
-    element.addEventListener("blur", function(e) {
+    element.addEventListener("blur", function (e) {
       var newText = element.textContent;
       var editedTimestamp = editedID.substr(7, 13);
       var editedIndex = editedID.split("-")[1];
       flt.database
         .ref("transcripts/" + flt.transcriptID + "/" + editedTimestamp)
         .once("value")
-        .then(function(snapshot) {
+        .then(function (snapshot) {
           var lineAsArray = snapshot.val().split("|");
           lineAsArray[editedIndex] = newText;
           var updatedLine = lineAsArray.join("|");
-          flt.database
-            .ref("transcripts/" + flt.transcriptID + "/" + editedTimestamp)
-            .set(updatedLine, flt.completion);
-          flt.database
-            .ref("transcripts/" + flt.transcriptID + "/just-updated")
-            .set(editedTimestamp, flt.completion);
+          flt.database.ref("transcripts/" + flt.transcriptID + "/" + editedTimestamp).set(updatedLine, flt.completion);
+          flt.database.ref("transcripts/" + flt.transcriptID + "/just-updated").set(editedTimestamp, flt.completion);
         });
     });
   }
@@ -360,7 +272,7 @@ flt.addEditingListener = function(editedID, newElement) {
 };
 // ----------------------------------------------------------------------------
 // TODO: rename this. It's just the callback that runs when firebase is done saving what we put in there. Maybe call it firebaseCompletion or something is better?
-flt.completion = function(error) {
+flt.completion = function (error) {
   console.log("completed");
   if (error) {
     console.log("Data could not be saved." + error);
@@ -371,76 +283,52 @@ flt.completion = function(error) {
 // ----------------------------------------------------------------------------
 // init will add all our listeners and do any other set up that we need.
 function init() {
-  document
-    .querySelector("#theme-toggle")
-    .addEventListener("click", toggleDarkTheme);
+  document.querySelector("#theme-toggle").addEventListener("click", toggleDarkTheme);
 
-  document
-    .querySelector("#font-minus")
-    .addEventListener("click", fontMinus);
+  document.querySelector("#font-minus").addEventListener("click", fontMinus);
 
-  document
-    .querySelector("#font-plus")
-    .addEventListener("click", fontPlus);
+  document.querySelector("#font-plus").addEventListener("click", fontPlus);
 
-  document
-    .querySelector("#settings-button")
-    .addEventListener("click", settingsToggle)
+  document.querySelector("#settings-button").addEventListener("click", settingsToggle);
 
-  document
-    .querySelector("#about-button")
-    .addEventListener("click", aboutToggle)
+  document.querySelector("#about-button").addEventListener("click", aboutToggle);
 
-  document
-    .querySelector("#header-toggle-button")
-    .addEventListener("click", toggleHeader);
+  document.querySelector("#header-toggle-button").addEventListener("click", toggleHeader);
 
-  document
-    .addEventListener("keydown", (e) => {
-      if (e.keyCode == 27) {
-        closePopup()
-      }
-    })
+  document.addEventListener("keydown", (e) => {
+    if (e.keyCode == 27) {
+      closePopup();
+    }
+  });
 
-  document
-    .querySelector("#export-button")
-    .addEventListener("click", exportToggle)
+  document.querySelector("#export-button").addEventListener("click", exportToggle);
 
-  document
-  .querySelectorAll("#exit-popup")
-  .forEach(function(ele) {
-  ele.addEventListener("click", closePopup)
-  })
+  document.querySelectorAll("#exit-popup").forEach(function (ele) {
+    ele.addEventListener("click", closePopup);
+  });
 
-  document
-  .querySelectorAll("#save-settings")
-  .forEach(function(ele) {
-  ele.addEventListener("click", closePopup)
-  })
-  
-  document
-  .querySelector("#name-button")
-  .addEventListener("click", nameToggle)
+  document.querySelectorAll("#save-settings").forEach(function (ele) {
+    ele.addEventListener("click", closePopup);
+  });
 
-  document
-    .addEventListener("click", (e) => {
-      console.log(e.target.tagName)
-      if (e.target.tagName == "HTML" || e.target.tagName == "MAIN") {
-        closePopup()
-      }
-    })
+  document.querySelector("#name-button").addEventListener("click", nameToggle);
 
-  document
-    .querySelector("#select-language")
-    .addEventListener("change", function(event) {
-      flt.recognition.lang = event.target.value;
-    });
+  document.addEventListener("click", (e) => {
+    console.log(e.target.tagName);
+    if (e.target.tagName == "HTML" || e.target.tagName == "MAIN") {
+      closePopup();
+    }
+  });
+
+  document.querySelector("#select-language").addEventListener("change", function (event) {
+    flt.recognition.lang = event.target.value;
+  });
 }
-Array.from(document.querySelectorAll(".listen-toggle")).forEach(element => {
+Array.from(document.querySelectorAll(".listen-toggle")).forEach((element) => {
   element.addEventListener("click", flt.toggle);
 });
-document
-  .querySelector("#export-button")
-  .addEventListener("click", flt.getExport);
+document.querySelector("#export-button").addEventListener("click", () => {
+  getExport(flt);
+});
 
 init();
