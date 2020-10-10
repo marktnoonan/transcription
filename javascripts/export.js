@@ -38,6 +38,7 @@ function exportCurrentTranscript (flt) {
   return JSON.stringify(transcriptExportAsJSON);
 };
 // ----------------------------------------------------------------------------
+// TODO: fix this function, or just redo it using the date-fns library or something. It has never 100% worked
 function getSubTime (timeInMs) {
   var hours = Math.floor(timeInMs / (1000 * 60 * 60));
   var hh = hours > 9 ? hours : "0" + hours;
@@ -61,6 +62,7 @@ function getSubTime (timeInMs) {
   return hh + ":" + mm + ":" + ss + "." + ms;
 };
 // ----------------------------------------------------------------------------
+// TODO: double check the output format against standard subrip format https://en.wikipedia.org/wiki/SubRip#SubRip_text_file_format
 function convertToSubFormat (transcriptAsJson) {
   var subText = "";
   var previousEndTime = "00:00:00.00";
@@ -71,3 +73,7 @@ function convertToSubFormat (transcriptAsJson) {
   }
   return subText;
 };
+
+
+// TODO: find a way to offer exported transcript as plain text or a download as a .srt file, 
+// this might be a hand reference since we are chrome-only anyway: https://twitter.com/sulco/status/1313798240043753473
