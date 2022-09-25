@@ -6,7 +6,7 @@ NOTE: This requires the Chrome browser for the transcription to work. It uses a 
 
 # Live Version
 
-(Live Version](https://freelivetranscript.com/)
+[freelivetranscript.com](https://freelivetranscript.com/)
 
 
 # Prerequisites to Implement Locally
