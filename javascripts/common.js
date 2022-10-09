@@ -11,23 +11,7 @@ var darkThemeOn = false;
 var database;
 
 function toggleDarkTheme() {
-	if (darkThemeOn == false) {
-		document.body.style.background = "#121212";
-		document.body.style.color = "#ffffff";
-		document.querySelector("header").style.backgroundColor = "#121212";
-		if (document.querySelector(".credit")) {
-			document.querySelector(".credit").style.color = "#ffffff";
-		}
-		darkThemeOn = true;
-	} else {
-		document.body.style.background = "#ffffff";
-		document.body.style.color = "#000000";
-		document.querySelector("header").style.backgroundColor = "#f0f8ff";
-		if (document.querySelector(".credit")) {
-			document.querySelector(".credit").style.color = "#000";
-		}
-		darkThemeOn = false;
-	}
+	document.querySelector('body').classList.toggle('dark')
 }
 
 function fontMinus() {
@@ -58,77 +42,30 @@ function toggleHeader() {
 	}
 }
 
-function settingsToggle() {
-	const settings = document.querySelector('.settings-box')
-	const about = document.querySelector('.about-box')
-	const exporttext = document.querySelector(".export-box")
-	const name = document.querySelector(".name-box")
-    if (settings.classList.contains('hidden')) {
-			settings.classList.remove('hidden');
-			about.classList.add('hidden');
-			exporttext.classList.add('hidden');
-			name.classList.add('hidden');
-    } else {
-			settings.classList.add('hidden');
-	}
-}
-
-function aboutToggle() {
-	const settings = document.querySelector('.settings-box')
-	const about = document.querySelector('.about-box')
-	const exporttext = document.querySelector(".export-box")
-	const name = document.querySelector(".name-box")
-    if (about.classList.contains('hidden')) {
-			settings.classList.add('hidden');
-			about.classList.remove('hidden');
-			exporttext.classList.add('hidden');
-			name.classList.add('hidden');
-    } else {
-			about.classList.add('hidden');
-	}
-}
-
 function exportToggle() {
-	const settings = document.querySelector('.settings-box')
-	const about = document.querySelector('.about-box')
-	const exporttext = document.querySelector(".export-box")
-	const name = document.querySelector(".name-box")
-	if (exporttext.classList.contains('hidden')) {
-		settings.classList.add('hidden');
-		about.classList.add('hidden');
-		exporttext.classList.remove('hidden');
-		name.classList.add('hidden');
-	} else {
-		exporttext.classList.add('hidden');
-	}
+
+	navigator.clipboard.writeText(document.querySelector('.transcript-export').textContent);
+
 }
 
 function nameToggle() {
-	const settings = document.querySelector('.settings-box')
 	const about = document.querySelector('.about-box')
 	const exporttext = document.querySelector(".export-box")
 	const name = document.querySelector(".name-box")
 	if (name.classList.contains('hidden')) {
-		settings.classList.add('hidden');
-		about.classList.add('hidden');
 		exporttext.classList.add('hidden');
 		name.classList.remove('hidden');
+		document.querySelector("#exit-popup").focus()
 	} else {
 		name.classList.add('hidden');
 	}
 }
 
 function closePopup() {
-	const settings = document.querySelector('.settings-box')
-	const about = document.querySelector('.about-box');
-	const exportBox = document.querySelector(".export-box");
 	const name = document.querySelector(".name-box");
-	if (!settings.classList.contains('hidden') || !about.classList.contains('hidden') || !exportBox.classList.contains('hidden') || !name.classList.contains('hidden'))  {
-		settings.classList.add('hidden');
-		about.classList.add('hidden');
-		exportBox.classList.add('hidden');
+	if (!name.classList.contains('hidden'))  {
 		name.classList.add('hidden');
 	}
 }
 
-export { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus, settingsToggle, aboutToggle, closePopup, exportToggle, nameToggle };
+export { config, toggleDarkTheme, toggleHeader, fontMinus, fontPlus, closePopup, exportToggle, nameToggle };

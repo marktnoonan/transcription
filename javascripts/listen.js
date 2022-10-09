@@ -11,8 +11,6 @@ import {
   toggleHeader,
   fontMinus,
   fontPlus,
-  settingsToggle,
-  aboutToggle,
   closePopup,
   exportToggle,
   nameToggle,
@@ -67,6 +65,7 @@ flt.recognition.onresult = function (event) {
     flt.currentLineID = Date.now(); // this is what we will really use to handle "replay" timing I think. - Mark
     flt.line = document.createElement("div");
     flt.line.id = "line" + flt.currentLineID;
+    flt.line.className = "transcript-line";
     flt.transcript.appendChild(flt.line);
   }
 
@@ -152,25 +151,15 @@ flt.toggle = function () {
 
   flt.listening = !flt.listening;
 
-  var domStatus = document.querySelector("#status");
-  domStatus.textContent = "Listening";
-  domStatus.setAttribute("class", "live");
 
-  Array.from(document.getElementsByClassName("startListen")).map(function (element) {
-    element.setAttribute("style", flt.listening ? "display:none" : "display:inline");
-  });
-  Array.from(document.getElementsByClassName("stopListen")).map(function (element) {
-    element.setAttribute("style", flt.listening ? "display:inline" : "display:none");
-  });
+  document.querySelector('.startListen').setAttribute("style", flt.listening ? "display:none" : "display:flex");
+  document.querySelector(".stopListen").setAttribute("style", flt.listening ? "display:flex" : "display:none");
   if (!flt.listening) {
     flt.recognition.stop();
     flt.interim.textContent = "";
-    domStatus.textContent = "Not Listening";
-    domStatus.setAttribute("class", "dead");
+
   } else {
     flt.recognition.start();
-    domStatus.textContent = "Listening";
-    domStatus.setAttribute("class", "live");
   }
 };
 // ----------------------------------------------------------------------------
@@ -289,10 +278,6 @@ function init() {
 
   document.querySelector("#font-plus").addEventListener("click", fontPlus);
 
-  document.querySelector("#settings-button").addEventListener("click", settingsToggle);
-
-  document.querySelector("#about-button").addEventListener("click", aboutToggle);
-
   document.querySelector("#header-toggle-button").addEventListener("click", toggleHeader);
 
   document.addEventListener("keydown", (e) => {
@@ -303,13 +288,7 @@ function init() {
 
   document.querySelector("#export-button").addEventListener("click", exportToggle);
 
-  document.querySelectorAll("#exit-popup").forEach(function (ele) {
-    ele.addEventListener("click", closePopup);
-  });
-
-  document.querySelectorAll("#save-settings").forEach(function (ele) {
-    ele.addEventListener("click", closePopup);
-  });
+  document.querySelector("#exit-popup").addEventListener("click", closePopup);
 
   document.querySelector("#name-button").addEventListener("click", nameToggle);
 

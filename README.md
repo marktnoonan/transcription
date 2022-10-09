@@ -26,19 +26,13 @@ git clone https://github.com/marktnoonan/transcription.git
 
 ```
 
-If you don't have the parcel package bundler, you can install it globally:
-
-```
-npm install --global parcel
-```
-
 In the root directory of the project on your computer, run the following commands:
 
 ```
 
 npm install
 
-parcel index.html
+npx parcel index.html
 
 ```
 

@@ -127,8 +127,6 @@ exports.toggleDarkTheme = toggleDarkTheme;
 exports.toggleHeader = toggleHeader;
 exports.fontMinus = fontMinus;
 exports.fontPlus = fontPlus;
-exports.settingsToggle = settingsToggle;
-exports.aboutToggle = aboutToggle;
 exports.closePopup = closePopup;
 exports.exportToggle = exportToggle;
 exports.nameToggle = nameToggle;
@@ -146,27 +144,7 @@ var darkThemeOn = false;
 var database;
 
 function toggleDarkTheme() {
-  if (darkThemeOn == false) {
-    document.body.style.background = "#121212";
-    document.body.style.color = "#ffffff";
-    document.querySelector("header").style.backgroundColor = "#121212";
-
-    if (document.querySelector(".credit")) {
-      document.querySelector(".credit").style.color = "#ffffff";
-    }
-
-    darkThemeOn = true;
-  } else {
-    document.body.style.background = "#ffffff";
-    document.body.style.color = "#000000";
-    document.querySelector("header").style.backgroundColor = "#f0f8ff";
-
-    if (document.querySelector(".credit")) {
-      document.querySelector(".credit").style.color = "#000";
-    }
-
-    darkThemeOn = false;
-  }
+  document.querySelector('body').classList.toggle('dark');
 }
 
 function fontMinus() {
@@ -199,80 +177,28 @@ function toggleHeader() {
   }
 }
 
-function settingsToggle() {
-  var settings = document.querySelector('.settings-box');
-  var about = document.querySelector('.about-box');
-  var exporttext = document.querySelector(".export-box");
-  var name = document.querySelector(".name-box");
-
-  if (settings.classList.contains('hidden')) {
-    settings.classList.remove('hidden');
-    about.classList.add('hidden');
-    exporttext.classList.add('hidden');
-    name.classList.add('hidden');
-  } else {
-    settings.classList.add('hidden');
-  }
-}
-
-function aboutToggle() {
-  var settings = document.querySelector('.settings-box');
-  var about = document.querySelector('.about-box');
-  var exporttext = document.querySelector(".export-box");
-  var name = document.querySelector(".name-box");
-
-  if (about.classList.contains('hidden')) {
-    settings.classList.add('hidden');
-    about.classList.remove('hidden');
-    exporttext.classList.add('hidden');
-    name.classList.add('hidden');
-  } else {
-    about.classList.add('hidden');
-  }
-}
-
 function exportToggle() {
-  var settings = document.querySelector('.settings-box');
-  var about = document.querySelector('.about-box');
-  var exporttext = document.querySelector(".export-box");
-  var name = document.querySelector(".name-box");
-
-  if (exporttext.classList.contains('hidden')) {
-    settings.classList.add('hidden');
-    about.classList.add('hidden');
-    exporttext.classList.remove('hidden');
-    name.classList.add('hidden');
-  } else {
-    exporttext.classList.add('hidden');
-  }
+  navigator.clipboard.writeText(document.querySelector('.transcript-export').textContent);
 }
 
 function nameToggle() {
-  var settings = document.querySelector('.settings-box');
   var about = document.querySelector('.about-box');
   var exporttext = document.querySelector(".export-box");
   var name = document.querySelector(".name-box");
 
   if (name.classList.contains('hidden')) {
-    settings.classList.add('hidden');
-    about.classList.add('hidden');
     exporttext.classList.add('hidden');
     name.classList.remove('hidden');
+    document.querySelector("#exit-popup").focus();
   } else {
     name.classList.add('hidden');
   }
 }
 
 function closePopup() {
-  var settings = document.querySelector('.settings-box');
-  var about = document.querySelector('.about-box');
-  var exportBox = document.querySelector(".export-box");
   var name = document.querySelector(".name-box");
 
-  if (!settings.classList.contains('hidden') || !about.classList.contains('hidden') || !exportBox.classList.contains('hidden') || !name.classList.contains('hidden')) {
-    settings.classList.add('hidden');
-    about.classList.add('hidden');
-    exportBox.classList.add('hidden');
+  if (!name.classList.contains('hidden')) {
     name.classList.add('hidden');
   }
 }
@@ -636,12 +562,99 @@ var define;
 
 }));
 
+},{}],"javascripts/export.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = getExport;
+
+function getExport(flt) {
+  if (flt.listening) {
+    // important, cause things go crazy if we're still adding to the transcript after export.
+    flt.toggle();
+  }
+
+  var wrapper = document.querySelector(".export-box");
+  var text = JSON.parse(exportCurrentTranscript(flt)); // TODO - this display in a textarea is not so great, it blocks the transcript itself,
+  // a genuine modal would be nicer.
+
+  var textArea = document.createElement("textarea");
+  textArea.textContent = Object.values(text).join("\r\n");
+  textArea.setAttribute("class", "transcript-export");
+  var textbox = document.querySelector(".transcript-export");
+
+  if (wrapper.contains(textbox)) {
+    wrapper.removeChild(textbox);
+    wrapper.appendChild(textArea);
+    flt.transcript.appendChild(wrapper);
+  } else {
+    wrapper.appendChild(textArea);
+    flt.transcript.appendChild(wrapper);
+  }
+} // ----------------------------------------------------------------------------
+
+
+function exportCurrentTranscript(flt) {
+  var transcriptExportAsJSON = {};
+  var lines = Array.from(flt.transcript.querySelectorAll("div"));
+  lines.forEach(function (line) {
+    var lineContent = Array.from(line.querySelectorAll("span")).map(function (line) {
+      return line.textContent;
+    }).join(" "); // TODO This part is definitely funky and not doing the ideal thing.
+    // the part the gets the MS is not correct.
+    // We probably need to keep a reference to the very first word in the transcript
+    // subtract that time from every subsequent word... so the first word is zero,
+    // and everything after that is the correct MS. The absolute timestamp doesn't really matter
+    // and in an exported transcript should _definitely_ be ignored. Probably in the DB it should stay.
+
+    var msSinceStart = Number(line.id.substr(4)) - Number(flt.transcriptStartTime);
+    console.log({
+      msSinceStart: msSinceStart
+    });
+    transcriptExportAsJSON[msSinceStart] = lineContent;
+  });
+  return JSON.stringify(transcriptExportAsJSON);
+} // ----------------------------------------------------------------------------
+// TODO: fix this function, or just redo it using the date-fns library or something. It has never 100% worked
+
+
+function getSubTime(timeInMs) {
+  var hours = Math.floor(timeInMs / (1000 * 60 * 60));
+  var hh = hours > 9 ? hours : "0" + hours;
+  var minutes = Math.floor((timeInMs - hours * 60 * 60 * 1000) / (1000 * 60));
+  var mm = minutes > 9 ? minutes : "0" + minutes;
+  debugger;
+  var seconds = Math.floor((timeInMs - (hours * 60 * 60 * 1000 - minutes * 60 * 1000)) / 1000);
+  var ss = seconds > 9 ? seconds : "0" + seconds;
+  var milliseconds = Math.floor(timeInMs - (hours * 60 * 60 * 1000 - minutes * 60 * 1000 - seconds * 1000));
+  var ms = milliseconds > 9 ? milliseconds.toString().substring(0, 2) : "0" + milliseconds;
+  return hh + ":" + mm + ":" + ss + "." + ms;
+} // ----------------------------------------------------------------------------
+// TODO: double check the output format against standard subrip format https://en.wikipedia.org/wiki/SubRip#SubRip_text_file_format
+
+
+function convertToSubFormat(transcriptAsJson) {
+  var subText = "";
+  var previousEndTime = "00:00:00.00";
+
+  for (var line in transcriptAsJson) {
+    subText += "\n" + previousEndTime;
+    subText += line;
+  }
+
+  return subText;
+} // TODO: find a way to offer exported transcript as plain text or a download as a .srt file,
+// this might be a hand reference since we are chrome-only anyway: https://twitter.com/sulco/status/1313798240043753473
 },{}],"javascripts/listen.js":[function(require,module,exports) {
 "use strict";
 
 var _common = require("./common");
 
 var _zenscroll = _interopRequireDefault(require("zenscroll"));
+
+var _export = _interopRequireDefault(require("./export"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -673,71 +686,7 @@ var flt = {
   recognition: null,
   interim: null
 }; // ----------------------------------------------------------------------------
-
-flt.getExport = function () {
-  if (flt.listening) {
-    // important, cause things go crazy if we're still adding to the transcript after export.
-    flt.toggle();
-  }
-
-  var wrapper = document.querySelector(".export-box");
-  var text = JSON.parse(flt.exportCurrentTranscript());
-  var textArea = document.createElement("textarea");
-  textArea.textContent = Object.values(text).join("\r\n");
-  textArea.setAttribute("class", "transcript-export");
-  var textbox = document.querySelector(".transcript-export");
-
-  if (wrapper.contains(textbox)) {
-    wrapper.removeChild(textbox);
-    wrapper.appendChild(textArea);
-    flt.transcript.appendChild(wrapper);
-  } else {
-    wrapper.appendChild(textArea);
-    flt.transcript.appendChild(wrapper);
-  }
-}; // ----------------------------------------------------------------------------
-
-
-flt.exportCurrentTranscript = function () {
-  var transcriptExportAsJSON = {};
-  var lines = Array.from(flt.transcript.querySelectorAll("div"));
-  lines.forEach(function (line) {
-    var lineContent = Array.from(line.querySelectorAll("span")).map(function (line) {
-      return line.textContent;
-    }).join(" ");
-    var msSinceStart = Number(line.id.substr(4)) - Number(flt.transcriptStartTime);
-    transcriptExportAsJSON[msSinceStart] = lineContent;
-  });
-  return JSON.stringify(transcriptExportAsJSON);
-}; // ----------------------------------------------------------------------------
-
-
-flt.getSubTime = function (timeInMs) {
-  var hours = Math.floor(timeInMs / (1000 * 60 * 60));
-  var hh = hours > 9 ? hours : "0" + hours;
-  var minutes = Math.floor((timeInMs - hours * 60 * 60 * 1000) / (1000 * 60));
-  var mm = minutes > 9 ? minutes : "0" + minutes;
-  debugger;
-  var seconds = Math.floor((timeInMs - (hours * 60 * 60 * 1000 - minutes * 60 * 1000)) / 1000);
-  var ss = seconds > 9 ? seconds : "0" + seconds;
-  var milliseconds = Math.floor(timeInMs - (hours * 60 * 60 * 1000 - minutes * 60 * 1000 - seconds * 1000));
-  var ms = milliseconds > 9 ? milliseconds.toString().substring(0, 2) : "0" + milliseconds;
-  return hh + ":" + mm + ":" + ss + "." + ms;
-}; // ----------------------------------------------------------------------------
-
-
-flt.convertToSubFormat = function (transcriptAsJson) {
-  var subText = "";
-  var previousEndTime = "00:00:00.00";
-
-  for (var line in transcriptAsJson) {
-    subText += "\n" + previousEndTime;
-    subText += line;
-  }
-
-  return subText;
-}; // ----------------------------------------------------------------------------
-
+// ----------------------------------------------------------------------------
 
 if (document.getElementById("transcriptIDForm")) {
   document.getElementById("transcriptIDForm").addEventListener("submit", function (event) {
@@ -759,6 +708,7 @@ flt.recognition.onresult = function (event) {
 
     flt.line = document.createElement("div");
     flt.line.id = "line" + flt.currentLineID;
+    flt.line.className = "transcript-line";
     flt.transcript.appendChild(flt.line);
   }
 
@@ -845,7 +795,7 @@ flt.toggle = function () {
   console.log({
     flt: flt
   });
-  console.log('toggling');
+  console.log("toggling");
 
   if (!flt.haveListenedOnce) {
     flt.haveListenedOnce = true;
@@ -853,25 +803,14 @@ flt.toggle = function () {
   }
 
   flt.listening = !flt.listening;
-  var domStatus = document.querySelector("#status");
-  domStatus.textContent = "Listening";
-  domStatus.setAttribute("class", "live");
-  Array.from(document.getElementsByClassName("startListen")).map(function (element) {
-    element.setAttribute("style", flt.listening ? "display:none" : "display:inline");
-  });
-  Array.from(document.getElementsByClassName("stopListen")).map(function (element) {
-    element.setAttribute("style", flt.listening ? "display:inline" : "display:none");
-  });
+  document.querySelector('.startListen').setAttribute("style", flt.listening ? "display:none" : "display:flex");
+  document.querySelector(".stopListen").setAttribute("style", flt.listening ? "display:flex" : "display:none");
 
   if (!flt.listening) {
     flt.recognition.stop();
     flt.interim.textContent = "";
-    domStatus.textContent = "Not Listening";
-    domStatus.setAttribute("class", "dead");
   } else {
     flt.recognition.start();
-    domStatus.textContent = "Listening";
-    domStatus.setAttribute("class", "live");
   }
 }; // ----------------------------------------------------------------------------
 
@@ -987,8 +926,6 @@ function init() {
   document.querySelector("#theme-toggle").addEventListener("click", _common.toggleDarkTheme);
   document.querySelector("#font-minus").addEventListener("click", _common.fontMinus);
   document.querySelector("#font-plus").addEventListener("click", _common.fontPlus);
-  document.querySelector("#settings-button").addEventListener("click", _common.settingsToggle);
-  document.querySelector("#about-button").addEventListener("click", _common.aboutToggle);
   document.querySelector("#header-toggle-button").addEventListener("click", _common.toggleHeader);
   document.addEventListener("keydown", function (e) {
     if (e.keyCode == 27) {
@@ -996,12 +933,7 @@ function init() {
     }
   });
   document.querySelector("#export-button").addEventListener("click", _common.exportToggle);
-  document.querySelectorAll("#exit-popup").forEach(function (ele) {
-    ele.addEventListener("click", _common.closePopup);
-  });
-  document.querySelectorAll("#save-settings").forEach(function (ele) {
-    ele.addEventListener("click", _common.closePopup);
-  });
+  document.querySelector("#exit-popup").addEventListener("click", _common.closePopup);
   document.querySelector("#name-button").addEventListener("click", _common.nameToggle);
   document.addEventListener("click", function (e) {
     console.log(e.target.tagName);
@@ -1018,9 +950,11 @@ function init() {
 Array.from(document.querySelectorAll(".listen-toggle")).forEach(function (element) {
   element.addEventListener("click", flt.toggle);
 });
-document.querySelector("#export-button").addEventListener("click", flt.getExport);
+document.querySelector("#export-button").addEventListener("click", function () {
+  (0, _export.default)(flt);
+});
 init();
-},{"./common":"javascripts/common.js","zenscroll":"node_modules/zenscroll/zenscroll.js"}],"../../../../../usr/local/lib/node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./common":"javascripts/common.js","zenscroll":"node_modules/zenscroll/zenscroll.js","./export":"javascripts/export.js"}],"node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -1048,7 +982,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53793" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64182" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -1224,5 +1158,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../usr/local/lib/node_modules/parcel/src/builtins/hmr-runtime.js","javascripts/listen.js"], null)
+},{}]},{},["node_modules/parcel/src/builtins/hmr-runtime.js","javascripts/listen.js"], null)
 //# sourceMappingURL=/listen.6de55b8d.js.map

@@ -7,55 +7,38 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Free Live Transcript</title>
 	<link rel="stylesheet" href="styles/index.css">
-	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 
 <body>
 
 	<header id="header">
-		<h1>Free Live Transcript</h1>
-		<div>
-			<button id="start-listen" class='listen-toggle startListen'>Start Transcribing</button>
-			<button id="stop-listen" class="listen-toggle stopListen" style="display:none">Stop Transcribing</button>
-		</div>
-		<div class="status">Status:
-			<span id="status">Not Listening</span>
-		</div>
-		<button id="settings-button" class="setting-button">Settings</button>
-		<!-- make this form into a modal, add button that makes the modal popup -->
-		<button id="export-button" class="setting-button">Export Transcript</button>
+		<div class="title-wrap">
+			<h1>Free Live Transcript</h1>
+			<button id="start-listen" class='listen-toggle startListen'>
+				<img src="img/microphone.png" alt="" height="24">
+				Start Transcribing
+			</button>
+			<button id="stop-listen" class="listen-toggle stopListen" style="display:none">
+				<img src="img/microphone.png" alt="" height="24">
+				Stop Transcribing
+			</button>
 
-		<!-- This is a dummy button -->
-		<button id="name-button" class="setting-button">Name Transcript</button>
-		<button id="about-button" class="setting-button">About</button>
-		<button id="header-toggle-button" class="setting-button">Hide Header</button>
-	</header>
-	<main>
-		<!-- Name Popup -->
-		<div class="name-box hidden">
-			<h1>Name Transcript</h1>
-			<button id="exit-popup">x</button>
-			<form id="transcriptIDForm" class="transcript-id-form">
-				<label>Transcript name (letters, numbers, and dashes only):
-					<input type="text" id="newTranscriptID" pattern="[a-zA-Z0-9-]+">
-				</label>
-				<button type="submit">Name Transcript</button>
-			</form>
 		</div>
-		<!-- Settings Popup -->
-		<div class="settings-box hidden">
-				<h1>Settings</h1>
-				<p>Customize our app for your needs!</p>
-			<button id="exit-popup">x</button>
-				<h2>Font Size</h2>
-				<button id="font-minus" class="setting-button">-</button>
-				<button id="font-plus" class="setting-button">+</button>
-				<h2>Color</h2>
+		<div class="menu">
+			<div class="settings-box">
+				<button id="font-minus" class="setting-button"><img src="img/ftfontsizedown.svg" alt="Reduce Font Size"
+						width="20"></button>
+				<button id="font-plus" class="setting-button"><img src="img/ftfontsizeup.svg" alt="Increase Font Size"
+						width="20"></button>
 				<button id="theme-toggle" class="setting-button">Toggle Light/Dark</button>
-				<h2>Language</h2>
-				<label for="select-language">
+				<button id="export-button" class="setting-button"><img src="img/clipboard.svg" alt="" width="20"> 
+					Copy Transcript
+				</button>
+				<button id="name-button" class="setting-button">Share Transcript</button>
+				<a href="/about.html">About Free Live Transcript</a>
+				<label for="select-language" style="display: none;">
 					I am speaking in:</label>
-				<select id="select-language" name="select-language">
+				<select id="select-language" name="select-language" style="display: none;">
 					<!-- <option value="Afrikaans">Afrikaans</option>
 							<option value="Bahasa Indonesia">Bahasa Indonesia</option>
 							<option value="Bahasa Melayu">Bahasa Melayu</option>
@@ -89,57 +72,44 @@
 								<option value="日本語">日本語</option>
 								<option value="Lingua latīna">Lingua latīna</option> -->
 				</select>
-				</label>
-		<div><button id="save-settings">Save</button></div>
-		</div>
-		<!-- About Popup -->
-		<div class="about-box hidden">
-			<!-- TODO: Well it's not just made by me any more :) so how about we do something that follows the all-contributors spec:
-	https://github.com/kentcdodds/all-contributors -->
-			<div id="cfa-logo">
-				<a href="https://www.codeforatlanta.org/" target="_blank"><img src="./img/cfa-logo.png"
-						alt="Code for Atlanta Logo" width="400px"></a>
-						<button id="exit-popup">x</button>
-					</div>
-			<h2>About this project</h2>
-			<p class="credit">This is an open-source exporation of creating live transcripts of speech on the web, that
-				can be displayed (and edited) in real time on a big screen, or watched on anybody's personal device. The
-				underlying transcription process is largely based on David Walsh's awesome <a
-					href="https://davidwalsh.name/speech-recognition">blog post</a>. The project was started by Mark
-				Noonan at Code for Atlanta, where a growing number of people are learning and making contributions. The
-				code is available on <a href="https://github.com/marktnoonan/transcription">GitHub</a>. <b>Currently,
-					any browser can watch a transcript, but only Chrome can generate them, because only Chrome has
-					implemented the experimental Web Speech Recognition API Specification, so you will need to use
-					Chrome for this page to work.</b>
-			</p>
-			<!-- TODO: the language here could be improved. The class and ID names could be more clear also. -->
-			<aside class="name-transcript" id="name-transcript">
-				<h2>Naming Transcripts</h2>
-				You can name this transcript to save the results and allow others to access it live from their own
-				devices. Or don't name it, and keep it private to just this browser window. If the transcript is not
-				named, everything will be deleted when you close the page. If it has a name, it can be viewed in full by
-				using that name on the Watch Transcript page.
+			</div>
 		</div>
 
-		<div class="export-box hidden">
-			<h1>Export Transcript</h1>
-			<button id="exit-popup">x</button>
-		</div>
-		</div>
+		<button id="header-toggle-button" class="setting-button">Hide Header</button>
+	</header>
+	<main>
 		<!-- transcript area -->
 		<p id="transcript" contenteditable="false"></p>
 		<span class="interim" id="interim"></span>
 	</main>
-	
-
-
+	<!-- Name Popup -->
+	<div class="name-box hidden">
+		<h2>Share Transcript</h2>
+		<button id="exit-popup">Close</button>
+		<form id="transcriptIDForm" class="transcript-id-form">
+			<label>Transcript name (letters, numbers, and dashes only):
+				<input type="text" id="newTranscriptID" pattern="[a-zA-Z0-9-]+">
+			</label>
+			<button type="submit">Name Transcript</button>
+		</form>
+		<p>Named transcripts can be watched and translated on other devices.</p>
+		<p>
+			⚠️ Note: named transcripts are <strong>public</strong>. Anybody who knows the name can access them.
+			If you need greater privacy, don't name the transcript. It will disappear when you close this tab. 
+		</p>
+		<p>If you need to share transcripts privately, you can use the "Copy Transcript" to make your own copy.</p>
+		<p>If you need something else, you might want a paid professional transcription service. 
+			FLT is not intended as a replacement for such services. It's a little free thing created mostly as a learning tool.
+		</p>
+	</div>
+	<div class="export-box hidden"></div>
 	<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
 	<script>
 		window.noZensmooth = true
 
 		// set top margin for main content based on the rendered height of the header.
 		function setMargin() {
-			document.querySelector('main').style.marginTop = document.querySelector("header").clientHeight + 'px';
+			document.querySelector('main').style.marginTop = document.querySelector("header").clientHeight + 20 + 'px';
 		}
 		setMargin()
 
