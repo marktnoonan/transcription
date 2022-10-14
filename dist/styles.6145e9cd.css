@@ -260,6 +260,7 @@ button {
   width: 700px;
   border: 1px solid #000;
   position: absolute;
+  background-color: #fff;
 }
 
 .name-box h2 {
