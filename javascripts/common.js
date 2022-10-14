@@ -16,17 +16,23 @@ function toggleDarkTheme() {
 
 function fontMinus() {
 	var transcript = document.querySelector("#transcript");
+	var interim = document.querySelector("#interim")
 	var currentSize = parseFloat(window.getComputedStyle(transcript).fontSize);
 	if (currentSize != 16) {
-		transcript.style.fontSize =  (currentSize - 10 ) + 'px';
+		var newSize = (currentSize - 10 ) + 'px';
+		transcript.style.fontSize =  newSize;
+		interim.style.fontSize =  newSize;
 	}
 }
 
 function fontPlus() {
 	var transcript = document.querySelector("#transcript");
+	var interim = document.querySelector("#interim")
 	var currentSize = parseFloat(window.getComputedStyle(transcript).fontSize);
 	if (currentSize != 76) {
-		transcript.style.fontSize =  (currentSize + 10 ) + 'px';
+		var newSize = (currentSize + 10 ) + 'px';
+		transcript.style.fontSize =  newSize;
+		interim.style.fontSize =  newSize;
 	}
 }
 
