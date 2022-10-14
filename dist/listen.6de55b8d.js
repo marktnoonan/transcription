@@ -842,7 +842,7 @@ flt.saveTranscriptID = function () {
   flt.database = firebase.database();
   flt.transcriptID = document.getElementById("newTranscriptID").value;
   var observeLink = flt.observeLinkRoot + "?" + flt.transcriptID;
-  document.getElementById("name-transcript").innerHTML = "";
+  document.getElementById("name-transcript").innerHTML = "Transcript name: " + flt.transcriptID;
   document.getElementById("transcriptIDForm").innerHTML = 'Link for others to watch: <a href="' + observeLink + '" target="_blank">' + observeLink + "</a>";
 }; // ----------------------------------------------------------------------------
 
@@ -982,7 +982,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64182" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56946" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

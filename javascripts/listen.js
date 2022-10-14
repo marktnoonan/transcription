@@ -190,7 +190,7 @@ flt.saveTranscriptID = function () {
 
   flt.transcriptID = document.getElementById("newTranscriptID").value;
   var observeLink = flt.observeLinkRoot + "?" + flt.transcriptID;
-  document.getElementById("name-transcript").innerHTML = "";
+  document.getElementById("name-transcript").innerHTML = "Transcript name: " + flt.transcriptID;
   document.getElementById("transcriptIDForm").innerHTML =
     'Link for others to watch: <a href="' + observeLink + '" target="_blank">' + observeLink + "</a>";
 };
