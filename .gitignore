@@ -3,3 +3,4 @@ npm-debug.log
 Archive.zip
 dist/
 .cache/
+.env
